@@ -65,14 +65,23 @@
                 </TabItem.HeaderTemplate>
 
 
-                <Grid>
+                <Grid Margin="10">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0">Placeholder....</TextBlock>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                        <Label>Game Folders</Label>
+                        <ListBox Grid.Row="0" ItemsSource="{Binding FolderPaths}" BorderThickness="1" ScrollViewer.CanContentScroll="True"></ListBox>
+                        <Button Command="{Binding AddFolderPathCommand}" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="50" Padding="8" Margin="8 0 0 0">
+                            <iconPacks:Material Kind="Plus"></iconPacks:Material>
+                        </Button>
                     <TextBlock Grid.Row="1">Placeholder....</TextBlock>
                 </Grid>
             </TabItem>

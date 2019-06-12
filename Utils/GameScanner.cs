@@ -13,6 +13,7 @@ namespace GameLauncher.Utils
         public readonly string Steam32 = "SOFTWARE\\VALVE\\";
         public readonly string Steam64 = "SOFTWARE\\Wow6432Node\\Valve\\";
         public readonly string EpicRegistry = "SOFTWARE\\WOW6432Node\\EpicGames\\Unreal Engine";
+        public readonly string UplayRegistry = "SOFTWARE\\WOW6432Node\\Ubisoft\\Launcher\\Installs";
 
         public ObservableCollection<string> LibraryDirectories { get; set; }
 
@@ -25,6 +26,7 @@ namespace GameLauncher.Utils
         {
             GetSteamDirs();
             GetEpicDirs();
+            GetUplayDirs();
         }
 
         public void GetSteamDirs()
@@ -55,17 +57,58 @@ namespace GameLauncher.Utils
 
         public void GetEpicDirs()
         {
-            RegistryKey key = Registry.LocalMachine.OpenSubKey(EpicRegistry);
-
-            foreach (string k in key.GetSubKeyNames())
+            using (RegistryKey key = Registry.LocalMachine.OpenSubKey(EpicRegistry))
             {
-                using (RegistryKey subkey = key.OpenSubKey(k))
+                foreach (string k in key.GetSubKeyNames())
                 {
-                    string epicGamesPath = subkey.GetValue("InstalledDirectory").ToString();
-                    epicGamesPath = epicGamesPath.Substring(0, epicGamesPath.Length - 4);
-                    LibraryDirectories.Add(epicGamesPath);
+                    using (RegistryKey subkey = key.OpenSubKey(k))
+                    {
+                        string epicGamesPath = subkey.GetValue("InstalledDirectory").ToString();
+                        epicGamesPath = epicGamesPath.Substring(0, epicGamesPath.Length - 4);
+                        LibraryDirectories.Add(epicGamesPath);
+                    }
                 }
             }
+        }
+
+        public void GetUplayDirs()
+        {
+            using (RegistryKey key = Registry.LocalMachine.OpenSubKey(UplayRegistry))
+            {
+                foreach (string k in key.GetSubKeyNames())
+                {
+                    using (RegistryKey subKey = key.OpenSubKey(k))
+                    {
+                        string uplayPath = subKey.GetValue("InstallDir").ToString();
+                        string uplayPathTrimmed = uplayPath.Substring(0, 58);
+                        //string[] splitTitle = uplayPath.Split('/');
+                        //int largest = splitTitle.Length;
+                        //largest = largest - 2;
+                        //string title = splitTitle[largest];
+                        LibraryDirectories.Add(uplayPathTrimmed);
+                    }
+                }
+            }
+        }
+
+        public dynamic DeterminePlatform()
+        {
+            Platforms platform = Platforms.Steam;
+            foreach (var dir in LibraryDirectories)
+            {
+                if (dir.Contains("Steam"))
+                    platform = Platforms.Steam;
+
+                else if (dir.Contains("Epic"))
+                    platform = Platforms.Epic;
+
+                else if (dir.Contains("Bethesda"))
+                    platform = Platforms.Bethesda;
+
+                else
+                    platform = Platforms.Origin;
+            }
+            return platform;
         }
 
         public ObservableCollection<Game> GetExecutables()
@@ -83,7 +126,7 @@ namespace GameLauncher.Utils
                     Game game = new Game
                     {
                         Name = new DirectoryInfo(gameDir).Name,
-                        Platform = Platforms.Steam,
+                        Platform = DeterminePlatform(),
                         Executables = new List<string>(exes)
                     };
                     games.Add(game);

@@ -33,8 +33,8 @@
             <Button Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <iconPacks:PackIconMaterial Kind="Network"></iconPacks:PackIconMaterial>
             </Button>
-            <Button Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <iconPacks:PackIconMaterial Kind="Earth"></iconPacks:PackIconMaterial>
+            <Button Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding LaunchGameCommand}">
+                <iconPacks:PackIconMaterial Kind="Play"></iconPacks:PackIconMaterial>
             </Button>
 
         </Grid>
@@ -65,7 +65,7 @@
                     </Grid.ColumnDefinitions>
 
                     <TextBlock Grid.Column="0">Games might go here</TextBlock>
-                    <ListBox Grid.Column="0" BorderThickness="1" ItemsSource="{Binding Games}" DisplayMemberPath="Name"></ListBox>
+                    <ListBox Grid.Column="0" BorderThickness="1" ItemsSource="{Binding Games}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedGame}"></ListBox>
                 </Grid>
             </TabItem>
             <TabItem>
@@ -102,9 +102,9 @@
 
                         <Label>Game Folders</Label>
                     <ListBox Grid.Row="0" ItemsSource="{Binding Scanner.LibraryDirectories}" BorderThickness="1" ScrollViewer.CanContentScroll="True"></ListBox>
-                        <Button Command="{Binding AddFolderPathCommand}" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="50" Padding="8" Margin="8 0 0 0">
-                            <iconPacks:Material Kind="Plus"></iconPacks:Material>
-                        </Button>
+                    <Button Command="{Binding AddFolderPathCommand}" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="50" Padding="8" Margin="8 0 0 0">
+                        <iconPacks:Material Kind="Plus"></iconPacks:Material>
+                    </Button>
                 </Grid>
             </TabItem>
         </TabControl>

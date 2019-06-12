@@ -1,5 +1,6 @@
 ﻿using GameLauncher.Models;
 using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -11,6 +12,7 @@ namespace GameLauncher.Utils
     {
         public readonly string Steam32 = "SOFTWARE\\VALVE\\";
         public readonly string Steam64 = "SOFTWARE\\Wow6432Node\\Valve\\";
+        public readonly string EpicRegistry = "SOFTWARE\\WOW6432Node\\EpicGames\\Unreal Engine";
 
         public ObservableCollection<string> LibraryDirectories { get; set; }
 
@@ -22,6 +24,7 @@ namespace GameLauncher.Utils
         public void Scan()
         {
             GetSteamDirs();
+            GetEpicDirs();
         }
 
         public void GetSteamDirs()
@@ -46,6 +49,21 @@ namespace GameLauncher.Utils
                         }
                         LibraryDirectories.Add($"{steamPath}\\steamapps\\common");
                     }
+                }
+            }
+        }
+
+        public void GetEpicDirs()
+        {
+            RegistryKey key = Registry.LocalMachine.OpenSubKey(EpicRegistry);
+
+            foreach (string k in key.GetSubKeyNames())
+            {
+                using (RegistryKey subkey = key.OpenSubKey(k))
+                {
+                    string epicGamesPath = subkey.GetValue("InstalledDirectory").ToString();
+                    epicGamesPath = epicGamesPath.Substring(0, epicGamesPath.Length - 4);
+                    LibraryDirectories.Add(epicGamesPath);
                 }
             }
         }

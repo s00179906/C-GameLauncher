@@ -2,7 +2,6 @@
 
 namespace GameLauncher.Models
 {
-    public enum Platforms { Steam, Epic, Origin, Bethesda }
     public class Game
     {
         public string Name { get; set; }

@@ -74,6 +74,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Models\Game.cs" />
+    <Compile Include="Models\Platform.cs" />
     <Compile Include="Utils\CommandRunner.cs" />
     <Compile Include="Utils\GameScanner.cs" />
     <Compile Include="Utils\Helper.cs" />

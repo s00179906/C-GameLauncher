@@ -3,6 +3,7 @@ using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 
@@ -10,16 +11,26 @@ namespace GameLauncher.Utils
 {
     public class GameScanner
     {
-        public readonly string Steam32 = "SOFTWARE\\VALVE\\";
-        public readonly string Steam64 = "SOFTWARE\\Wow6432Node\\Valve\\";
-        public readonly string EpicRegistry = "SOFTWARE\\WOW6432Node\\EpicGames\\Unreal Engine";
-        public readonly string UplayRegistry = "SOFTWARE\\WOW6432Node\\Ubisoft\\Launcher\\Installs";
+        private readonly string Steam32 = "SOFTWARE\\VALVE\\";
+        private readonly string Steam64 = "SOFTWARE\\Wow6432Node\\Valve\\";
+        private readonly string EpicRegistry = "SOFTWARE\\WOW6432Node\\EpicGames\\Unreal Engine";
+        private readonly string UplayRegistry = "SOFTWARE\\WOW6432Node\\Ubisoft\\Launcher\\Installs";
 
-        public ObservableCollection<string> LibraryDirectories { get; set; }
+        public ObservableCollection<Platform> LibraryDirectories { get; set; }
 
         public GameScanner()
         {
-            LibraryDirectories = new ObservableCollection<string>();
+            Properties.Settings.Default.Reset();
+            LibraryDirectories = new ObservableCollection<Platform>();
+            LibraryDirectories.CollectionChanged += new NotifyCollectionChangedEventHandler(UpdateSettings);
+        }
+
+        private void UpdateSettings(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            foreach (Platform item in e.NewItems)
+            {
+                Properties.Settings.Default.FolderPaths.Add(item.InstallationPath);
+            }
         }
 
         public void Scan()
@@ -31,94 +42,116 @@ namespace GameLauncher.Utils
 
         public void GetSteamDirs()
         {
-            RegistryKey key = string.IsNullOrEmpty(Registry.LocalMachine.OpenSubKey(Steam64).ToString())
-                ? Registry.LocalMachine.OpenSubKey(Steam32)
-                : Registry.LocalMachine.OpenSubKey(Steam64);
-
-            foreach (string k in key.GetSubKeyNames())
+            try
             {
-                using (RegistryKey subKey = key.OpenSubKey(k))
+                RegistryKey key = string.IsNullOrEmpty(Registry.LocalMachine.OpenSubKey(Steam64).ToString())
+                    ? Registry.LocalMachine.OpenSubKey(Steam32)
+                    : Registry.LocalMachine.OpenSubKey(Steam64);
+
+                foreach (string k in key.GetSubKeyNames())
                 {
-                    string steamPath = subKey.GetValue("InstallPath").ToString();
-                    string configPath = steamPath + "/steamapps/libraryfolders.vdf";
-                    if (File.Exists(configPath))
+                    using (RegistryKey subKey = key.OpenSubKey(k))
                     {
-                        IEnumerable<string> configLines = File.ReadAllLines(configPath)
-                            .Where(l => !string.IsNullOrEmpty(l) && l.Contains(":\\"));
-                        foreach (var line in configLines)
+                        string steamPath = subKey.GetValue("InstallPath").ToString();
+                        string configPath = steamPath + "/steamapps/libraryfolders.vdf";
+                        if (File.Exists(configPath))
                         {
-                            LibraryDirectories.Add($"{line.Substring(line.IndexOf(":") - 1, line.Length - line.IndexOf(":"))}\\steamapps\\common");
+                            IEnumerable<string> configLines = File.ReadAllLines(configPath)
+                                .Where(l => !string.IsNullOrEmpty(l) && l.Contains(":\\"));
+                            foreach (var line in configLines)
+                            {
+                                LibraryDirectories.Add(new Platform
+                                {
+                                    PlatformType = Platforms.Steam,
+                                    Name = nameof(Platforms.Steam),
+                                    InstallationPath = $"{line.Substring(line.IndexOf(":") - 1, line.Length - line.IndexOf(":"))}\\steamapps\\common"
+                                });
+                            }
+
+                            LibraryDirectories.Add(new Platform
+                            {
+                                PlatformType = Platforms.Steam,
+                                Name = nameof(Platforms.Steam),
+                                InstallationPath = $"{steamPath}\\steamapps\\common"
+                            });
                         }
-                        LibraryDirectories.Add($"{steamPath}\\steamapps\\common");
                     }
                 }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
             }
         }
 
         public void GetEpicDirs()
         {
-            using (RegistryKey key = Registry.LocalMachine.OpenSubKey(EpicRegistry))
+            try
             {
-                foreach (string k in key.GetSubKeyNames())
+                using (RegistryKey key = Registry.LocalMachine.OpenSubKey(EpicRegistry))
                 {
-                    using (RegistryKey subkey = key.OpenSubKey(k))
+                    foreach (string k in key.GetSubKeyNames())
                     {
-                        string epicGamesPath = subkey.GetValue("InstalledDirectory").ToString();
-                        epicGamesPath = epicGamesPath.Substring(0, epicGamesPath.Length - 4);
-                        LibraryDirectories.Add(epicGamesPath);
+                        using (RegistryKey subkey = key.OpenSubKey(k))
+                        {
+                            string epicGamesPath = subkey.GetValue("InstalledDirectory").ToString();
+                            epicGamesPath = epicGamesPath.Substring(0, epicGamesPath.Length - 4);
+                            LibraryDirectories.Add(new Platform
+                            {
+                                PlatformType = Platforms.Epic,
+                                Name = "Epic",
+                                InstallationPath = epicGamesPath
+                            });
+                        }
                     }
                 }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
             }
         }
 
         public void GetUplayDirs()
         {
-            using (RegistryKey key = Registry.LocalMachine.OpenSubKey(UplayRegistry))
+            try
             {
-                foreach (string k in key.GetSubKeyNames())
+                using (RegistryKey key = Registry.LocalMachine.OpenSubKey(UplayRegistry))
                 {
-                    using (RegistryKey subKey = key.OpenSubKey(k))
+                    foreach (string k in key.GetSubKeyNames())
                     {
-                        string uplayPath = subKey.GetValue("InstallDir").ToString();
-                        string uplayPathTrimmed = uplayPath.Substring(0, 58);
-                        //string[] splitTitle = uplayPath.Split('/');
-                        //int largest = splitTitle.Length;
-                        //largest = largest - 2;
-                        //string title = splitTitle[largest];
-                        LibraryDirectories.Add(uplayPathTrimmed);
+                        using (RegistryKey subKey = key.OpenSubKey(k))
+                        {
+                            string uplayPath = subKey.GetValue("InstallDir").ToString();
+                            string uplayPathTrimmed = uplayPath.Substring(0, 58);
+                            //string[] splitTitle = uplayPath.Split('/');
+                            //int largest = splitTitle.Length;
+                            //largest = largest - 2;
+                            //string title = splitTitle[largest];
+                            LibraryDirectories.Add(new Platform
+                            {
+                                PlatformType = Platforms.UPlay,
+                                Name = nameof(Platforms.UPlay),
+                                InstallationPath = uplayPathTrimmed
+                            });
+
+                        }
                     }
                 }
             }
-        }
-
-        public dynamic DeterminePlatform()
-        {
-            Platforms platform = Platforms.Steam;
-            foreach (var dir in LibraryDirectories)
+            catch (Exception e)
             {
-                if (dir.Contains("Steam"))
-                    platform = Platforms.Steam;
-
-                else if (dir.Contains("Epic"))
-                    platform = Platforms.Epic;
-
-                else if (dir.Contains("Bethesda"))
-                    platform = Platforms.Bethesda;
-
-                else
-                    platform = Platforms.Origin;
+                Console.WriteLine(e.Message);
             }
-            return platform;
         }
 
         public ObservableCollection<Game> GetExecutables()
         {
             ObservableCollection<Game> games = new ObservableCollection<Game>();
 
-            foreach (string dir in LibraryDirectories)
+            foreach (Platform libDir in LibraryDirectories)
             {
-                string[] gameDirs = Directory.GetDirectories(dir);
-
+                string[] gameDirs = Directory.GetDirectories(libDir.InstallationPath);
 
                 foreach (var gameDir in gameDirs)
                 {
@@ -126,9 +159,10 @@ namespace GameLauncher.Utils
                     Game game = new Game
                     {
                         Name = new DirectoryInfo(gameDir).Name,
-                        Platform = DeterminePlatform(),
+                        Platform = libDir.PlatformType,
                         Executables = new List<string>(exes)
                     };
+
                     games.Add(game);
                 }
             }

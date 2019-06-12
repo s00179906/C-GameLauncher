@@ -29,8 +29,13 @@ namespace GameLauncher.Utils
         {
             foreach (Platform item in e.NewItems)
             {
-                Properties.Settings.Default.FolderPaths.Add(item.InstallationPath);
+                if (!Properties.Settings.Default.FolderPaths.Contains(item.InstallationPath))
+                {
+                    Properties.Settings.Default.FolderPaths.Add(item.InstallationPath);
+                }       
             }
+
+            Properties.Settings.Default.Save();
         }
 
         public void Scan()

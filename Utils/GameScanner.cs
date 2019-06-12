@@ -39,10 +39,10 @@ namespace GameLauncher.Utils
                     if (File.Exists(configPath))
                     {
                         IEnumerable<string> configLines = File.ReadAllLines(configPath)
-                            .Where(l => !string.IsNullOrEmpty(l) && l.Contains(":/"));
+                            .Where(l => !string.IsNullOrEmpty(l) && l.Contains(":\\"));
                         foreach (var line in configLines)
                         {
-                            LibraryDirectories.Add($"{line}\\steamapps\\common");
+                            LibraryDirectories.Add($"{line.Substring(line.IndexOf(":") - 1, line.Length - line.IndexOf(":"))}\\steamapps\\common");
                         }
                         LibraryDirectories.Add($"{steamPath}\\steamapps\\common");
                     }

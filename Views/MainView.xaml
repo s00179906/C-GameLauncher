@@ -7,12 +7,39 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid Margin="10">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="0.05*"/>
-            <RowDefinition Height="0.95*"/>
-        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.05*"/>
+            <ColumnDefinition Width="0.95*"/>
+        </Grid.ColumnDefinitions>
 
-        <TabControl Grid.Row="1">
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Button Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <iconPacks:PackIconMaterial Kind="AllInclusive"></iconPacks:PackIconMaterial>
+            </Button>
+            <Button Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <iconPacks:PackIconMaterial Kind="Gamepad"></iconPacks:PackIconMaterial>
+            </Button>
+            <Button Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <iconPacks:PackIconMaterial Kind="GamepadVariant"></iconPacks:PackIconMaterial>
+            </Button>
+            <Button Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <iconPacks:PackIconMaterial Kind="Network"></iconPacks:PackIconMaterial>
+            </Button>
+            <Button Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <iconPacks:PackIconMaterial Kind="Earth"></iconPacks:PackIconMaterial>
+            </Button>
+
+        </Grid>
+
+        <TabControl Grid.Column="1">
             <TabItem Header="Games">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
@@ -35,14 +62,10 @@
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="0.7*"/>
-                        <ColumnDefinition Width="0.3*"/>
                     </Grid.ColumnDefinitions>
 
                     <TextBlock Grid.Column="0">Games might go here</TextBlock>
-                    <ListBox Grid.Column="0" BorderThickness="1">
-                        
-                    </ListBox>
-                    <TextBlock Grid.Column="1">Game information might go here</TextBlock>
+                    <ListBox Grid.Column="0" BorderThickness="1" ItemsSource="{Binding Games}" DisplayMemberPath="Name"></ListBox>
                 </Grid>
             </TabItem>
             <TabItem>
@@ -78,11 +101,10 @@
                     </Grid.ColumnDefinitions>
 
                         <Label>Game Folders</Label>
-                    <ListBox Grid.Row="0" ItemsSource="{Binding Scanner.GameDirectories}" BorderThickness="1" ScrollViewer.CanContentScroll="True"></ListBox>
+                    <ListBox Grid.Row="0" ItemsSource="{Binding Scanner.LibraryDirectories}" BorderThickness="1" ScrollViewer.CanContentScroll="True"></ListBox>
                         <Button Command="{Binding AddFolderPathCommand}" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="50" Padding="8" Margin="8 0 0 0">
                             <iconPacks:Material Kind="Plus"></iconPacks:Material>
                         </Button>
-                    <TextBlock Grid.Row="1">Placeholder....</TextBlock>
                 </Grid>
             </TabItem>
         </TabControl>

@@ -19,11 +19,13 @@ namespace GameLauncher.ViewModels
             Scanner = new GameScanner();
 
             Scanner.Scan();
+
+            Games = Scanner.GetExecutables();
         }
 
         private void AddFolder(object obj)
         {
-            Scanner.GameDirectories.Add(Helper.SelectDir());
+            Scanner.LibraryDirectories.Add(Helper.SelectDir());
         }
     }
 }

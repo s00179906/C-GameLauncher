@@ -1,10 +1,7 @@
-﻿using GameLauncher.Models;
-using GameLauncher.Utils;
+﻿using GameLauncher.Utils;
 using MahApps.Metro;
 using MahApps.Metro.Controls.Dialogs;
 using System;
-using System.Collections.ObjectModel;
-using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Windows;

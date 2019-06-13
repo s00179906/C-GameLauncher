@@ -76,12 +76,7 @@ namespace GameLauncher.ViewModels
                     PlatformType = Platforms.NONE
                 });
 
-                Games.Clear();
-
-                foreach (var exe in Scanner.GetExecutables())
-                {
-                    Games.Add(exe);
-                }
+                RefreshGames();
             }
         }
 
@@ -90,18 +85,30 @@ namespace GameLauncher.ViewModels
             if (SelectedFolder != null)
             {
                 Scanner.LibraryDirectories.Remove(SelectedFolder);
-                Games.Clear();
-                foreach (var exe in Scanner.GetExecutables())
-                {
-                    Games.Add(exe);
-                }
+                RefreshGames();
+            }
+        }
+
+        private void RefreshGames()
+        {
+            Games.Clear();
+            foreach (var exe in Scanner.GetExecutables())
+            {
+                Games.Add(exe);
             }
         }
 
         private void FilterGamesByPlatformSteam(object obj)
         {
-            Enum.TryParse(obj as string, out Platforms selectedPlatform);
-            FilteredGames.Filter = game => ((Game)game).Platform.Equals(selectedPlatform);
+            if (obj as string == "ALL")
+            {
+                FilteredGames.Filter = game => game.Equals(game);
+            }
+            else
+            {
+                Enum.TryParse(obj as string, out Platforms selectedPlatform);
+                FilteredGames.Filter = game => ((Game)game).Platform.Equals(selectedPlatform);
+            }
         }
 
         private void OnPropertyChanged(string property)

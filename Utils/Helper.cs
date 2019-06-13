@@ -6,23 +6,6 @@ namespace GameLauncher.Utils
 {
     public class Helper
     {
-        public static void CheckGameFoldersExist()
-        {
-            string[] folderPaths = Properties.Settings.Default.FolderPaths.Cast<string>().ToArray();
-            
-            // Used for testing
-            // Properties.Settings.Default.Reset();
-
-            if (folderPaths.Length < 2)
-            {
-                if (MessageBox.Show("Please select a game folder", "No game folders found") == MessageBoxResult.OK)
-                {
-                    Properties.Settings.Default.FolderPaths.Add(SelectDir());
-                    Properties.Settings.Default.Save();
-                }
-            }
-        }
-
         public static string SelectDir()
         {
             var dialog = new CommonOpenFileDialog
@@ -37,13 +20,6 @@ namespace GameLauncher.Utils
                 return dialog.FileName;
             }
 
-            return string.Empty;
-        }
-
-        public static string RemoveSelectedDir(string folder)
-        {
-            Properties.Settings.Default.FolderPaths.Remove(folder);
-            Properties.Settings.Default.Save();
             return string.Empty;
         }
     }

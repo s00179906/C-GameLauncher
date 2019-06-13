@@ -19,8 +19,6 @@ namespace GameLauncher.ViewModels
 
         public GameLauncherViewModel(IDialogCoordinator instance)
         {
-            Helper.CheckGameFoldersExist();
-
             ExitCommand = new CommandRunner(Close);
             ShowAboutCommand = new CommandRunner(ShowAboutDialog);
             ChangeThemeCommand = new CommandRunner(ChangeTheme);

@@ -1,5 +1,6 @@
 ﻿using GameLauncher.Models;
 using GameLauncher.Utils;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -15,24 +16,20 @@ namespace GameLauncher.ViewModels
         public ObservableCollection<Game> Games
         {
             get { return _games; }
-            set { _games = value; OnPropertyChanged("Games"); }
+            set { _games = value; OnPropertyChanged(nameof(Games)); }
         }
 
         public ICollectionView FilteredGames { get; set; }
 
         public CommandRunner AddFolderPathCommand { get; set; }
         public CommandRunner DeleteFolderPathCommand { get; private set; }
-        public CommandRunner FilterSteamGamesCommand { get; private set; }
-        public CommandRunner FilterUplayGamesCommand { get; private set; }
-        public CommandRunner FilterBethesdaGamesCommand { get; private set; }
-        public CommandRunner FilterBlizzardGamesCommand { get; private set; }
-        public CommandRunner FilterOriginsGamesCommand { get; private set; }
-        public CommandRunner FilterEpicGamesCommand { get; private set; }
-        public GameScanner Scanner { get; set; }
+        public CommandRunner FilterGamesCommand { get; private set; }
         public CommandRunner LaunchGameCommand { get; private set; }
+        public GameScanner Scanner { get; set; }
         public Game SelectedGame { get; set; }
         public Platform SelectedFolder { get; set; }
 
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public MainViewModel()
         {
@@ -41,26 +38,15 @@ namespace GameLauncher.ViewModels
             Scanner = new GameScanner();
 
             LaunchGameCommand = new CommandRunner(LaunchGame);
-            AddFolderPathCommand = new CommandRunner(AddFolder);
-            DeleteFolderPathCommand = new CommandRunner(DeleteFolder);
-            FilterSteamGamesCommand = new CommandRunner(FilterGamesByPlatformSteam);
-            FilterEpicGamesCommand = new CommandRunner(FilterGamesByPlatformSteam);
+            AddFolderPathCommand = new CommandRunner(AddDir);
+            DeleteFolderPathCommand = new CommandRunner(DeleteDir);
+            FilterGamesCommand = new CommandRunner(FilterGamesByPlatformSteam);
 
             Scanner.Scan();
 
             Games = Scanner.GetExecutables();
             FilteredGames = CollectionViewSource.GetDefaultView(Games);
         }
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void OnPropertyChanged(string property)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(property));
-            }
-        }
-
 
         private void LaunchGame(object obj)
         {
@@ -77,7 +63,7 @@ namespace GameLauncher.ViewModels
             }
         }
 
-        private void AddFolder(object obj)
+        private void AddDir(object obj)
         {
             string dirToAdd = Helper.SelectDir();
 
@@ -87,7 +73,7 @@ namespace GameLauncher.ViewModels
                 {
                     Name = "Agnostic",
                     InstallationPath = dirToAdd,
-                    PlatformType = Platforms.Cracked
+                    PlatformType = Platforms.NONE
                 });
 
                 Games.Clear();
@@ -99,7 +85,7 @@ namespace GameLauncher.ViewModels
             }
         }
 
-        private void DeleteFolder(object obj)
+        private void DeleteDir(object obj)
         {
             if (SelectedFolder != null)
             {
@@ -114,22 +100,14 @@ namespace GameLauncher.ViewModels
 
         private void FilterGamesByPlatformSteam(object obj)
         {
-            string Platform = obj as string;
-            switch (Platform)
-            {
-                case "Steam":
-                    FilteredGames.Filter = game => ((Game)game).Platform.Equals(Platforms.Steam);
-                    break;
-                case "Epic":
-                    FilteredGames.Filter = game => ((Game)game).Platform.Equals(Platforms.Epic);
-                    break;
-                case "Uplay":
-                    FilteredGames.Filter = game => ((Game)game).Platform.Equals(Platforms.UPlay);
-                    break;
-                default:
-                    MessageBox.Show("Platform not found . . .");
-                    break;
-            }
+            Enum.TryParse(obj as string, out Platforms selectedPlatform);
+            FilteredGames.Filter = game => ((Game)game).Platform.Equals(selectedPlatform);
         }
+
+        private void OnPropertyChanged(string property)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
+        }
+
     }
 }

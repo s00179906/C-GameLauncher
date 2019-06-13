@@ -3,7 +3,6 @@ using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 
@@ -67,16 +66,16 @@ namespace GameLauncher.Utils
                             {
                                 LibraryDirectories.Add(new Platform
                                 {
-                                    PlatformType = Platforms.Steam,
-                                    Name = nameof(Platforms.Steam),
+                                    PlatformType = Platforms.STEAM,
+                                    Name = nameof(Platforms.STEAM),
                                     InstallationPath = $"{line.Substring(line.IndexOf(":") - 1, line.Length - line.IndexOf(":"))}\\steamapps\\common"
                                 });
                             }
 
                             LibraryDirectories.Add(new Platform
                             {
-                                PlatformType = Platforms.Steam,
-                                Name = nameof(Platforms.Steam),
+                                PlatformType = Platforms.STEAM,
+                                Name = nameof(Platforms.STEAM),
                                 InstallationPath = $"{steamPath}\\steamapps\\common"
                             });
                         }
@@ -103,7 +102,7 @@ namespace GameLauncher.Utils
                             epicGamesPath = epicGamesPath.Substring(0, epicGamesPath.Length - 4);
                             LibraryDirectories.Add(new Platform
                             {
-                                PlatformType = Platforms.Epic,
+                                PlatformType = Platforms.EPIC,
                                 Name = "Epic",
                                 InstallationPath = epicGamesPath
                             });
@@ -129,14 +128,10 @@ namespace GameLauncher.Utils
                         {
                             string uplayPath = subKey.GetValue("InstallDir").ToString();
                             string uplayPathTrimmed = uplayPath.Substring(0, 58);
-                            //string[] splitTitle = uplayPath.Split('/');
-                            //int largest = splitTitle.Length;
-                            //largest = largest - 2;
-                            //string title = splitTitle[largest];
                             LibraryDirectories.Add(new Platform
                             {
-                                PlatformType = Platforms.UPlay,
-                                Name = nameof(Platforms.UPlay),
+                                PlatformType = Platforms.UPLAY,
+                                Name = nameof(Platforms.UPLAY),
                                 InstallationPath = uplayPathTrimmed
                             });
 

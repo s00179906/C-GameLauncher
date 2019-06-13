@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GameLauncher.Models
 {
-    public enum Platforms { Steam, Epic, Origin, Bethesda, UPlay, None }
+    public enum Platforms { Steam, Epic, Origin, Bethesda, UPlay, Cracked, None }
 
     public class Platform
     {

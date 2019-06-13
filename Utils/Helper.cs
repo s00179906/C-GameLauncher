@@ -39,5 +39,12 @@ namespace GameLauncher.Utils
 
             return string.Empty;
         }
+
+        public static string RemoveSelectedDir(string folder)
+        {
+            Properties.Settings.Default.FolderPaths.Remove(folder);
+            Properties.Settings.Default.Save();
+            return string.Empty;
+        }
     }
 }

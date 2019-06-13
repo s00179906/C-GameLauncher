@@ -21,19 +21,50 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <Button Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Button Grid.Row="0"
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Center"
+                    Height="45"
+                    Width="45"
+                    Command="{Binding FilterSteamGamesCommand}">
                 <iconPacks:PackIconMaterial Kind="AllInclusive"></iconPacks:PackIconMaterial>
             </Button>
-            <Button Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <iconPacks:PackIconMaterial Kind="Gamepad"></iconPacks:PackIconMaterial>
+
+            <Button Grid.Row="1" 
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Center"
+                    Command="{Binding FilterSteamGamesCommand}"
+                    CommandParameter="Steam"
+                    Height="45"
+                    Width="45">
+                <iconPacks:PackIconMaterial Kind="Steam"></iconPacks:PackIconMaterial>
             </Button>
-            <Button Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+
+            <Button Grid.Row="2" 
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Center"
+                    Height="45"
+                    Width="45"
+                    CommandParameter="Epic"
+                    Command="{Binding FilterSteamGamesCommand}">
                 <iconPacks:PackIconMaterial Kind="GamepadVariant"></iconPacks:PackIconMaterial>
             </Button>
-            <Button Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Button Grid.Row="3" 
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Height="45"
+                    Width="45"
+                    CommandParameter="Uplay"
+                    Command="{Binding FilterSteamGamesCommand}">
                 <iconPacks:PackIconMaterial Kind="Network"></iconPacks:PackIconMaterial>
             </Button>
-            <Button Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding LaunchGameCommand}">
+
+            <Button Grid.Row="4" 
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Center"
+                    Command="{Binding LaunchGameCommand}"
+                    Height="45"
+                    Width="45">
                 <iconPacks:PackIconMaterial Kind="Play"></iconPacks:PackIconMaterial>
             </Button>
 
@@ -65,7 +96,39 @@
                     </Grid.ColumnDefinitions>
 
                     <TextBlock Grid.Column="0">Games might go here</TextBlock>
-                    <ListBox Grid.Column="0" BorderThickness="1" ItemsSource="{Binding Games}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedGame}"></ListBox>
+                    <ListBox Grid.Column="0" 
+                             BorderThickness="1" 
+                             ItemsSource="{Binding Games}" 
+                             SelectedItem="{Binding SelectedGame}">
+
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="5">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                        <!--<ColumnDefinition/>-->
+                                    </Grid.ColumnDefinitions>
+
+                                    <!--<Image Source="{Binding Path=ImageSource, Mode=OneTime}" Height="180" Grid.Row="0" Grid.Column="2"/>-->
+                                    <TextBlock Text="{Binding Name}" 
+                                               Grid.Row="0" 
+                                               Grid.Column="0"
+                                               HorizontalAlignment="Center"
+                                               FontSize="16"/>
+
+                                    <TextBlock Text="{Binding Platform}"
+                                               Grid.Row="0" 
+                                               Grid.Column="1"
+                                               HorizontalAlignment="Center"
+                                               FontSize="16"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
                 </Grid>
             </TabItem>
             <TabItem>
@@ -100,10 +163,13 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                        <Label>Game Folders</Label>
-                    <ListBox Grid.Row="0" ItemsSource="{Binding Scanner.LibraryDirectories}" DisplayMemberPath="InstallationPath" BorderThickness="1" ScrollViewer.CanContentScroll="True"></ListBox>
+                    <Label>Game Folders</Label>
+                    <ListBox Grid.Row="0" ItemsSource="{Binding Scanner.LibraryDirectories}" DisplayMemberPath="InstallationPath" BorderThickness="1" ScrollViewer.CanContentScroll="True" SelectedItem="{Binding SelectedFolder}"></ListBox>
                     <Button Command="{Binding AddFolderPathCommand}" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="50" Padding="8" Margin="8 0 0 0">
                         <iconPacks:Material Kind="Plus"></iconPacks:Material>
+                    </Button>
+                    <Button Command="{Binding DeleteFolderPathCommand}" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="50" Padding="8" Margin="8 0 0 0">
+                        <iconPacks:Material Kind="Minus"></iconPacks:Material>
                     </Button>
                 </Grid>
             </TabItem>

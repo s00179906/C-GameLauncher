@@ -20,23 +20,23 @@ namespace GameLauncher.Utils
 
         public GameScanner()
         {
-            Properties.Settings.Default.Reset();
+            //Properties.Settings.Default.Reset();
             LibraryDirectories = new ObservableCollection<Platform>();
-            LibraryDirectories.CollectionChanged += new NotifyCollectionChangedEventHandler(UpdateSettings);
+            //LibraryDirectories.CollectionChanged += new NotifyCollectionChangedEventHandler(UpdateSettings);
         }
 
-        private void UpdateSettings(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            foreach (Platform item in e.NewItems)
-            {
-                if (!Properties.Settings.Default.FolderPaths.Contains(item.InstallationPath))
-                {
-                    Properties.Settings.Default.FolderPaths.Add(item.InstallationPath);
-                }       
-            }
+        //private void UpdateSettings(object sender, NotifyCollectionChangedEventArgs e)
+        //{
+        //    foreach (Platform item in e.NewItems)
+        //    {
+        //        if (!Properties.Settings.Default.FolderPaths.Contains(item.InstallationPath))
+        //        {
+        //            Properties.Settings.Default.FolderPaths.Add(item.InstallationPath);
+        //        }
+        //    }
 
-            Properties.Settings.Default.Save();
-        }
+        //    Properties.Settings.Default.Save();
+        //}
 
         public void Scan()
         {

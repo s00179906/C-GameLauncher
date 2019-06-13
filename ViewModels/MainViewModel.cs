@@ -17,12 +17,11 @@ namespace GameLauncher.ViewModels
 
         public MainViewModel()
         {
-            LaunchGameCommand = new CommandRunner(LaunchGame);
             Games = new ObservableCollection<Game>();
-
-            AddFolderPathCommand = new CommandRunner(AddFolder);
-
             Scanner = new GameScanner();
+
+            LaunchGameCommand = new CommandRunner(LaunchGame);
+            AddFolderPathCommand = new CommandRunner(AddFolder);
 
             Scanner.Scan();
 
@@ -46,7 +45,19 @@ namespace GameLauncher.ViewModels
 
         private void AddFolder(object obj)
         {
-            Scanner.LibraryDirectories.Add(Helper.SelectDir());
+            Scanner.LibraryDirectories.Add(new Platform
+            {
+                Name = "Agnostic",
+                InstallationPath = Helper.SelectDir(),
+                PlatformType = Platforms.None
+            });
+
+            Games.Clear();
+
+            foreach (var exe in Scanner.GetExecutables())
+            {
+                Games.Add(exe);
+            }
         }
     }
 }

@@ -30,6 +30,7 @@ namespace GameLauncher.ViewModels
         public Game SelectedGame { get; set; }
         public Platform SelectedFolder { get; set; }
         public ChooseGameExesView window { get; set; }
+        public static string UserSelectedExe { get; set; }
 
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -63,7 +64,7 @@ namespace GameLauncher.ViewModels
                 {
                     window = new ChooseGameExesView(SelectedGame);
                     window.ShowDialog();
-
+                    Process.Start(UserSelectedExe);
                 }
             }
         }

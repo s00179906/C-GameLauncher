@@ -12,9 +12,12 @@
                    FontSize="22"
                    Foreground="AntiqueWhite"/>
             <ListBox ItemsSource="{Binding GameExecutables}"
-                     Foreground="AntiqueWhite"
-                     FontSize="22"
-                     SelectedItem="{Binding SelectedExecutable}"/>
+                     SelectedItem="{Binding SelectedExecutable}"
+                     FontSize="16"
+                     Foreground="WhiteSmoke"/>
+
+            <Button Content="Add Exe"
+                    Command="{Binding SetEXECommand}"/>
             <TextBlock Text="{Binding SelectedExecutable}"
                    FontSize="22"
                    Foreground="AntiqueWhite"/>

@@ -120,7 +120,8 @@
                                                Grid.Row="0" 
                                                Grid.Column="0"
                                                HorizontalAlignment="Center"
-                                               FontSize="16"/>
+                                               FontSize="16"
+                                               />
 
                                     <TextBlock Text="{Binding Platform}"
                                                Grid.Row="0" 

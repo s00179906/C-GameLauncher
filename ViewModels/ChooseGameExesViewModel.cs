@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Data;
 using GameLauncher.Views;
 using System.Linq;
+using System.Collections.Specialized;
 
 namespace GameLauncher.ViewModels
 {
@@ -18,6 +19,7 @@ namespace GameLauncher.ViewModels
         public string SelectedExecutable { get; set; }
         public CommandRunner SetEXECommand { get; set; }
         public ChooseGameExesView exeWindow { get; set; }
+        public StringCollection UserSelectedEXES { get; set; }
 
         public ChooseGameExesViewModel(Game game)
         {
@@ -28,13 +30,18 @@ namespace GameLauncher.ViewModels
                 GameExecutables.Add(exe);
             }
             SetEXECommand = new CommandRunner(SetEXE);
+            UserSelectedEXES = new StringCollection();
         }
 
         private void SetEXE(object obj)
         {
             if (SelectedExecutable != null)
             {
-                MainViewModel.UserSelectedExe = SelectedExecutable;
+                //MainViewModel.UserSelectedExe = SelectedExecutable;
+                MainViewModel.SelectedGame.UserSelectedExecutable = SelectedExecutable;
+                UserSelectedEXES.Add(SelectedExecutable);
+                Properties.Settings.Default.UserSelectedEXES = UserSelectedEXES;
+                Properties.Settings.Default.Save();
                 exeWindow = Application.Current.Windows.OfType<ChooseGameExesView>().SingleOrDefault(w => w.IsActive);
                 exeWindow.Close();
             }

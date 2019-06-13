@@ -72,5 +72,16 @@ namespace GameLauncher.Properties {
                 this["FolderPaths"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringCollection UserSelectedEXES {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["UserSelectedEXES"]));
+            }
+            set {
+                this["UserSelectedEXES"] = value;
+            }
+        }
     }
 }

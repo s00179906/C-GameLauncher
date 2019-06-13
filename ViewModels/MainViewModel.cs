@@ -28,7 +28,7 @@ namespace GameLauncher.ViewModels
         public CommandRunner FilterGamesCommand { get; private set; }
         public CommandRunner LaunchGameCommand { get; private set; }
         public GameScanner Scanner { get; set; }
-        public Game SelectedGame { get; set; }
+        public static Game SelectedGame { get; set; }
         public Platform SelectedFolder { get; set; }
         public ChooseGameExesView Window { get; set; }
         public static string UserSelectedExe { get; set; }
@@ -56,35 +56,47 @@ namespace GameLauncher.ViewModels
         private async void MultilpleEXEWarning()
         {
             await DialogCoordinator.ShowMessageAsync(this, "Multiple Exes", $"{SelectedGame.Name} has multiple exes. \nPlease choose the correct one to launch.");
-           
+
         }
 
         private void LaunchGame(object obj)
         {
             if (SelectedGame != null)
             {
+                var games = Properties.Settings.Default.UserSelectedEXES;
                 if (SelectedGame.Executables.Count == 1)
                 {
                     Process.Start(SelectedGame.Executables[0]);
                 }
                 else
                 {
-                    MultilpleEXEWarning();
-                    LaunchUserSelectedEXE();
-
+                    foreach (var gamePath in games)
+                    {
+                        try
+                        {
+                            if (gamePath.Contains(SelectedGame.Name))
+                            {
+                                //need to check if process was not cancelled by the user, crashes the app. 
+                                Process.Start(gamePath);
+                            }
+                            else
+                            {
+                                MultilpleEXEWarning();
+                                Window = new ChooseGameExesView(SelectedGame);
+                                Window.ShowDialog();
+                            }
+                        }
+                        //does not work
+                        catch (OperationCanceledException)
+                        {
+                            throw;
+                        }
+                        
+                    }
                 }
             }
         }
 
-        private void LaunchUserSelectedEXE()
-        {
-            Window = new ChooseGameExesView(SelectedGame);
-            Window.Show();
-            if (UserSelectedExe != null)
-            {
-                Process.Start(UserSelectedExe);
-            }
-        }
 
         private void AddDir(object obj)
         {

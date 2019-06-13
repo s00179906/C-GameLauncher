@@ -17,5 +17,8 @@
   &lt;string xsi:nil="true" /&gt;
 &lt;/ArrayOfString&gt;</Value>
     </Setting>
+    <Setting Name="UserSelectedEXES" Type="System.Collections.Specialized.StringCollection" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>

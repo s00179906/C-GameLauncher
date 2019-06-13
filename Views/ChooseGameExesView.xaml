@@ -1,0 +1,23 @@
+﻿<Window x:Class="GameLauncher.Views.ChooseGameExesView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GameLauncher.Views"
+        mc:Ignorable="d"
+        Title="ChooseGameExesView" Height="450" Width="800">
+    <Grid>
+        <StackPanel>
+            <TextBlock Text="{Binding Game.Name}"
+                   FontSize="22"
+                   Foreground="AntiqueWhite"/>
+            <ListBox ItemsSource="{Binding GameExecutables}"
+                     Foreground="AntiqueWhite"
+                     FontSize="22"
+                     SelectedItem="{Binding SelectedExecutable}"/>
+            <TextBlock Text="{Binding SelectedExecutable}"
+                   FontSize="22"
+                   Foreground="AntiqueWhite"/>
+        </StackPanel>
+    </Grid>
+</Window>

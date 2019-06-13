@@ -79,8 +79,12 @@
     <Compile Include="Utils\CommandRunner.cs" />
     <Compile Include="Utils\GameScanner.cs" />
     <Compile Include="Utils\Helper.cs" />
+    <Compile Include="ViewModels\ChooseGameExesViewModel.cs" />
     <Compile Include="ViewModels\GameLauncherViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="Views\ChooseGameExesView.xaml.cs">
+      <DependentUpon>ChooseGameExesView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
@@ -96,6 +100,10 @@
       <DependentUpon>GameLauncher.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\ChooseGameExesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

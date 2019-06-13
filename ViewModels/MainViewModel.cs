@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Data;
+using GameLauncher.Views;
 
 namespace GameLauncher.ViewModels
 {
@@ -28,6 +29,8 @@ namespace GameLauncher.ViewModels
         public GameScanner Scanner { get; set; }
         public Game SelectedGame { get; set; }
         public Platform SelectedFolder { get; set; }
+        public ChooseGameExesView window { get; set; }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -58,7 +61,9 @@ namespace GameLauncher.ViewModels
                 }
                 else
                 {
-                    MessageBox.Show("Game has more than one exe", "Whoops");
+                    window = new ChooseGameExesView(SelectedGame);
+                    window.ShowDialog();
+
                 }
             }
         }

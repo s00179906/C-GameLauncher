@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Data;
 using GameLauncher.Views;
+using MahApps.Metro.Controls.Dialogs;
 
 namespace GameLauncher.ViewModels
 {
@@ -29,16 +30,16 @@ namespace GameLauncher.ViewModels
         public GameScanner Scanner { get; set; }
         public Game SelectedGame { get; set; }
         public Platform SelectedFolder { get; set; }
-        public ChooseGameExesView window { get; set; }
+        public ChooseGameExesView Window { get; set; }
         public static string UserSelectedExe { get; set; }
-
+        public IDialogCoordinator DialogCoordinator { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public MainViewModel()
+        public MainViewModel(IDialogCoordinator instance)
         {
             Games = new ObservableCollection<Game>();
-           
+            DialogCoordinator = instance;
             Scanner = new GameScanner();
 
             LaunchGameCommand = new CommandRunner(LaunchGame);
@@ -52,6 +53,12 @@ namespace GameLauncher.ViewModels
             FilteredGames = CollectionViewSource.GetDefaultView(Games);
         }
 
+        private async void MultilpleEXEWarning()
+        {
+            await DialogCoordinator.ShowMessageAsync(this, "Multiple Exes", $"{SelectedGame.Name} has multiple exes. \nPlease choose the correct one to launch.");
+           
+        }
+
         private void LaunchGame(object obj)
         {
             if (SelectedGame != null)
@@ -62,10 +69,20 @@ namespace GameLauncher.ViewModels
                 }
                 else
                 {
-                    window = new ChooseGameExesView(SelectedGame);
-                    window.ShowDialog();
-                    Process.Start(UserSelectedExe);
+                    MultilpleEXEWarning();
+                    LaunchUserSelectedEXE();
+
                 }
+            }
+        }
+
+        private void LaunchUserSelectedEXE()
+        {
+            Window = new ChooseGameExesView(SelectedGame);
+            Window.Show();
+            if (UserSelectedExe != null)
+            {
+                Process.Start(UserSelectedExe);
             }
         }
 

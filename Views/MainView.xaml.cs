@@ -1,5 +1,6 @@
 ﻿using GameLauncher.ViewModels;
 using System.Windows.Controls;
+using MahApps.Metro.Controls.Dialogs;
 
 namespace GameLauncher.Views
 {
@@ -8,7 +9,7 @@ namespace GameLauncher.Views
         public MainView()
         {
             InitializeComponent();
-            MainViewModel vm = new MainViewModel();
+            MainViewModel vm = new MainViewModel(DialogCoordinator.Instance);
             this.DataContext = vm;
         }
     }

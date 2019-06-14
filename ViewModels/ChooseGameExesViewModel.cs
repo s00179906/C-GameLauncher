@@ -36,7 +36,6 @@ namespace GameLauncher.ViewModels
         {
             if (SelectedExecutable != null)
             {
-                //MultilpleEXEWarning(); // crashes the app for some reason.
                 MainViewModel.SelectedGame.UserPreferedEXE = SelectedExecutable;
 
                 if (MainViewModel.SelectedGame.UserPreferedEXE != null)
@@ -62,16 +61,6 @@ namespace GameLauncher.ViewModels
                 ExeWindow = Application.Current.Windows.OfType<ChooseGameExesView>().SingleOrDefault(w => w.IsActive);
                 ExeWindow.Close();
             }
-        }
-        public string AddObjectsToJson<JObject>(string json, JObject objects)
-        {
-            List<JObject> list = JsonConvert.DeserializeObject<List<JObject>>(json);
-            list.Add(objects);
-            return JsonConvert.SerializeObject(list);
-        }
-        private async void MultilpleEXEWarning()
-        {
-            await DialogCoordinator.ShowMessageAsync(this, $"{MainViewModel.SelectedGame.Name}", $"You are about to add the selected exe as prefered exe. Continue?");
         }
     }
 }

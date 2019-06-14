@@ -13,7 +13,7 @@ namespace GameLauncher.Utils
         private readonly string Steam32 = "SOFTWARE\\VALVE\\";
         private readonly string Steam64 = "SOFTWARE\\Wow6432Node\\Valve\\";
         private readonly string EpicRegistry = "SOFTWARE\\WOW6432Node\\EpicGames\\Unreal Engine";
-        private readonly string UplayRegistry = "SOFTWARE\\WOW6432Node\\Ubisoft\\Launcher\\Installs";
+        private readonly string UplayRegistry = "SOFTWARE\\WOW6432Node\\Ubisoft\\Launcher";
 
         public ObservableCollection<Platform> LibraryDirectories { get; set; }
 
@@ -122,21 +122,14 @@ namespace GameLauncher.Utils
             {
                 using (RegistryKey key = Registry.LocalMachine.OpenSubKey(UplayRegistry))
                 {
-                    foreach (string k in key.GetSubKeyNames())
+                    string uplayPath = key.GetValue("InstallDir").ToString();
+                    string uplayPathTrimmed = uplayPath + "games";
+                    LibraryDirectories.Add(new Platform
                     {
-                        using (RegistryKey subKey = key.OpenSubKey(k))
-                        {
-                            string uplayPath = subKey.GetValue("InstallDir").ToString();
-                            string uplayPathTrimmed = uplayPath.Substring(0, 58);
-                            LibraryDirectories.Add(new Platform
-                            {
-                                PlatformType = Platforms.UPLAY,
-                                Name = nameof(Platforms.UPLAY),
-                                InstallationPath = uplayPathTrimmed
-                            });
-
-                        }
-                    }
+                        PlatformType = Platforms.UPLAY,
+                        Name = nameof(Platforms.UPLAY),
+                        InstallationPath = uplayPathTrimmed
+                    });
                 }
             }
             catch (Exception e)
@@ -166,7 +159,6 @@ namespace GameLauncher.Utils
                     games.Add(game);
                 }
             }
-
             return games;
         }
     }

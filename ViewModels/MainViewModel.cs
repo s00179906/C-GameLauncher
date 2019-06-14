@@ -4,16 +4,13 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Windows;
 using System.Windows.Data;
 using GameLauncher.Views;
 using MahApps.Metro.Controls.Dialogs;
-using System.Collections.Specialized;
-using System.Linq;
 using System.IO;
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Configuration;
+using System.Windows;
 
 namespace GameLauncher.ViewModels
 {
@@ -31,7 +28,7 @@ namespace GameLauncher.ViewModels
         public CommandRunner DeleteFolderPathCommand { get; private set; }
         public CommandRunner FilterGamesCommand { get; private set; }
         public CommandRunner SetPreferedEXECommand { get; private set; }
-        public CommandRunner ResetDirPathsCommand { get; set; }
+        public CommandRunner ResetAllSettingsCommand { get; set; }
         public GameScanner Scanner { get; set; }
         public static Game SelectedGame { get; set; }
         public Platform SelectedFolder { get; set; }
@@ -39,11 +36,7 @@ namespace GameLauncher.ViewModels
         public static string UserSelectedExe { get; set; }
         public IDialogCoordinator DialogCoordinator { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
-
-
         public CommandRunner PlayGameCommand { get; set; }
-
-
         #endregion
 
         #region Constructor
@@ -56,7 +49,7 @@ namespace GameLauncher.ViewModels
             AddFolderPathCommand = new CommandRunner(AddDir);
             DeleteFolderPathCommand = new CommandRunner(DeleteDir);
             FilterGamesCommand = new CommandRunner(FilterGamesByPlatformSteam);
-            ResetDirPathsCommand = new CommandRunner(ResetDirPaths);
+            ResetAllSettingsCommand = new CommandRunner(ResetAllSettings);
 
 
             PlayGameCommand = new CommandRunner(PlayGame);
@@ -99,13 +92,19 @@ namespace GameLauncher.ViewModels
 
             foreach (var game in gameList)
             {
-                if (game.Name == SelectedGame.Name)
+                if (SelectedGame != null)
                 {
-                    Process.Start(game.UserPreferedEXE);
+                    if (game.Name == SelectedGame.Name)
+                    {
+                        Process.Start(game.UserPreferedEXE);
+                    }
+                    else if (SelectedGame.Executables.Count == 1)
+                        Process.Start(SelectedGame.Executables[0]);
                 }
-                else if (SelectedGame.Executables.Count == 1)
-                    Process.Start(SelectedGame.Executables[0]);
             }
+
+           
+           
         }
 
         private void AddDir(object obj)
@@ -161,10 +160,13 @@ namespace GameLauncher.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
         }
 
-        private void ResetDirPaths(object obj)
+        private void ResetAllSettings(object obj)
         {
             ResetAllSettingsWarning();
-            Properties.Settings.Default.Reset();
+            File.WriteAllText(@"game.json", string.Empty);
+            File.WriteAllText(@"game.json", "[]");
+            Scanner.LibraryDirectories.Clear();
+            RefreshGames();
         }
 
         private async void ResetAllSettingsWarning()
@@ -175,6 +177,11 @@ namespace GameLauncher.ViewModels
         private async void MultilpleEXEWarning()
         {
             await DialogCoordinator.ShowMessageAsync(this, "Multiple Exes", $"{SelectedGame.Name} has multiple exes. \nPlease choose the correct one to launch.");
+        }
+
+        private async void NoEXESetWarning()
+        {
+            await DialogCoordinator.ShowMessageAsync(this, $"{SelectedGame.Name}", $"No exe set, Please set a exe before playing.");
         }
 
         private async void UserPreferedEXEAlreadySETWarning()

@@ -15,6 +15,7 @@ namespace GameLauncher.ViewModels
         public CommandRunner ChangeThemeCommand { get; set; }
         public CommandRunner ChangeAccentCommand { get; set; }
 
+        
         private IDialogCoordinator dialogCoordinator;
 
         public GameLauncherViewModel(IDialogCoordinator instance)

@@ -66,10 +66,10 @@
             <Button Grid.Row="4" 
                     HorizontalAlignment="Center" 
                     VerticalAlignment="Center"
-                    Command="{Binding LaunchGameCommand}"
+                    Command="{Binding SetPreferedEXECommand}"
                     Height="45"
                     Width="45">
-                <iconPacks:PackIconMaterial Kind="Play"></iconPacks:PackIconMaterial>
+                <iconPacks:PackIconMaterial Kind="Plus"></iconPacks:PackIconMaterial>
             </Button>
 
         </Grid>
@@ -114,10 +114,9 @@
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition/>
                                         <ColumnDefinition/>
-                                        <!--<ColumnDefinition/>-->
+                                        <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
-
-                                    <!--<Image Source="{Binding Path=ImageSource, Mode=OneTime}" Height="180" Grid.Row="0" Grid.Column="2"/>-->
+                                    
                                     <TextBlock Text="{Binding Name}" 
                                                Grid.Row="0" 
                                                Grid.Column="0"
@@ -130,6 +129,16 @@
                                                Grid.Column="1"
                                                HorizontalAlignment="Center"
                                                FontSize="16"/>
+
+                                    <Button 
+                                        HorizontalAlignment="Center" 
+                                        VerticalAlignment="Center"
+                                        Command="{Binding DataContext.PlayGameCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}}"
+                                        Height="30"
+                                        Width="100"
+                                        Grid.Column="2"> 
+                                        <iconPacks:PackIconMaterial Kind="Play"></iconPacks:PackIconMaterial>
+                                    </Button>
                                 </Grid>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
@@ -175,6 +184,9 @@
                     </Button>
                     <Button Command="{Binding DeleteFolderPathCommand}" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="50" Padding="8" Margin="8 0 0 0">
                         <iconPacks:Material Kind="Minus"></iconPacks:Material>
+                    </Button>
+                    <Button Command="{Binding ResetDirPathsCommand}" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="50" Padding="8" Margin="70 0 0 0">
+                        <iconPacks:Material Kind="Restart"></iconPacks:Material>
                     </Button>
                 </Grid>
             </TabItem>

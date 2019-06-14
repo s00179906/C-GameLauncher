@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GameLauncher.Views"
         mc:Ignorable="d"
-        Title="ChooseGameExesView" Height="450" Width="800">
+        Title="ChooseGameExesView" Height="450" Width="800"
+        WindowStartupLocation="CenterScreen" Topmost="True">
     <Grid>
         <StackPanel>
             <TextBlock Text="{Binding Game.Name}"

@@ -15,6 +15,7 @@ namespace GameLauncher.ViewModels
         public CommandRunner ChangeThemeCommand { get; set; }
         public CommandRunner ChangeAccentCommand { get; set; }
 
+        
         private IDialogCoordinator dialogCoordinator;
 
         public GameLauncherViewModel(IDialogCoordinator instance)
@@ -77,7 +78,7 @@ namespace GameLauncher.ViewModels
 
             //Build the text for the dialog message
             sb.AppendLine("Game Launcher");
-            sb.AppendLine("Copyright © " + now.Year + " hignz + ibzmannnnnnnnnn(anele)");
+            sb.AppendLine("Copyright © " + now.Year + " hignz(fackaboiii) + ibzmannnnnnnnnn(anele)");
             sb.AppendLine("Version: " + version);
             sb.Append(Environment.NewLine);
             sb.AppendLine("Licensed under GPL 2.0");

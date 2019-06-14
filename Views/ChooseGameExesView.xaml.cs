@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using GameLauncher.ViewModels;
 using GameLauncher.Models;
+using MahApps.Metro.Controls.Dialogs;
 
 namespace GameLauncher.Views
 {
@@ -24,7 +25,7 @@ namespace GameLauncher.Views
         public ChooseGameExesView(Game game)
         {
             InitializeComponent();
-            ChooseGameExesViewModel vm = new ChooseGameExesViewModel(game);
+            ChooseGameExesViewModel vm = new ChooseGameExesViewModel(game, DialogCoordinator.Instance);
             this.DataContext = vm;
         }
     }

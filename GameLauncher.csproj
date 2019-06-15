@@ -92,6 +92,7 @@
     <Compile Include="Utils\CommandRunner.cs" />
     <Compile Include="Utils\GameScanner.cs" />
     <Compile Include="Utils\Helper.cs" />
+    <Compile Include="Utils\ReadACF.cs" />
     <Compile Include="ViewModels\ChooseGameExesViewModel.cs" />
     <Compile Include="ViewModels\GameLauncherViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />

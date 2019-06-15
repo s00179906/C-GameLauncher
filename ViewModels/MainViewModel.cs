@@ -11,6 +11,8 @@ using System.IO;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Windows;
+using Microsoft.Win32;
+using System.Linq;
 
 namespace GameLauncher.ViewModels
 {
@@ -37,6 +39,10 @@ namespace GameLauncher.ViewModels
         public ChooseGameExesView Window { get; set; }
         public static string UserSelectedExe { get; set; }
         public IDialogCoordinator DialogCoordinator { get; set; }
+        public GameScanner GameScanner { get; set; }
+        public ReadACF ReadACF { get; set; }
+
+        public static int GameID { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
         #endregion
@@ -56,6 +62,8 @@ namespace GameLauncher.ViewModels
             TileCommand = new CommandRunner(TileClick);
             PlayGameCommand = new CommandRunner(PlayGame);
 
+            
+
             Scanner.Scan();
             Games = Scanner.GetExecutables();
             FilteredGames = CollectionViewSource.GetDefaultView(Games);
@@ -68,6 +76,7 @@ namespace GameLauncher.ViewModels
         private void TileClick(object obj)
         {
             SelectedGame = obj as Game;
+            SetPreferedEXE(obj);
             PlayGame(obj);
         }
         #endregion
@@ -97,6 +106,7 @@ namespace GameLauncher.ViewModels
 
         private void PlayGame(object obj)
         {
+            LaunchSteamGame();
             var initialJson = File.ReadAllText(@"game.json");
 
             var gameList = JsonConvert.DeserializeObject<List<Game>>(initialJson);
@@ -105,13 +115,68 @@ namespace GameLauncher.ViewModels
             {
                 if (SelectedGame != null)
                 {
-                    if (game.Name == SelectedGame.Name)
+                    try
                     {
-                        Process.Start(game.UserPreferedEXE);
+                        if (game.Name == SelectedGame.Name && game.Platform.Equals(Platforms.STEAM))
+                        {
+                            ReadACF = new ReadACF(SelectedGame.Name);
+                            Process.Start($"steam://rungameid/{GameID}");
+                        }
+                        if (game.Name == SelectedGame.Name && !game.Platform.Equals(Platforms.STEAM))
+                        {
+                            Process.Start(game.UserPreferedEXE);
+                        }
+                        else if (SelectedGame.Executables.Count == 1)
+                            Process.Start(SelectedGame.Executables[0]);
                     }
-                    else if (SelectedGame.Executables.Count == 1)
-                        Process.Start(SelectedGame.Executables[0]);
+                    catch (Win32Exception){}
                 }
+            }
+        }
+
+        private void LaunchSteamGame()
+        {
+            string Steam32 = "SOFTWARE\\VALVE\\STEAM\\APPS";
+            string Steam64 = "SOFTWARE\\Wow6432Node\\Valve\\STEAM\\APPS";
+            try
+            {
+                RegistryKey key = string.IsNullOrEmpty(Registry.LocalMachine.OpenSubKey(Steam64).ToString())
+                    ? Registry.LocalMachine.OpenSubKey(Steam32)
+                    : Registry.LocalMachine.OpenSubKey(Steam64);
+
+                foreach (string k in key.GetSubKeyNames())
+                {
+                    using (RegistryKey subKey = key.OpenSubKey(k))
+                    {
+                        string steamPath = subKey.GetValue("InstallPath").ToString();
+                        //string configPath = steamPath + "/steamapps/libraryfolders.vdf";
+                        //if (File.Exists(configPath))
+                        //{
+                        //    IEnumerable<string> configLines = File.ReadAllLines(configPath)
+                        //        .Where(l => !string.IsNullOrEmpty(l) && l.Contains(":\\"));
+                        //    foreach (var line in configLines)
+                        //    {
+                        //        GameScanner.LibraryDirectories.Add(new Platform
+                        //        {
+                        //            PlatformType = Platforms.STEAM,
+                        //            Name = nameof(Platforms.STEAM),
+                        //            InstallationPath = $"{line.Substring(line.IndexOf(":") - 1, line.Length - line.IndexOf(":"))}\\steamapps\\common"
+                        //        });
+                        //    }
+
+                        //    GameScanner.LibraryDirectories.Add(new Platform
+                        //    {
+                        //        PlatformType = Platforms.STEAM,
+                        //        Name = nameof(Platforms.STEAM),
+                        //        InstallationPath = $"{steamPath}\\steamapps\\common"
+                        //    });
+                        //}
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
             }
         }
 
@@ -174,7 +239,6 @@ namespace GameLauncher.ViewModels
             File.WriteAllText(@"game.json", string.Empty);
             File.WriteAllText(@"game.json", "[]");
             Scanner.LibraryDirectories.Clear();
-            Scanner.Scan();
             RefreshGames();
         }
 

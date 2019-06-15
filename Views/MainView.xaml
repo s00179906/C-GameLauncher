@@ -4,6 +4,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
              xmlns:Dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
              Dialog:DialogParticipation.Register="{Binding}"
              mc:Ignorable="d" 
@@ -14,6 +15,7 @@
             <ColumnDefinition Width="0.95*"/>
         </Grid.ColumnDefinitions>
 
+        <!--Side Bar Buttons-->
         <Grid Grid.Column="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
@@ -75,6 +77,7 @@
         </Grid>
 
         <TabControl Grid.Column="1">
+            <!--Games Tab-->
             <TabItem Header="Games">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
@@ -94,57 +97,57 @@
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
 
-                <Grid>
+                <Grid Margin="10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="0.7*"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Grid.Column="0">Games might go here</TextBlock>
                     <ListBox Grid.Column="0" 
-                             BorderThickness="1" 
-                             ItemsSource="{Binding Games}" 
-                             SelectedItem="{Binding SelectedGame}">
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                             ItemsSource="{Binding Games}" >
+                        <ListBox.Resources>
+                            <SolidColorBrush x:Key="AccentColorBrush3" Color="Transparent" />
+                        </ListBox.Resources>
 
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid IsItemsHost="True" Columns="4"></UniformGrid>
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <Grid Margin="5">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition/>
-                                    </Grid.RowDefinitions>
+                                <Grid>
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition/>
-                                        <ColumnDefinition/>
-                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
-                                    
-                                    <TextBlock Text="{Binding Name}" 
-                                               Grid.Row="0" 
-                                               Grid.Column="0"
-                                               HorizontalAlignment="Center"
-                                               FontSize="16"
-                                               />
-
-                                    <TextBlock Text="{Binding Platform}"
-                                               Grid.Row="0" 
-                                               Grid.Column="1"
-                                               HorizontalAlignment="Center"
-                                               FontSize="16"/>
-
-                                    <Button 
-                                        HorizontalAlignment="Center" 
-                                        VerticalAlignment="Center"
-                                        Command="{Binding DataContext.PlayGameCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}}"
-                                        Height="30"
-                                        Width="100"
-                                        Grid.Column="2"> 
-                                        <iconPacks:PackIconMaterial Kind="Play"></iconPacks:PackIconMaterial>
-                                    </Button>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <Controls:Tile                 
+                                        Title="{Binding Name}"
+                                        Grid.Row="0"
+                                        Grid.RowSpan="2"
+                                        Grid.Column="0"
+                                        Grid.ColumnSpan="2"
+                                        Cursor="Hand"
+                                        Width="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
+                                        Command="{Binding DataContext.TileCommand,RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" 
+                                        CommandParameter="{Binding}">
+                                    </Controls:Tile>
+                                    <TextBlock 
+                                        Margin="10"
+                                        Text="{Binding Platform}"
+                                        VerticalAlignment="Top">
+                                    </TextBlock>
                                 </Grid>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
                 </Grid>
             </TabItem>
+            <!--Settings Tab-->
             <TabItem>
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
@@ -164,31 +167,61 @@
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
 
-
-                <Grid Margin="10">
+                <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-
-                    <Label>Game Folders</Label>
-                    <ListBox Grid.Row="0" ItemsSource="{Binding Scanner.LibraryDirectories, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="InstallationPath" BorderThickness="1" ScrollViewer.CanContentScroll="True" SelectedItem="{Binding SelectedFolder}"></ListBox>
-                    <Button Command="{Binding AddFolderPathCommand}" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="50" Padding="8" Margin="8 0 0 0">
-                        <iconPacks:Material Kind="Plus"></iconPacks:Material>
-                    </Button>
-                    <Button Command="{Binding DeleteFolderPathCommand}" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="50" Padding="8" Margin="8 0 0 0">
-                        <iconPacks:Material Kind="Minus"></iconPacks:Material>
-                    </Button>
-                    <Button Command="{Binding ResetAllSettingsCommand}" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="50" Padding="8" Margin="70 0 0 0">
-                        <iconPacks:Material Kind="Refresh"></iconPacks:Material>
-                    </Button>
+                    <Expander Header="Game folder paths" Grid.Row="0">
+                        <Grid Margin="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Label>Game Folders</Label>
+                            <ListBox 
+                                Grid.Row="0"
+                                Grid.RowSpan="4"
+                                ItemsSource="{Binding Scanner.LibraryDirectories, UpdateSourceTrigger=PropertyChanged}" 
+                                DisplayMemberPath="InstallationPath" 
+                                BorderThickness="1"
+                                ScrollViewer.CanContentScroll="True" 
+                                SelectedItem="{Binding SelectedFolder}">
+                            </ListBox>
+                            <Button Command="{Binding AddFolderPathCommand}" Grid.Column="1" Grid.Row="0" Grid.RowSpan="3" HorizontalAlignment="Left" VerticalAlignment="Top" Width="50" Padding="8" Margin="8 0 0 0">
+                                <iconPacks:Material Kind="Plus"></iconPacks:Material>
+                            </Button>
+                            <Button Command="{Binding DeleteFolderPathCommand}" Grid.Column="1" Grid.Row="0" Grid.RowSpan="3" HorizontalAlignment="Left" VerticalAlignment="Top" Width="50" Padding="8" Margin="70 0 0 0">
+                                <iconPacks:Material Kind="Minus"></iconPacks:Material>
+                            </Button>
+                            <Button Command="{Binding ResetAllSettingsCommand}" Grid.Column="1" Grid.Row="1" Grid.RowSpan="3" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="50" Padding="8" Margin="8 0 0 0">
+                                <iconPacks:Material Kind="Refresh"></iconPacks:Material>
+                            </Button>
+                        </Grid>
+                    </Expander>
+                    <Expander Header="Other shit" Grid.Row="1">
+                        <Grid Margin="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                        </Grid>
+                    </Expander>
                 </Grid>
+
             </TabItem>
         </TabControl>
     </Grid>

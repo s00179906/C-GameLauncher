@@ -24,19 +24,21 @@ namespace GameLauncher.ViewModels
             set { _games = value; OnPropertyChanged(nameof(Games)); }
         }
         public ICollectionView FilteredGames { get; set; }
-        public CommandRunner AddFolderPathCommand { get; set; }
+        public CommandRunner AddFolderPathCommand { get; private set; }
         public CommandRunner DeleteFolderPathCommand { get; private set; }
         public CommandRunner FilterGamesCommand { get; private set; }
         public CommandRunner SetPreferedEXECommand { get; private set; }
-        public CommandRunner ResetAllSettingsCommand { get; set; }
+        public CommandRunner ResetAllSettingsCommand { get; private set; }
+        public CommandRunner TileCommand { get; private set; }
+        public CommandRunner PlayGameCommand { get; set; }
         public GameScanner Scanner { get; set; }
         public static Game SelectedGame { get; set; }
         public Platform SelectedFolder { get; set; }
         public ChooseGameExesView Window { get; set; }
         public static string UserSelectedExe { get; set; }
         public IDialogCoordinator DialogCoordinator { get; set; }
+
         public event PropertyChangedEventHandler PropertyChanged;
-        public CommandRunner PlayGameCommand { get; set; }
         #endregion
 
         #region Constructor
@@ -45,19 +47,28 @@ namespace GameLauncher.ViewModels
             Games = new ObservableCollection<Game>();
             DialogCoordinator = instance;
             Scanner = new GameScanner();
+
             SetPreferedEXECommand = new CommandRunner(SetPreferedEXE);
             AddFolderPathCommand = new CommandRunner(AddDir);
             DeleteFolderPathCommand = new CommandRunner(DeleteDir);
             FilterGamesCommand = new CommandRunner(FilterGamesByPlatformSteam);
             ResetAllSettingsCommand = new CommandRunner(ResetAllSettings);
-
-
+            TileCommand = new CommandRunner(TileClick);
             PlayGameCommand = new CommandRunner(PlayGame);
-
 
             Scanner.Scan();
             Games = Scanner.GetExecutables();
             FilteredGames = CollectionViewSource.GetDefaultView(Games);
+        }
+
+        /// <summary>
+        /// Quick fix, we need to rework this process.. 
+        /// </summary>
+        /// <param name="obj"></param>
+        private void TileClick(object obj)
+        {
+            SelectedGame = obj as Game;
+            PlayGame(obj);
         }
         #endregion
 
@@ -102,9 +113,6 @@ namespace GameLauncher.ViewModels
                         Process.Start(SelectedGame.Executables[0]);
                 }
             }
-
-           
-           
         }
 
         private void AddDir(object obj)
@@ -166,6 +174,7 @@ namespace GameLauncher.ViewModels
             File.WriteAllText(@"game.json", string.Empty);
             File.WriteAllText(@"game.json", "[]");
             Scanner.LibraryDirectories.Clear();
+            Scanner.Scan();
             RefreshGames();
         }
 

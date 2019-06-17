@@ -10,7 +10,7 @@ namespace GameLauncher.Views
         {
             InitializeComponent();
             MainViewModel vm = new MainViewModel(DialogCoordinator.Instance);
-            this.DataContext = vm;
+            DataContext = vm;
         }
     }
 }

@@ -224,6 +224,9 @@
                             <Button Command="{Binding ResetAllSettingsCommand}" Grid.Column="1" Grid.Row="1" Grid.RowSpan="3" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="50" Padding="8" Margin="8 0 0 0">
                                 <iconPacks:Material Kind="Refresh"></iconPacks:Material>
                             </Button>
+                            <Button Command="{Binding ScanGamesCommand}" Grid.Column="1" Grid.Row="1" Grid.RowSpan="3" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="50" Padding="8" Margin="70 0 0 0">
+                                <iconPacks:Material Kind="Scanner"></iconPacks:Material>
+                            </Button>
                         </Grid>
                     </Expander>
                     <Expander Header="Other shit" Grid.Row="1">

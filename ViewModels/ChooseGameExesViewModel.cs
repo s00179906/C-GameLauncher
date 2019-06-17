@@ -24,6 +24,7 @@ namespace GameLauncher.ViewModels
         {
             Game = game;
             DialogCoordinator = instance;
+            //MultilpleEXEWarning();
             GameExecutables = new ObservableCollection<string>();
             foreach (var exe in Game.Executables)
             {
@@ -52,6 +53,8 @@ namespace GameLauncher.ViewModels
                         Name = MainViewModel.SelectedGame.Name
                     };
 
+                    //create steam game
+
                     list.Add(game);
                     var convertedJson = JsonConvert.SerializeObject(list, Formatting.Indented);
                     File.WriteAllText(@"game.json", string.Empty);
@@ -62,5 +65,10 @@ namespace GameLauncher.ViewModels
                 ExeWindow.Close();
             }
         }
+        private async void MultilpleEXEWarning()
+        {
+            await DialogCoordinator.ShowMessageAsync(this, "Multiple Exes", $"{MainViewModel.SelectedGame.Name} has multiple exes. \nPlease choose the correct one to launch.");
+        }
+
     }
 }

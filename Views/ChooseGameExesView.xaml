@@ -3,7 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:GameLauncher.Views"
+        xmlns:Dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
+        Dialog:DialogParticipation.Register="{Binding}"
         mc:Ignorable="d"
         Title="ChooseGameExesView" Height="450" Width="800"
         WindowStartupLocation="CenterScreen" Topmost="True">
@@ -13,21 +14,21 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="0.1*"/>
         </Grid.RowDefinitions>
-            <TextBlock Text="Select the main exe"        
+        <TextBlock Text="Select the main exe"        
                        FontSize="22"        
                        Grid.Row="0"    
                        HorizontalAlignment="Left"           
                        Foreground="AntiqueWhite"/>
-            <TextBlock Text="{Binding Game.Name}"              
+        <TextBlock Text="{Binding Game.Name}"              
                        FontSize="22"                
                        Grid.Row="0"              
                        HorizontalAlignment="Right"     
                        Foreground="AntiqueWhite"/>
-            <ListBox ItemsSource="{Binding GameExecutables}"
+        <ListBox ItemsSource="{Binding GameExecutables}"
                      SelectedItem="{Binding SelectedExecutable}"
                      Grid.Row="1"
                      Foreground="WhiteSmoke"/>
-            <Button Content="Select"
+        <Button Content="Select"
                     Grid.Row="2"
                     HorizontalAlignment="Right"
                     Command="{Binding SetEXECommand}"/>

@@ -3,7 +3,6 @@ using GameLauncher.Utils;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Windows.Data;
 using GameLauncher.Views;
 using MahApps.Metro.Controls.Dialogs;
@@ -11,10 +10,11 @@ using System.IO;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Windows;
+using System.Diagnostics;
 
 /*
     TODOS:
-        1. Add spinner for games launching
+        1. Add spinner for app launching > DONE
 
 */
 
@@ -22,8 +22,12 @@ namespace GameLauncher.ViewModels
 {
     public class MainViewModel : INotifyPropertyChanged
     {
-        #region Public Props 
+
+        #region Private Members
         private ObservableCollection<Game> _games;
+        #endregion
+
+        #region Public Properties 
         public ObservableCollection<Game> Games
         {
             get { return _games; }
@@ -36,28 +40,30 @@ namespace GameLauncher.ViewModels
         public CommandRunner SetPreferedEXECommand { get; private set; }
         public CommandRunner ResetAllSettingsCommand { get; private set; }
         public CommandRunner TileCommand { get; private set; }
-        public CommandRunner PlayGameCommand { get; set; }
+        public CommandRunner ScanGamesCommand { get; set; }
         public GameScanner Scanner { get; set; }
+        public GameScanner GameScanner { get; set; }
         public static Game SelectedGame { get; set; }
         public Platform SelectedFolder { get; set; }
         public ChooseGameExesView Window { get; set; }
-        public static string UserSelectedExe { get; set; }
         public IDialogCoordinator DialogCoordinator { get; set; }
-        public GameScanner GameScanner { get; set; }
         public ReadACF ReadACF { get; set; }
-        public CommandRunner ScanGamesCommand { get; set; }
         public bool AllowGameToBePlayed { get; set; }
         public static int GameID { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
         public APIController APIController { get; set; }
+        public string JSONResponse { get; set; }
+        public string Cover { get; set; }
+        public List<Game> GameCovers { get; set; }
         #endregion
 
         #region Constructor
         public MainViewModel(IDialogCoordinator instance)
         {
-            Games = new ObservableCollection<Game>();
+            //Games = new ObservableCollection<Game>();
             DialogCoordinator = instance;
-            Scanner = new GameScanner();
+
+
             ScanGamesCommand = new CommandRunner(ScanGames);
             SetPreferedEXECommand = new CommandRunner(SetPreferedEXE);
             AddFolderPathCommand = new CommandRunner(AddDir);
@@ -65,11 +71,18 @@ namespace GameLauncher.ViewModels
             FilterGamesCommand = new CommandRunner(FilterGamesByPlatformSteam);
             ResetAllSettingsCommand = new CommandRunner(ResetAllSettings);
             TileCommand = new CommandRunner(TileClick);
-            PlayGameCommand = new CommandRunner(PlayGame);
+
+            Scanner = new GameScanner();
             Scanner.Scan();
+
             Games = Scanner.GetExecutables();
+
             FilteredGames = CollectionViewSource.GetDefaultView(Games);
-            APIController = new APIController();
+
+            APIController = new APIController(Games);
+            APIController.GetGameCovers();
+            GameCovers = APIController.GameCovers;
+            SetGameCover();
         }
 
         /// <summary>
@@ -86,20 +99,56 @@ namespace GameLauncher.ViewModels
 
         #region VM Methods
 
+        private void SetGameCover()
+        {
+            foreach (var cover in GameCovers)
+            {
+                foreach (var game in Games)
+                {
+                    string gameNameFromOC = game.Name;
+                    string gameNameFromCovers = cover.Name;
+                    var charsToRemove = new string[] { ":", "-", "'", " " };
+
+                    foreach (var c in charsToRemove)
+                    {
+                        gameNameFromCovers = gameNameFromCovers.Replace(c, string.Empty);
+                        gameNameFromOC = gameNameFromOC.Replace(c, string.Empty);
+                    }
+
+                    if (gameNameFromOC.ToUpper() == gameNameFromCovers.ToUpper())
+                    {
+                        game.GameCover = cover.GameCover;
+                    }
+                }
+            }
+        }
+
         private void SetPreferedEXE(object obj)
         {
             if (SelectedGame != null)
             {
-                var initialJson = File.ReadAllText(@"game.json");
-                var gameDirList = JsonConvert.DeserializeObject<List<Game>>(initialJson);
-                var gameFound = gameDirList.Find(game => game.Name == SelectedGame.Name);
-                AllowGameToBePlayed = true;
-
-                if (gameFound == null)
+                //should put this into ctor
+                string json = "game.json";
+                if (!File.Exists(json))
                 {
-                    Window = new ChooseGameExesView(SelectedGame);
-                    Window.ShowDialog();
-                    AllowGameToBePlayed = false;
+                    using (StreamWriter file = File.CreateText(@"game.json"))
+                    {
+                        file.WriteLine("[]");
+                    }
+                }
+                else
+                {
+                    var initialJson = File.ReadAllText(@"game.json");
+                    var gameDirList = JsonConvert.DeserializeObject<List<Game>>(initialJson);
+                    var gameFound = gameDirList.Find(game => game.Name == SelectedGame.Name);
+                    AllowGameToBePlayed = true;
+
+                    if (gameFound == null)
+                    {
+                        Window = new ChooseGameExesView(SelectedGame);
+                        Window.ShowDialog();
+                        AllowGameToBePlayed = false;
+                    }
                 }
             }
         }
@@ -113,21 +162,26 @@ namespace GameLauncher.ViewModels
 
         private void PlayGame(object obj)
         {
-            switch (SelectedGame.Platform)
+            if (AllowGameToBePlayed)
             {
-                case Platforms.STEAM:
-                    SteamGame steam = new SteamGame(GameID, AllowGameToBePlayed);
-                    steam.Launch();
-                    break;
+                var initialJson = File.ReadAllText(@"game.json");
+                var gameList = JsonConvert.DeserializeObject<List<Game>>(initialJson);
 
-                case Platforms.NONE:
-                    NONEGame none = new NONEGame(AllowGameToBePlayed);
-                    none.Launch();
-                    break;
-
-                default:
-                    MessageBox.Show("Game Platform not playable...");
-                    break;
+                foreach (var game in gameList)
+                {
+                    if (SelectedGame != null)
+                    {
+                        try
+                        {
+                            if (game.Name == SelectedGame.Name)
+                            {
+                                ReadACF = new ReadACF(MainViewModel.SelectedGame.Name);
+                                Process.Start($"steam://rungameid/{GameID}");
+                            }
+                        }
+                        catch (Win32Exception) { }
+                    }
+                }
             }
         }
 

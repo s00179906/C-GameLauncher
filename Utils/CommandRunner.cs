@@ -5,8 +5,8 @@ namespace GameLauncher.Utils
 {
     public class CommandRunner: ICommand
     {
-        private Action<object> _TargetExecuteMethod;
-        private Func<bool> _TargetCanExecuteMethod;
+        private readonly Action<object> _TargetExecuteMethod;
+        private readonly Func<bool> _TargetCanExecuteMethod;
 
         public CommandRunner(Action<object> executeMethod)
         {

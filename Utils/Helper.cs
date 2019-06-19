@@ -1,6 +1,4 @@
 ﻿using Microsoft.WindowsAPICodePack.Dialogs;
-using System.Linq;
-using System.Windows;
 
 namespace GameLauncher.Utils
 {

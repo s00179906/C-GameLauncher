@@ -9,6 +9,7 @@ namespace GameLauncher.Models
         public List<string> Executables { get; set; } = new List<string>();
         public string UserPreferedEXE { get; set; }
         public Platforms Platform { get; set; }
+        public string GameCover { get; set; }
 
         public Game()
         {

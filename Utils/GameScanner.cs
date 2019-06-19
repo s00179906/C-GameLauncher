@@ -22,28 +22,13 @@ namespace GameLauncher.Utils
 
         public GameScanner()
         {
-            //Properties.Settings.Default.Reset();
             LibraryDirectories = new ObservableCollection<Platform>();
-            //LibraryDirectories.CollectionChanged += new NotifyCollectionChangedEventHandler(UpdateSettings);
         }
-
-        //private void UpdateSettings(object sender, NotifyCollectionChangedEventArgs e)
-        //{
-        //    foreach (Platform item in e.NewItems)
-        //    {
-        //        if (!Properties.Settings.Default.FolderPaths.Contains(item.InstallationPath))
-        //        {
-        //            Properties.Settings.Default.FolderPaths.Add(item.InstallationPath);
-        //        }
-        //    }
-
-        //    Properties.Settings.Default.Save();
-        //}
 
         public void Scan()
         {
             GetSteamDirs();
-            GetOriginsDir();
+            //GetOriginsDir();
             GetEpicDirs();
             GetUplayDirs();
             ReadUserAddedDirectories();
@@ -64,6 +49,7 @@ namespace GameLauncher.Utils
                 }
             }
         }
+
         public void GetSteamDirs()
         {
             try
@@ -224,7 +210,7 @@ namespace GameLauncher.Utils
 
             foreach (Platform libDir in LibraryDirectories)
             {
-                string[] gameDirs = Directory.GetDirectories(libDir.InstallationPath);
+                string[] gameDirs = Directory.GetDirectories(libDir.InstallationPath); // this is where the path is null
 
                 foreach (var gameDir in gameDirs)
                 {

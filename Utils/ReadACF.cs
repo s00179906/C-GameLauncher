@@ -3,9 +3,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Windows;
 using GameLauncher.ViewModels;
-using System.Collections.Generic;
 
 namespace GameLauncher.Utils
 {

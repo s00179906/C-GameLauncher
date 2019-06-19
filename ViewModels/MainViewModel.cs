@@ -25,6 +25,7 @@ namespace GameLauncher.ViewModels
 
         #region Private Members
         private ObservableCollection<Game> _games;
+        private bool firstTimeConfiguration = true;
         #endregion
 
         #region Public Properties 
@@ -55,15 +56,14 @@ namespace GameLauncher.ViewModels
         public string JSONResponse { get; set; }
         public string Cover { get; set; }
         public List<Game> GameCovers { get; set; }
+
         #endregion
 
         #region Constructor
         public MainViewModel(IDialogCoordinator instance)
         {
-            //Games = new ObservableCollection<Game>();
             DialogCoordinator = instance;
-
-
+            
             ScanGamesCommand = new CommandRunner(ScanGames);
             SetPreferedEXECommand = new CommandRunner(SetPreferedEXE);
             AddFolderPathCommand = new CommandRunner(AddDir);
@@ -71,14 +71,12 @@ namespace GameLauncher.ViewModels
             FilterGamesCommand = new CommandRunner(FilterGamesByPlatformSteam);
             ResetAllSettingsCommand = new CommandRunner(ResetAllSettings);
             TileCommand = new CommandRunner(TileClick);
-
+            
             Scanner = new GameScanner();
             Scanner.Scan();
-
             Games = Scanner.GetExecutables();
-
             FilteredGames = CollectionViewSource.GetDefaultView(Games);
-
+            FirstTimeConfiguration();
             APIController = new APIController(Games);
             APIController.GetGameCovers();
             GameCovers = APIController.GameCovers;
@@ -98,6 +96,18 @@ namespace GameLauncher.ViewModels
         #endregion
 
         #region VM Methods
+
+        private void FirstTimeConfiguration()
+        {
+            if (firstTimeConfiguration)
+            {
+                File.WriteAllText(@"game.json", string.Empty);
+                File.WriteAllText(@"game.json", "[]");
+                Properties.Settings.Default.FolderPaths.Clear();
+                Properties.Settings.Default.Save();
+                firstTimeConfiguration = false;
+            }
+        }
 
         private void SetGameCover()
         {
@@ -173,10 +183,16 @@ namespace GameLauncher.ViewModels
                     {
                         try
                         {
-                            if (game.Name == SelectedGame.Name)
+                            if (game.Name == SelectedGame.Name && game.Platform.Equals(Platforms.STEAM))
                             {
                                 ReadACF = new ReadACF(MainViewModel.SelectedGame.Name);
                                 Process.Start($"steam://rungameid/{GameID}");
+                            }
+
+                            if (game.Name == SelectedGame.Name && game.Platform.Equals(Platforms.NONE))
+                            {
+                                ReadACF = new ReadACF(MainViewModel.SelectedGame.Name);
+                                Process.Start(SelectedGame.UserPreferedEXE);
                             }
                         }
                         catch (Win32Exception) { }
@@ -218,6 +234,7 @@ namespace GameLauncher.ViewModels
             {
                 Games.Add(exe);
             }
+            SetGameCover();
         }
 
         private void FilterGamesByPlatformSteam(object obj)

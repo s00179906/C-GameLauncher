@@ -139,8 +139,6 @@ namespace GameLauncher.Utils
                         }
                     }
                 }
-
-
             }
             catch (Exception e)
             {
@@ -156,7 +154,6 @@ namespace GameLauncher.Utils
 
                 if (DirExists)
                 {
-
                     using (RegistryKey key = Registry.LocalMachine.OpenSubKey(UplayRegistry))
                     {
                         string uplayPath = key.GetValue("InstallDir").ToString();
@@ -213,7 +210,7 @@ namespace GameLauncher.Utils
                 var lib = libDir.InstallationPath;
                 if (lib != null)
                 {
-                    string[] gameDirs = Directory.GetDirectories(lib); // this is where the path is null
+                    string[] gameDirs = Directory.GetDirectories(lib);
 
                     foreach (var gameDir in gameDirs)
                     {

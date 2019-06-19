@@ -139,8 +139,6 @@ namespace GameLauncher.Utils
                         }
                     }
                 }
-
-
             }
             catch (Exception e)
             {
@@ -156,7 +154,6 @@ namespace GameLauncher.Utils
 
                 if (DirExists)
                 {
-
                     using (RegistryKey key = Registry.LocalMachine.OpenSubKey(UplayRegistry))
                     {
                         string uplayPath = key.GetValue("InstallDir").ToString();
@@ -210,19 +207,23 @@ namespace GameLauncher.Utils
 
             foreach (Platform libDir in LibraryDirectories)
             {
-                string[] gameDirs = Directory.GetDirectories(libDir.InstallationPath); // this is where the path is null
-
-                foreach (var gameDir in gameDirs)
+                var lib = libDir.InstallationPath;
+                if (lib != null)
                 {
-                    string[] exes = Directory.GetFiles(gameDir, "*.exe", SearchOption.AllDirectories);
-                    Game game = new Game
-                    {
-                        Name = new DirectoryInfo(gameDir).Name,
-                        Platform = libDir.PlatformType,
-                        Executables = new List<string>(exes)
-                    };
+                    string[] gameDirs = Directory.GetDirectories(lib);
 
-                    games.Add(game);
+                    foreach (var gameDir in gameDirs)
+                    {
+                        string[] exes = Directory.GetFiles(gameDir, "*.exe", SearchOption.AllDirectories);
+                        Game game = new Game
+                        {
+                            Name = new DirectoryInfo(gameDir).Name,
+                            Platform = libDir.PlatformType,
+                            Executables = new List<string>(exes)
+                        };
+
+                        games.Add(game);
+                    }
                 }
             }
             return games;

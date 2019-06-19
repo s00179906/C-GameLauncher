@@ -6,17 +6,66 @@ namespace GameLauncher.Utils
 {
     public class RestClient
     {
-        public string Get(string uri)
+        public enum HttpMethods
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
-            
-            request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
-            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
-            using (Stream stream = response.GetResponseStream())
-            using (StreamReader reader = new StreamReader(stream))
+            GET,
+            POST,
+            PUT,
+            DELETE
+        }
+
+        public string EndPoint { get; set; }
+        public HttpMethods HttpMethod { get; set; }
+        public HttpWebRequest Request { get; set; }
+        public string APIKey { get; set; } = "808bf6418e00aed6439da60df118a8db";
+
+        public RestClient()
+        {
+            EndPoint = "";
+            HttpMethod = HttpMethods.GET;
+        }
+
+        public string MakeRequest()
+        {
+
+            string strResponseValue = string.Empty;
+
+            Request = (HttpWebRequest)WebRequest.Create(EndPoint);
+
+            Request.Method = HttpMethod.ToString();
+            Request.Headers.Add("user-key", APIKey);
+
+            HttpWebResponse response = null;
+
+            try
             {
-                return reader.ReadToEnd();
+                response = (HttpWebResponse)Request.GetResponse();
+
+                using (Stream responseStream = response.GetResponseStream())
+                {
+                    if (responseStream != null)
+                    {
+                        using (StreamReader reader = new StreamReader(responseStream))
+                        {
+                            strResponseValue = reader.ReadToEnd();
+                        }
+                    }
+                }
             }
+            catch (Exception ex)
+            {
+                strResponseValue = "{\"errorMessages\":[\"" + ex.Message.ToString() + "\"],\"errors\":{}}";
+            }
+            finally
+            {
+                if (response != null)
+                {
+                    ((IDisposable)response).Dispose();
+                }
+            }
+
+            return strResponseValue;
         }
     }
 }
+

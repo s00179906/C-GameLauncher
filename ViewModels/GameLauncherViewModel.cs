@@ -1,4 +1,5 @@
 ﻿using GameLauncher.Utils;
+using GameLauncher.Views;
 using MahApps.Metro;
 using MahApps.Metro.Controls.Dialogs;
 using System;
@@ -14,9 +15,10 @@ namespace GameLauncher.ViewModels
         public CommandRunner ShowAboutCommand { get; set; }
         public CommandRunner ChangeThemeCommand { get; set; }
         public CommandRunner ChangeAccentCommand { get; set; }
+        public MainView MainView { get; set; }
 
-        
-        private IDialogCoordinator dialogCoordinator;
+
+        private readonly IDialogCoordinator dialogCoordinator;
 
         public GameLauncherViewModel(IDialogCoordinator instance)
         {
@@ -24,6 +26,7 @@ namespace GameLauncher.ViewModels
             ShowAboutCommand = new CommandRunner(ShowAboutDialog);
             ChangeThemeCommand = new CommandRunner(ChangeTheme);
             ChangeAccentCommand = new CommandRunner(ChangeAccent);
+            MainView = new MainView();
 
             dialogCoordinator = instance;
             ChangeTheme(Properties.Settings.Default["Theme"]);

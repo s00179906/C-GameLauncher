@@ -1,0 +1,39 @@
+﻿<Window x:Class="GameLauncher.Views.SplashScreenView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GameLauncher.Views"
+        xmlns:fa="http://schemas.fontawesome.io/icons/"
+       
+        mc:Ignorable="d"
+        Title="SplashScreenView" 
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Height="300" Width="290" Background="#151518">
+    <Grid>
+       
+        <ProgressBar x:Name="progressBar" 
+                     Width="230"
+                     Height="20"
+                     VerticalAlignment="Bottom"
+                     Margin="0 100"
+                     />
+        <TextBlock HorizontalAlignment="Center"
+                   VerticalAlignment="Top"
+                   Margin="0 110"
+                   Foreground="WhiteSmoke"
+                   FontSize="22"
+                   Text="STARTING"
+                   FontWeight="Bold"/>
+        <TextBlock HorizontalAlignment="Center"
+                   x:Name="tblckPercentage"
+                   VerticalAlignment="Bottom"
+                   Margin="0 70"
+                   Foreground="WhiteSmoke"
+                   FontSize="14"
+                   
+                   />
+    </Grid>
+</Window>

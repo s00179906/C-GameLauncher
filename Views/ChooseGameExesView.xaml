@@ -7,30 +7,36 @@
         Dialog:DialogParticipation.Register="{Binding}"
         mc:Ignorable="d"
         Title="ChooseGameExesView" Height="450" Width="800"
-        WindowStartupLocation="CenterScreen" Topmost="True">
+        WindowStartupLocation="CenterScreen" Topmost="True" Background="#151518">
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="0.1*"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="0.1*"/>
         </Grid.RowDefinitions>
+        
         <TextBlock Text="Select the main exe"        
-                       FontSize="22"        
-                       Grid.Row="0"    
-                       HorizontalAlignment="Left"           
-                       Foreground="AntiqueWhite"/>
+                   FontSize="22"        
+                   Grid.Row="0"    
+                   HorizontalAlignment="Left"           
+                   Foreground="AntiqueWhite"/>
+        
         <TextBlock Text="{Binding Game.Name}"              
-                       FontSize="22"                
-                       Grid.Row="0"              
-                       HorizontalAlignment="Right"     
-                       Foreground="AntiqueWhite"/>
+                   FontSize="22"                
+                   Grid.Row="0"              
+                   HorizontalAlignment="Right"     
+                   Foreground="AntiqueWhite"/>
+        
         <ListBox ItemsSource="{Binding GameExecutables}"
-                     SelectedItem="{Binding SelectedExecutable}"
-                     Grid.Row="1"
-                     Foreground="WhiteSmoke"/>
+                 SelectedItem="{Binding SelectedExecutable}"
+                 Grid.Row="1"
+                 Foreground="WhiteSmoke"
+                 Background="#151518"/>
+        
         <Button Content="Select"
-                    Grid.Row="2"
-                    HorizontalAlignment="Right"
-                    Command="{Binding SetEXECommand}"/>
+                Grid.Row="2"
+                HorizontalAlignment="Right"
+                Command="{Binding SetEXECommand}"
+                Background="#151518"/>
     </Grid>
 </Window>

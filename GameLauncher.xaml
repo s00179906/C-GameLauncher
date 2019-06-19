@@ -8,8 +8,12 @@
                       xmlns:Dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
                       xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
                       Dialog:DialogParticipation.Register="{Binding}"
-        mc:Ignorable="d"
-        Title="Game Launcher" Height="800" Width="1200" WindowStartupLocation="CenterScreen">
+                      mc:Ignorable="d"
+                      Title="Game Launcher"
+                      Height="800" 
+                      Width="1200" 
+                      WindowStartupLocation="CenterScreen"
+                      Background="#151518">
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="File">
@@ -40,6 +44,8 @@
                 <MenuItem Header="About" Command="{Binding ShowAboutCommand}"/>
             </MenuItem>
         </Menu>
-        <views:MainView></views:MainView>
+        <!--<views:MainView></views:MainView>-->
+        <Frame x:Name="frmMainFrame" Content="{Binding MainView}"/>
+
     </DockPanel>
 </Controls:MetroWindow>

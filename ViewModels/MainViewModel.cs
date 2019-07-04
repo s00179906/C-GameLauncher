@@ -68,7 +68,7 @@ namespace GameLauncher.ViewModels
             DialogCoordinator = instance;
             //Properties.Settings.Default.Reset();
             FirstTimeConfiguration();
-            ComboBoxItems = new string[] { "GENRES", "----------","FPS", "RPG", "Action", "Adventure", "Horror", "Racing" };
+            ComboBoxItems = new string[] { "GENRES", "----------------------------------------", "FPS", "RPG", "ACTION", "ADVENTURE", "HORROR", "RACING" };
             ScanGamesCommand = new CommandRunner(ScanGames);
             SetPreferedEXECommand = new CommandRunner(SetPreferedEXE);
             AddFolderPathCommand = new CommandRunner(AddDir);
@@ -94,8 +94,10 @@ namespace GameLauncher.ViewModels
         private void TileClick(object obj)
         {
             SelectedGame = obj as Game;
-            SetPreferedEXE(obj);
-            PlayGame(obj);
+            GameDetailedView view = new GameDetailedView(SelectedGame);
+            GameLauncherViewModel.MainFrame.Content = view;
+            //SetPreferedEXE(obj);
+            //PlayGame(obj);
         }
         #endregion
 
@@ -136,6 +138,7 @@ namespace GameLauncher.ViewModels
                     if (gameNameFromOC.ToUpper() == gameNameFromCovers.ToUpper())
                     {
                         game.GameCover = cover.GameCover;
+                        game.GameScreenshots = cover.GameScreenshots;
                     }
                 }
             }

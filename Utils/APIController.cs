@@ -35,9 +35,10 @@ namespace GameLauncher.Utils
             string json = "";
             foreach (var game in list)
             {
-                string cover = "", name = "";
+                string cover = "", name = "", screenshotURL = "";
+                List<string> screenshots = new List<string>();
                 string game2 = game.Replace('-', ':');
-                string stringData = $"?search={game2}&limit=1&fields=cover.*, name";
+                string stringData = $"?search={game2}&limit=1&fields=cover.*, name, screenshots.*";
                 Client.EndPoint = $"https://api-v3.igdb.com/games/{stringData}";
                 json = Client.MakeRequest();
 
@@ -53,6 +54,14 @@ namespace GameLauncher.Utils
                     {
                         name = g[0].name;
                     }
+                    if (!String.IsNullOrWhiteSpace(g[0].screenshots[0].url))
+                    {
+                        foreach (var screenshot in g[0].screenshots)
+                        {
+                            screenshotURL = $"https://images.igdb.com/igdb/image/upload/t_1080p/{screenshot.image_id}.jpg";
+                            screenshots.Add(screenshotURL);
+                        }
+                    }
 
                 }
                 string finalCover = $"https://images.igdb.com/igdb/image/upload/t_cover_big/{cover}.jpg";
@@ -60,7 +69,8 @@ namespace GameLauncher.Utils
                 Game test = new Game()
                 {
                     Name = name,
-                    GameCover = finalCover
+                    GameCover = finalCover,
+                    GameScreenshots = screenshots
                 };
                 GameCovers.Add(test);
             }

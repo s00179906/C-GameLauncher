@@ -29,90 +29,115 @@
                    Grid.RowSpan="2"
                    Fill="#111113"/>
 
-        <Grid Grid.Column="0" Grid.Row="2">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
 
-            <Button Grid.Row="0"
-                    HorizontalAlignment="Center" 
-                    VerticalAlignment="Center"
-                    Height="55"
-                    Width="55"
-                    BorderThickness="0"
-                    Command="{Binding FilterGamesCommand}"
-                    CommandParameter="ALL"
-                    Background="#111113">
-                <Image Width="45"
-                       Height="45"
-                       VerticalAlignment="Center"
-                       HorizontalAlignment="Center"
-                       Source="pack://application:,,,/GameLauncher;component/Resources/Images/noneICON.png"/>
-            </Button>
-            <Button Grid.Row="1" 
-                    HorizontalAlignment="Center" 
-                    VerticalAlignment="Center"
-                    Command="{Binding FilterGamesCommand}"
-                    CommandParameter="STEAM"
-                    Height="55"
-                    Width="55"
-                    BorderThickness="0"
-                    Background="#111113">
-                <Image Width="45"
-                       Height="45"
-                       VerticalAlignment="Center"
-                       HorizontalAlignment="Center"
-                       Source="pack://application:,,,/GameLauncher;component/Resources/Images/steamICON.png"/>
-            </Button>
-            <Button Grid.Row="2" 
-                    HorizontalAlignment="Center" 
-                    VerticalAlignment="Center"
-                    Height="55"
-                    Width="55"
-                    BorderThickness="0"
-                    CommandParameter="EPIC"
-                    Command="{Binding FilterGamesCommand}"
-                    Background="#111113">
-                <Image Width="45"
-                       Height="45"
-                       VerticalAlignment="Center"
-                       HorizontalAlignment="Center"
-                       Source="pack://application:,,,/GameLauncher;component/Resources/Images/epicICON.png"/>
-            </Button>
-            <Button Grid.Row="3" 
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Height="55"
-                    Width="55"
-                    BorderThickness="0"
-                    CommandParameter="UPLAY"
-                    Command="{Binding FilterGamesCommand}"
-                    Background="#111113">
-                <Image Width="45"
-                       Height="45"
-                       VerticalAlignment="Center"
-                       HorizontalAlignment="Center"
-                       Source="pack://application:,,,/GameLauncher;component/Resources/Images/uplayICON.png"/>
-            </Button>
-            <Button Grid.Row="4" 
-                    HorizontalAlignment="Center" 
-                    VerticalAlignment="Center"
-                    CommandParameter="NONE"
-                    Command="{Binding FilterGamesCommand}"
-                    Height="55"
-                    Width="55"
-                    BorderThickness="0"
-                    Background="#111113">
-                <Image Width="45"
-                       Height="45"
-                       VerticalAlignment="Center"
-                       HorizontalAlignment="Center"
-                       Source="pack://application:,,,/GameLauncher;component/Resources/Images/noneICON.png"/>
-            </Button>
+        <!--<Image Source="{Binding GameScreenshot}"
+               Panel.ZIndex="2"
+               Grid.Row="2" Grid.Column="2"/>-->
+
+
+
+        <Grid Grid.Column="0" Grid.Row="2">
+            <!--<Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>-->
+
+            <StackPanel VerticalAlignment="Center" 
+                        HorizontalAlignment="Center">
+
+                <Button Grid.Row="0"
+                        HorizontalAlignment="Center" 
+                        VerticalAlignment="Center"
+                        Height="55"
+                        Width="55"
+                        BorderThickness="0"
+                        Command="{Binding FilterGamesCommand}"
+                        CommandParameter="ALL"
+                        Background="#111113"
+                        Margin="0 40">
+
+                    <Image Width="45"
+                           Height="45"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           Source="pack://application:,,,/GameLauncher;component/Resources/Images/noneICON.png"/>
+                </Button>
+
+                <Button Grid.Row="1" 
+                        HorizontalAlignment="Center" 
+                        VerticalAlignment="Center"
+                        Command="{Binding FilterGamesCommand}"
+                        CommandParameter="STEAM"
+                        Height="55"
+                        Width="55"
+                        BorderThickness="0"
+                        Background="#111113"
+                        Margin="0 40">
+
+                    <Image Width="45"
+                           Height="45"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           Source="pack://application:,,,/GameLauncher;component/Resources/Images/steamICON.png"/>
+                </Button>
+
+                <Button Grid.Row="2" 
+                        HorizontalAlignment="Center" 
+                        VerticalAlignment="Center"
+                        Height="55"
+                        Width="55"
+                        BorderThickness="0"
+                        CommandParameter="EPIC"
+                        Command="{Binding FilterGamesCommand}"
+                        Background="#111113"
+                        Margin="0 40">
+
+                    <Image Width="45"
+                           Height="45"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           Source="pack://application:,,,/GameLauncher;component/Resources/Images/epicICON.png"/>
+                </Button>
+
+                <Button Grid.Row="3" 
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Height="55"
+                        Width="55"
+                        BorderThickness="0"
+                        CommandParameter="UPLAY"
+                        Command="{Binding FilterGamesCommand}"
+                        Background="#111113"
+                        Margin="0 40">
+
+                    <Image Width="45"
+                           Height="45"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           Source="pack://application:,,,/GameLauncher;component/Resources/Images/uplayICON.png"/>
+                </Button>
+
+                <Button Grid.Row="4" 
+                        HorizontalAlignment="Center" 
+                        VerticalAlignment="Center"
+                        CommandParameter="NONE"
+                        Command="{Binding FilterGamesCommand}"
+                        Height="55"
+                        Width="55"
+                        BorderThickness="0"
+                        Background="#111113"
+                        Margin="0 40">
+
+                    <Image Width="45"
+                           Height="45"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           Source="pack://application:,,,/GameLauncher;component/Resources/Images/noneICON.png"/>
+                </Button>
+            </StackPanel>
         </Grid>
 
         <Grid Grid.Row="0"
@@ -239,6 +264,7 @@
                                    FontSize="16"
                                    Grid.Row="2"
                                    Padding="10"/>
+
                         </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>

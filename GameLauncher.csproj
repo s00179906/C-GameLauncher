@@ -113,8 +113,14 @@
     <Compile Include="Views\ChooseGameExesView.xaml.cs">
       <DependentUpon>ChooseGameExesView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\GameLauncherView.xaml.cs">
+      <DependentUpon>GameLauncherView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SettingsView.xaml.cs">
+      <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SplashScreenView.xaml.cs">
       <DependentUpon>SplashScreenView.xaml</DependentUpon>
@@ -135,7 +141,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\GameLauncherView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -182,6 +196,20 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\noneICON.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\steamICON.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\epicICON.png" />
+    <Resource Include="Resources\Images\uplayICON.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\grid1.png" />
+    <Resource Include="Resources\Images\grid2.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />

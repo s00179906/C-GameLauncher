@@ -13,7 +13,7 @@ namespace GameLauncher.Utils
     {
         private readonly string Steam32 = "SOFTWARE\\VALVE\\";
         private readonly string Steam64 = "SOFTWARE\\Wow6432Node\\Valve\\";
-        private readonly string EpicRegistry = "SOFTWARE\\WOW6432Node\\EpicGames\\Unreal Engine";
+        //private readonly string EpicRegistry = "SOFTWARE\\WOW6432Node\\EpicGames\\Unreal Engine";
         private readonly string UplayRegistry = "SOFTWARE\\WOW6432Node\\Ubisoft\\Launcher";
         private readonly string OriginsRegistry = "SOFTWARE\\WOW6432Node\\Origin";
         public bool DirExists { get; set; }
@@ -33,6 +33,7 @@ namespace GameLauncher.Utils
             GetUplayDirs();
             ReadUserAddedDirectories();
         }
+
         private void ReadUserAddedDirectories()
         {
             var dirs = Properties.Settings.Default.FolderPaths;
@@ -94,7 +95,7 @@ namespace GameLauncher.Utils
                 }
                 else
                 {
-                    MessageBox.Show("Could not find Steam directories...");
+                    MessageBox.Show("Could not find Steam directories... Do you have Steam Installed?");
                 }
             }
             catch (Exception e)
@@ -116,29 +117,58 @@ namespace GameLauncher.Utils
                     }
                 }
             }
+
         }
 
+        //gets x86 directory, this is where epic games launcher is installed. But games are installed at Program Files 64
         public void GetEpicDirs()
         {
+            string programFiles = Environment.ExpandEnvironmentVariables("%ProgramW6432%");
+            string[] dirs = Directory.GetDirectories(programFiles);
+            var epicGames64 = Directory
+                            .GetDirectories(programFiles)
+                            .Where(folder => folder.Equals("C:\\Program Files\\Epic Games"))
+                            .ToList();
             try
             {
-                using (RegistryKey key = Registry.LocalMachine.OpenSubKey(EpicRegistry))
+                if (epicGames64 != null && Directory.Exists(epicGames64[0]))
                 {
-                    foreach (string k in key.GetSubKeyNames())
+                    LibraryDirectories.Add(new Platform
                     {
-                        using (RegistryKey subkey = key.OpenSubKey(k))
-                        {
-                            string epicGamesPath = subkey.GetValue("InstalledDirectory").ToString();
-                            epicGamesPath = epicGamesPath.Substring(0, epicGamesPath.Length - 4);
-                            LibraryDirectories.Add(new Platform
-                            {
-                                PlatformType = Platforms.EPIC,
-                                Name = "Epic",
-                                InstallationPath = epicGamesPath
-                            });
-                        }
-                    }
+                        PlatformType = Platforms.EPIC,
+                        Name = "Epic",
+                        InstallationPath = epicGames64[0]
+                    }); ;
                 }
+                else
+                {
+                    MessageBox.Show("Could not find Epic Games folder in Program Files...");
+                }
+                //DirExists = CheckIfRegistryDirExists(EpicRegistry, "INSTALLDIR");
+                //if (DirExists)
+                //{
+                //    using (RegistryKey key = Registry.LocalMachine.OpenSubKey(EpicRegistry))
+                //    {
+                //        foreach (string k in key.GetSubKeyNames())
+                //        {
+                //            using (RegistryKey subkey = key.OpenSubKey(k))
+                //            {
+                //                string epicGamesPath = subkey.GetValue("InstalledDirectory").ToString();
+                //                epicGamesPath = epicGamesPath.Substring(0, epicGamesPath.Length - 4);
+                //                LibraryDirectories.Add(new Platform
+                //                {
+                //                    PlatformType = Platforms.EPIC,
+                //                    Name = "Epic",
+                //                    InstallationPath = epicGamesPath
+                //                });
+                //            }
+                //        }
+                //    }
+                //}
+                //else
+                //{
+                //    MessageBox.Show("Could not find Epic directories... Do you have Epic Games Installed?");
+                //}
             }
             catch (Exception e)
             {
@@ -168,7 +198,7 @@ namespace GameLauncher.Utils
                 }
                 else
                 {
-                    MessageBox.Show("Could not find Uplay directories...");
+                    MessageBox.Show("Could not find Uplay directories... Do you have Uplay Installed?");
                 }
 
             }
@@ -208,7 +238,7 @@ namespace GameLauncher.Utils
             foreach (Platform libDir in LibraryDirectories)
             {
                 var lib = libDir.InstallationPath;
-                if (lib != null)
+                if (lib != null && Directory.Exists(lib))
                 {
                     string[] gameDirs = Directory.GetDirectories(lib);
 

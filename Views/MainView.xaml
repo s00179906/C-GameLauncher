@@ -3,23 +3,34 @@
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"             
              xmlns:Dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
              Dialog:DialogParticipation.Register="{Binding}"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" Background="#151518"
-             >
-    <Grid Margin="10" Background="#151518">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0.05*"/>
-            <ColumnDefinition Width="0.95*"/>
-        </Grid.ColumnDefinitions>
+             d:DesignHeight="800" d:DesignWidth="1200" Background="#151518">
 
-        <!--Side Bar Buttons-->
-        <Grid Grid.Column="0">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="24*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="15*"/>
+        </Grid.RowDefinitions>
+
+        <Rectangle Grid.Row="0"
+                   Grid.Column="0"
+                   Grid.ColumnSpan="2"
+                   Fill="#111113"/>
+
+        <Rectangle Grid.Row="0"
+                   Grid.Column="0"
+                   Grid.RowSpan="2"
+                   Fill="#111113"/>
+
+        <Grid Grid.Column="0" Grid.Row="2">
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
@@ -30,237 +41,208 @@
             <Button Grid.Row="0"
                     HorizontalAlignment="Center" 
                     VerticalAlignment="Center"
-                    Height="45"
-                    Width="45"
+                    Height="55"
+                    Width="55"
+                    BorderThickness="0"
                     Command="{Binding FilterGamesCommand}"
                     CommandParameter="ALL"
-                    Background="#151518">
-                <iconPacks:PackIconMaterial Kind="AllInclusive"></iconPacks:PackIconMaterial>
+                    Background="#111113">
+                <Image Width="45"
+                       Height="45"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+                       Source="pack://application:,,,/GameLauncher;component/Resources/Images/noneICON.png"/>
             </Button>
-
             <Button Grid.Row="1" 
                     HorizontalAlignment="Center" 
                     VerticalAlignment="Center"
                     Command="{Binding FilterGamesCommand}"
                     CommandParameter="STEAM"
-                    Height="45"
-                    Width="45"
-                    Background="#151518">
-                <iconPacks:PackIconMaterial Kind="Steam"></iconPacks:PackIconMaterial>
+                    Height="55"
+                    Width="55"
+                    BorderThickness="0"
+                    Background="#111113">
+                <Image Width="45"
+                       Height="45"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+                       Source="pack://application:,,,/GameLauncher;component/Resources/Images/steamICON.png"/>
             </Button>
-
             <Button Grid.Row="2" 
                     HorizontalAlignment="Center" 
                     VerticalAlignment="Center"
-                    Height="45"
-                    Width="45"
+                    Height="55"
+                    Width="55"
+                    BorderThickness="0"
                     CommandParameter="EPIC"
                     Command="{Binding FilterGamesCommand}"
-                    Background="#151518">
-                <iconPacks:PackIconMaterial Kind="GamepadVariant"></iconPacks:PackIconMaterial>
+                    Background="#111113">
+                <Image Width="45"
+                       Height="45"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+                       Source="pack://application:,,,/GameLauncher;component/Resources/Images/epicICON.png"/>
             </Button>
             <Button Grid.Row="3" 
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Height="45"
-                    Width="45"
+                    Height="55"
+                    Width="55"
+                    BorderThickness="0"
                     CommandParameter="UPLAY"
                     Command="{Binding FilterGamesCommand}"
-                    Background="#151518">
-                <iconPacks:PackIconMaterial Kind="Network"></iconPacks:PackIconMaterial>
+                    Background="#111113">
+                <Image Width="45"
+                       Height="45"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+                       Source="pack://application:,,,/GameLauncher;component/Resources/Images/uplayICON.png"/>
             </Button>
-
-            <Button Grid.Row="3" 
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Height="45"
-                    Width="45"
-                    CommandParameter="UPLAY"
-                    Command="{Binding FilterGamesCommand}"
-                    Background="#151518">
-                <iconPacks:PackIconMaterial Kind="Network"></iconPacks:PackIconMaterial>
-            </Button>
-
             <Button Grid.Row="4" 
                     HorizontalAlignment="Center" 
                     VerticalAlignment="Center"
                     CommandParameter="NONE"
                     Command="{Binding FilterGamesCommand}"
-                    Height="45"
-                    Width="45"
-                    Background="#151518">
-                <iconPacks:PackIconMaterial Kind="Package"></iconPacks:PackIconMaterial>
+                    Height="55"
+                    Width="55"
+                    BorderThickness="0"
+                    Background="#111113">
+                <Image Width="45"
+                       Height="45"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+                       Source="pack://application:,,,/GameLauncher;component/Resources/Images/noneICON.png"/>
             </Button>
-            <Button Grid.Row="5" 
-                    HorizontalAlignment="Center" 
-                    VerticalAlignment="Center"
-                    Command="{Binding SetPreferedEXECommand}"
-                    Height="45"
-                    Width="45"
-                    Background="#151518">
-                <iconPacks:PackIconMaterial Kind="Plus"></iconPacks:PackIconMaterial>
-            </Button>
-
         </Grid>
 
-        <TabControl Grid.Column="1" Background="#151518">
-            <!--Games Tab-->
-            <TabItem Header="Games">
-                <TabItem.HeaderTemplate>
+        <Grid Grid.Row="0"
+              Grid.Column="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="GAME LAUNCHER"
+                       Foreground="#fff"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Left"
+                       FontSize="24"
+                       FontWeight="Bold"
+                       />
+            <StackPanel Orientation="Horizontal"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Grid.Row="0"
+                    HorizontalAlignment="Right"
+                    Margin="70 0">
+                <Button Content="YOUR GAMES"
+                    Command="{Binding FilterGamesCommand}"
+                    CommandParameter="ALL"
+                    Foreground="#fff"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    FontSize="18"
+                    Margin="10 0"
+                    Background="Transparent"
+                    BorderThickness="0"/>
+
+                <TextBlock Text="RECENTLY PLAYED"
+                       Foreground="#fff"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+                       FontSize="18"
+                       Margin="10 0"/>
+                <TextBlock Text="ABOUT"
+                       Foreground="#fff"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+                       FontSize="18"
+                       Margin="10 0"/>
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Row="2" Grid.Column="2" Margin="30 0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="10*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <ComboBox Grid.Row="0"
+                      Grid.Column="1"
+                      Width="200"
+                      Height="50"
+                      VerticalAlignment="Center"
+                      HorizontalAlignment="Right"
+                      Background="Transparent"
+                      BorderThickness="0"
+                      ItemsSource="{Binding ComboBoxItems}"
+                      SelectedItem="{Binding ComboBoxItems[0]}"/>
+            <StackPanel Orientation="Horizontal"
+                        Grid.Row="0"
+                        Grid.Column="0">
+
+                <Button BorderThickness="0"
+                        Background="Transparent"
+                        Width="40"
+                        Height="40">
+                    <Image Source="pack://application:,,,/GameLauncher;component/Resources/Images/grid1.png"/>
+                </Button>
+                <Button BorderThickness="0"
+                        Background="Transparent"
+                        Width="40"
+                        Height="40">
+                    <Image Source="pack://application:,,,/GameLauncher;component/Resources/Images/grid2.png"/>
+                </Button>
+            </StackPanel>
+            <ListBox Grid.Column="0"
+                     Grid.ColumnSpan="2"
+                     Grid.Row="2"
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                     ItemsSource="{Binding Games}" 
+                     Background="#151518"
+                     >
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Background="#151518" 
+                               Orientation="Horizontal"
+                               VerticalAlignment="Top"
+                               HorizontalAlignment="Left"/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+
+                <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <DockPanel LastChildFill="True">
-                            <Rectangle DockPanel.Dock="Left" Width="20" Margin="0 0 5 0" Height="20" Fill="{Binding RelativeSource={RelativeSource AncestorType={x:Type ContentPresenter}}, Path=(TextElement.Foreground)}" >
-                                <Rectangle.OpacityMask>
-                                    <VisualBrush Stretch="Fill" Visual="{iconPacks:Material Kind=Gamepad}" />
-                                </Rectangle.OpacityMask>
-                            </Rectangle>
-                            <Label Padding="0"
-                                Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type ContentPresenter}}, Path=(TextElement.Foreground)}"
-                                FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type ContentPresenter}}, Path=(TextElement.FontSize)}"
-                                >
-                                Games
-                            </Label>
-                        </DockPanel>
-                    </DataTemplate>
-                </TabItem.HeaderTemplate>
-
-                <Grid Margin="10" Background="#151518" >
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="0.7*"/>
-                    </Grid.ColumnDefinitions>
-
-                    <ListBox Grid.Column="0" 
-                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                             ItemsSource="{Binding Games}" 
-                             Background="#151518">
-                        
-                        <ListBox.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <WrapPanel Background="#151518" 
-                                           Orientation="Horizontal"
-                                           VerticalAlignment="Center"
-                                           HorizontalAlignment="Center"/>
-                            </ItemsPanelTemplate>
-                        </ListBox.ItemsPanel>
-
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <Grid Background="#151518">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="*"/>
-                                        <RowDefinition Height="*"/>
-                                    </Grid.RowDefinitions>
-
-                                    <Controls:Tile                 
-                                        Title="{Binding Name}"
-                                        Grid.Row="0"
-                                        Grid.RowSpan="2"
-                                        Grid.Column="0"
-                                        Grid.ColumnSpan="2"
-                                        Cursor="Hand"
-                                        Width="230"
-                                        Height="270"
-                                        Command="{Binding DataContext.TileCommand,RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" 
-                                        CommandParameter="{Binding}">
-                                        <Image 
-                                           Source="{Binding GameCover}"/>
-                                    </Controls:Tile>
-                                </Grid>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                        
-                    </ListBox>
-                </Grid>
-            </TabItem>
-
-            <!--Settings Tab-->
-            <TabItem>
-                <TabItem.HeaderTemplate>
-                    <DataTemplate>
-                        <DockPanel LastChildFill="True">
-                            <Rectangle DockPanel.Dock="Left" Width="20" Margin="0 0 5 0" Height="20" Fill="{Binding RelativeSource={RelativeSource AncestorType={x:Type ContentPresenter}}, Path=(TextElement.Foreground)}" >
-                                <Rectangle.OpacityMask>
-                                    <VisualBrush Stretch="Fill" Visual="{iconPacks:Material Kind=Settings}" />
-                                </Rectangle.OpacityMask>
-                            </Rectangle>
-                            <Label Padding="0"
-                                Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type ContentPresenter}}, Path=(TextElement.Foreground)}"
-                                FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type ContentPresenter}}, Path=(TextElement.FontSize)}"
-                                >
-                                Settings
-                            </Label>
-                        </DockPanel>
-                    </DataTemplate>
-                </TabItem.HeaderTemplate>
-
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <Expander Header="Game folder paths" Grid.Row="0">
-                        <Grid Margin="10">
+                        <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*"/>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="10*"/>
                             </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <Label>Game Folders</Label>
-                            <ListBox 
-                                Grid.Row="0"
-                                Grid.RowSpan="4"
-                                ItemsSource="{Binding Scanner.LibraryDirectories, UpdateSourceTrigger=PropertyChanged}" 
-                                DisplayMemberPath="InstallationPath" 
-                                BorderThickness="1"
-                                ScrollViewer.CanContentScroll="True" 
-                                SelectedItem="{Binding SelectedFolder}">
-                            </ListBox>
-                            <Button Command="{Binding AddFolderPathCommand}" Grid.Column="1" Grid.Row="0" Grid.RowSpan="3" HorizontalAlignment="Left" VerticalAlignment="Top" Width="50" Padding="8" Margin="8 0 0 0">
-                                <iconPacks:Material Kind="Plus"></iconPacks:Material>
-                            </Button>
-                            <Button Command="{Binding DeleteFolderPathCommand}" Grid.Column="1" Grid.Row="0" Grid.RowSpan="3" HorizontalAlignment="Left" VerticalAlignment="Top" Width="50" Padding="8" Margin="70 0 0 0">
-                                <iconPacks:Material Kind="Minus"></iconPacks:Material>
-                            </Button>
-                            <Button Command="{Binding ResetAllSettingsCommand}" Grid.Column="1" Grid.Row="1" Grid.RowSpan="3" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="50" Padding="8" Margin="8 0 0 0">
-                                <iconPacks:Material Kind="Refresh"></iconPacks:Material>
-                            </Button>
-                            <Button Command="{Binding ScanGamesCommand}" Grid.Column="1" Grid.Row="1" Grid.RowSpan="3" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="50" Padding="8" Margin="70 0 0 0">
-                                <iconPacks:Material Kind="Scanner"></iconPacks:Material>
-                            </Button>
-                        </Grid>
-                    </Expander>
-                    <Expander Header="Other shit" Grid.Row="1">
-                        <Grid Margin="10">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <StackPanel Height="100">
+                            <Button Foreground="Transparent"
+                                Cursor="Hand"
+                                Width="230"
+                                Height="270"
+                                Command="{Binding DataContext.TileCommand,RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" 
+                                CommandParameter="{Binding}"
+                                BorderThickness="0">
 
-                                <TextBlock Text="{Binding SelectedGame2}" Foreground="White" FontSize="10" />
-                                <ListBox ItemsSource="{Binding Games}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedGame2}" Height="50"></ListBox>
-                            </StackPanel>
+                                <Image Source="{Binding GameCover}"
+                               Width="220"
+                               Height="270"
+                               Grid.Row="0"/>
+                            </Button>
+                            <TextBlock Text="{Binding Name}"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center"
+                                   FontSize="16"
+                                   Grid.Row="2"
+                                   Padding="10"/>
                         </Grid>
-                    </Expander>
-                </Grid>
-
-            </TabItem>
-        </TabControl>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Grid>
     </Grid>
 </Page>

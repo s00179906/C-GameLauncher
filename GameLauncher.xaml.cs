@@ -8,13 +8,13 @@ namespace GameLauncher
     public partial class MainWindow : MetroWindow
     {
         private readonly GameLauncherViewModel vm;
-       
+
         public MainWindow()
         {
             InitializeComponent();
-            vm = new GameLauncherViewModel(DialogCoordinator.Instance);
+            vm = new GameLauncherViewModel(DialogCoordinator.Instance, frmMainFrame);
             DataContext = vm;
-            
+
         }
     }
 }

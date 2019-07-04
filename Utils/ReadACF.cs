@@ -91,6 +91,7 @@ namespace GameLauncher.Utils
                 if (_gameName == GameName)
                 {
                     MainViewModel.GameID = int.Parse(GameID);
+                    GameDetailedViewModel.GameID = int.Parse(GameID);
                 }
             }
             catch

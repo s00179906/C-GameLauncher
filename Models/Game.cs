@@ -10,6 +10,7 @@ namespace GameLauncher.Models
         public string UserPreferedEXE { get; set; }
         public Platforms Platform { get; set; }
         public string GameCover { get; set; }
+        public List<string> GameScreenshots { get; set; }
 
         public Game()
         {

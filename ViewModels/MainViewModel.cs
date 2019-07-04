@@ -39,7 +39,7 @@ namespace GameLauncher.ViewModels
         public CommandRunner AddFolderPathCommand { get; private set; }
         public CommandRunner DeleteFolderPathCommand { get; private set; }
         public CommandRunner FilterGamesCommand { get; private set; }
-        public CommandRunner SetPreferedEXECommand { get; private set; }
+        //public CommandRunner SetPreferedEXECommand { get; private set; }
         public CommandRunner ResetAllSettingsCommand { get; private set; }
         public CommandRunner TileCommand { get; private set; }
         public CommandRunner ScanGamesCommand { get; set; }
@@ -49,8 +49,8 @@ namespace GameLauncher.ViewModels
         public Platform SelectedFolder { get; set; }
         public ChooseGameExesView Window { get; set; }
         public IDialogCoordinator DialogCoordinator { get; set; }
-        public ReadACF ReadACF { get; set; }
-        public bool AllowGameToBePlayed { get; set; }
+        //public ReadACF ReadACF { get; set; }
+        //public bool AllowGameToBePlayed { get; set; }
         public static int GameID { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
         public APIController APIController { get; set; }
@@ -70,13 +70,13 @@ namespace GameLauncher.ViewModels
             FirstTimeConfiguration();
             ComboBoxItems = new string[] { "GENRES", "----------------------------------------", "FPS", "RPG", "ACTION", "ADVENTURE", "HORROR", "RACING" };
             ScanGamesCommand = new CommandRunner(ScanGames);
-            SetPreferedEXECommand = new CommandRunner(SetPreferedEXE);
+            //SetPreferedEXECommand = new CommandRunner(SetPreferedEXE);
             AddFolderPathCommand = new CommandRunner(AddDir);
             DeleteFolderPathCommand = new CommandRunner(DeleteDir);
             FilterGamesCommand = new CommandRunner(FilterGamesByPlatformSteam);
             ResetAllSettingsCommand = new CommandRunner(ResetAllSettings);
             TileCommand = new CommandRunner(TileClick);
-            
+
             Scanner = new GameScanner();
             Scanner.Scan();
             Games = Scanner.GetExecutables();
@@ -144,35 +144,35 @@ namespace GameLauncher.ViewModels
             }
         }
 
-        private void SetPreferedEXE(object obj)
-        {
-            if (SelectedGame != null)
-            {
-                //should put this into ctor
-                string json = "game.json";
-                if (!File.Exists(json))
-                {
-                    using (StreamWriter file = File.CreateText(@"game.json"))
-                    {
-                        file.WriteLine("[]");
-                    }
-                }
-                else
-                {
-                    var initialJson = File.ReadAllText(@"game.json");
-                    var gameDirList = JsonConvert.DeserializeObject<List<Game>>(initialJson);
-                    var gameFound = gameDirList.Find(game => game.Name == SelectedGame.Name);
-                    AllowGameToBePlayed = true;
+        //private void SetPreferedEXE(object obj)
+        //{
+        //    if (SelectedGame != null)
+        //    {
+        //        //should put this into ctor
+        //        string json = "game.json";
+        //        if (!File.Exists(json))
+        //        {
+        //            using (StreamWriter file = File.CreateText(@"game.json"))
+        //            {
+        //                file.WriteLine("[]");
+        //            }
+        //        }
+        //        else
+        //        {
+        //            var initialJson = File.ReadAllText(@"game.json");
+        //            var gameDirList = JsonConvert.DeserializeObject<List<Game>>(initialJson);
+        //            var gameFound = gameDirList.Find(game => game.Name == SelectedGame.Name);
+        //            AllowGameToBePlayed = true;
 
-                    if (gameFound == null)
-                    {
-                        Window = new ChooseGameExesView(SelectedGame);
-                        Window.ShowDialog();
-                        AllowGameToBePlayed = false;
-                    }
-                }
-            }
-        }
+        //            if (gameFound == null)
+        //            {
+        //                Window = new ChooseGameExesView(SelectedGame);
+        //                Window.ShowDialog();
+        //                AllowGameToBePlayed = false;
+        //            }
+        //        }
+        //    }
+        //}
 
         //Used to scan games when settings have been reset.
         private void ScanGames(object obj)
@@ -181,45 +181,45 @@ namespace GameLauncher.ViewModels
             RefreshGames();
         }
 
-        private void PlayGame(object obj)
-        {
-            if (AllowGameToBePlayed)
-            {
-                var initialJson = File.ReadAllText(@"game.json");
-                var gameList = JsonConvert.DeserializeObject<List<Game>>(initialJson);
+        //private void PlayGame(object obj)
+        //{
+        //    if (AllowGameToBePlayed)
+        //    {
+        //        var initialJson = File.ReadAllText(@"game.json");
+        //        var gameList = JsonConvert.DeserializeObject<List<Game>>(initialJson);
 
-                foreach (var game in gameList)
-                {
-                    if (SelectedGame != null)
-                    {
-                        try
-                        {
-                            if (game.Name == SelectedGame.Name && SelectedGame.Platform.Equals(Platforms.STEAM))
-                            {
-                                ReadACF = new ReadACF(MainViewModel.SelectedGame.Name);
-                                Process.Start($"steam://rungameid/{GameID}");
-                            }
+        //        foreach (var game in gameList)
+        //        {
+        //            if (SelectedGame != null)
+        //            {
+        //                try
+        //                {
+        //                    if (game.Name == SelectedGame.Name && SelectedGame.Platform.Equals(Platforms.STEAM))
+        //                    {
+        //                        ReadACF = new ReadACF(MainViewModel.SelectedGame.Name);
+        //                        Process.Start($"steam://rungameid/{GameID}");
+        //                    }
 
-                            if (game.Name == SelectedGame.Name && SelectedGame.Platform.Equals(Platforms.NONE))
-                            {
-                                Process.Start(game.UserPreferedEXE);
-                            }
+        //                    if (game.Name == SelectedGame.Name && SelectedGame.Platform.Equals(Platforms.NONE))
+        //                    {
+        //                        Process.Start(game.UserPreferedEXE);
+        //                    }
 
-                            if (game.Name == SelectedGame.Name && SelectedGame.Platform.Equals(Platforms.UPLAY))
-                            {
-                                Process.Start(game.UserPreferedEXE);
-                            }
+        //                    if (game.Name == SelectedGame.Name && SelectedGame.Platform.Equals(Platforms.UPLAY))
+        //                    {
+        //                        Process.Start(game.UserPreferedEXE);
+        //                    }
 
-                            if (game.Name == SelectedGame.Name && SelectedGame.Platform.Equals(Platforms.EPIC))
-                            {
-                                Process.Start(game.UserPreferedEXE);
-                            }
-                        }
-                        catch (Win32Exception) { }
-                    }
-                }
-            }
-        }
+        //                    if (game.Name == SelectedGame.Name && SelectedGame.Platform.Equals(Platforms.EPIC))
+        //                    {
+        //                        Process.Start(game.UserPreferedEXE);
+        //                    }
+        //                }
+        //                catch (Win32Exception) { }
+        //            }
+        //        }
+        //    }
+        //}
 
         private void AddDir(object obj)
         {

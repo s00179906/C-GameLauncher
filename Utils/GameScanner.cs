@@ -244,6 +244,10 @@ namespace GameLauncher.Utils
 
                     foreach (var gameDir in gameDirs)
                     {
+                        //if (true)
+                        //{
+
+                        //}
                         string[] exes = Directory.GetFiles(gameDir, "*.exe", SearchOption.AllDirectories);
                         Game game = new Game
                         {

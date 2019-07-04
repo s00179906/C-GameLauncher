@@ -19,7 +19,7 @@ namespace GameLauncher.ViewModels
 
         public MainView MainView { get; set; }
 
-        public SettingsView SettingsView { get; set; }
+        public SettingsView SettingsView = new SettingsView();
         public static Frame MainFrame { get; set; }
         public CommandRunner SettingsCommand { get; set; }
 
@@ -41,7 +41,6 @@ namespace GameLauncher.ViewModels
         }
         private void Settings(object obj)
         {
-            SettingsView = new SettingsView();
             MainFrame.Content = SettingsView;
         }
 

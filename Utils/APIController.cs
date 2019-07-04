@@ -54,7 +54,7 @@ namespace GameLauncher.Utils
                     {
                         name = g[0].name;
                     }
-                    if (!String.IsNullOrWhiteSpace(g[0].screenshots[0].url))
+                    if (!String.IsNullOrWhiteSpace(g[0].screenshots[0].url) || g[0].screenshots != null)
                     {
                         foreach (var screenshot in g[0].screenshots)
                         {

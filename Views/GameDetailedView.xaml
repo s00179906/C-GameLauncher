@@ -3,23 +3,40 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:GameLauncher.Views"
       mc:Ignorable="d" 
       d:DesignHeight="800" d:DesignWidth="1200"
       Title="GameDetailedView">
-
+    <Page.Resources>
+        <BitmapImage x:Key="DefaultImage" UriSource="https://images.igdb.com/igdb/image/upload/t_1080p/wklmdcc9vn93257yjg1c.jpg" />
+        <TextBlock x:Key="DefaultText" Text="Call of Duty Black Ops III"/>
+    </Page.Resources>
     <Grid>
-        <Image Source="{Binding RandomSelectedGameScreenshot, UpdateSourceTrigger=PropertyChanged}"
-                   
-                   VerticalAlignment="Center"
-                   HorizontalAlignment="Center"/>
-
+        <Image Source="{Binding RandomSelectedGameScreenshot, 
+               FallbackValue={StaticResource DefaultImage},
+               TargetNullValue={StaticResource DefaultImage}}"
+               VerticalAlignment="Center"
+               HorizontalAlignment="Center"
+               Opacity="0.5"
+               
+               />
+        <TextBlock Text="{Binding SelectedGame.Name, 
+                   FallbackValue={StaticResource DefaultText}, 
+                   TargetNullValue={StaticResource DefaultText}}"
+                   FontSize="30"
+                   Foreground="#fff"
+                   VerticalAlignment="Top"
+                   Margin="50 110"/>
+        
         <Button Command="{Binding BackToMainViewCommand}"
-                Width="100"
+                Width="30"
                 Height="30"
-                Content="Back"
+                Content="X"
+                FontSize="20"
+                Padding="0"
+                Foreground="#fff"
+                Background="#FFA000"
                 VerticalAlignment="Top" 
-                HorizontalAlignment="Left"
+                HorizontalAlignment="Right"
                 Margin="10"/>
 
         <StackPanel VerticalAlignment="Center"
@@ -43,8 +60,9 @@
                    HorizontalAlignment="Center"/>
             </Button>
             <Button Content="PLAY" 
-                    Width="200"
+                    Width="220"
                     Height="50"
+                    Cursor="Hand"
                     Foreground="#fff"
                     Background="#FFA000"
                     VerticalAlignment="Center"
@@ -52,7 +70,5 @@
                     Command="{Binding TileCommand}" 
                     CommandParameter="{Binding}"/>
         </StackPanel>
-
-        
     </Grid>
 </Page>

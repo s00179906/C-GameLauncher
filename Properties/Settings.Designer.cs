@@ -83,5 +83,17 @@ namespace GameLauncher.Properties {
                 this["UserSelectedEXES"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool FirstTimeConfig {
+            get {
+                return ((bool)(this["FirstTimeConfig"]));
+            }
+            set {
+                this["FirstTimeConfig"] = value;
+            }
+        }
     }
 }

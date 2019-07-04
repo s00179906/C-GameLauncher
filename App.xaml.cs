@@ -28,7 +28,7 @@ namespace GameLauncher
                     //because we're not on the UI thread, we need to use the Dispatcher
                     //associated with the splash screen to update the progress bar
                     splashScreen.Dispatcher.Invoke(() => splashScreen.Progress = i);
-                    splashScreen.Dispatcher.Invoke(() => splashScreen.tblckPercentage.Text = splashScreen.progressBar.Value.ToString()+"%");
+                    splashScreen.Dispatcher.Invoke(() => splashScreen.tblckPercentage.Text = splashScreen.progressBar.Value.ToString() + "%");
                 }
 
                 //once we're done we need to use the Dispatcher
@@ -37,7 +37,7 @@ namespace GameLauncher
                 {
                     //initialize the main window, set it as the application main window
                     //and close the splash screen
-                    var mainWindow = new MainWindow();
+                    var mainWindow = new GameLauncherView();
                     this.MainWindow = mainWindow;
                     mainWindow.Show();
                     splashScreen.Close();

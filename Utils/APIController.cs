@@ -18,7 +18,7 @@ namespace GameLauncher.Utils
         public ObservableCollection<Game> Games { get; set; }
         public APIController(ObservableCollection<Game> games)
         {
-            APIKey = "41cca02193617b8b009006af5f560649";
+            APIKey = "e2e3dca62672ef196563f5bc3b31c331";
             Client = new RestClient();
             GameCovers = new List<Game>();
             Games = games;

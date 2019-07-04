@@ -6,6 +6,7 @@ using System;
 using System.Reflection;
 using System.Text;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace GameLauncher.ViewModels
 {
@@ -15,22 +16,35 @@ namespace GameLauncher.ViewModels
         public CommandRunner ShowAboutCommand { get; set; }
         public CommandRunner ChangeThemeCommand { get; set; }
         public CommandRunner ChangeAccentCommand { get; set; }
+
         public MainView MainView { get; set; }
 
+        public SettingsView SettingsView { get; set; }
+        public static Frame MainFrame { get; set; }
+        public CommandRunner SettingsCommand { get; set; }
 
         private readonly IDialogCoordinator dialogCoordinator;
 
-        public GameLauncherViewModel(IDialogCoordinator instance)
+        public GameLauncherViewModel(IDialogCoordinator instance, Frame frmMainFrame)
         {
+            MainFrame = frmMainFrame;
+            SettingsCommand = new CommandRunner(Settings);
             ExitCommand = new CommandRunner(Close);
             ShowAboutCommand = new CommandRunner(ShowAboutDialog);
             ChangeThemeCommand = new CommandRunner(ChangeTheme);
             ChangeAccentCommand = new CommandRunner(ChangeAccent);
+
             MainView = new MainView();
 
             dialogCoordinator = instance;
             ChangeTheme(Properties.Settings.Default["Theme"]);
         }
+        private void Settings(object obj)
+        {
+            SettingsView = new SettingsView();
+            MainFrame.Content = SettingsView;
+        }
+
 
         /// <summary>
         /// Changes application theme while preserving current accent, updates theme in Properties.Settings

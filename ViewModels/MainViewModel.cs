@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Windows;
 using System.Diagnostics;
+using System.Windows.Controls;
 
 /*
     TODOS:
@@ -25,7 +26,7 @@ namespace GameLauncher.ViewModels
 
         #region Private Members
         private ObservableCollection<Game> _games;
-        private bool firstTimeConfiguration = true;
+        private bool firstTimeConfiguration;
         #endregion
 
         #region Public Properties 
@@ -56,14 +57,18 @@ namespace GameLauncher.ViewModels
         public string JSONResponse { get; set; }
         public string Cover { get; set; }
         public List<Game> GameCovers { get; set; }
-
+        public CommandRunner CloseSettingsCommand { get; set; }
+        public string[] ComboBoxItems { get; set; }
         #endregion
 
         #region Constructor
         public MainViewModel(IDialogCoordinator instance)
         {
+            CloseSettingsCommand = new CommandRunner(CloseSettings);
             DialogCoordinator = instance;
-            
+            //Properties.Settings.Default.Reset();
+            FirstTimeConfiguration();
+            ComboBoxItems = new string[] { "GENRES", "----------","FPS", "RPG", "Action", "Adventure", "Horror", "Racing" };
             ScanGamesCommand = new CommandRunner(ScanGames);
             SetPreferedEXECommand = new CommandRunner(SetPreferedEXE);
             AddFolderPathCommand = new CommandRunner(AddDir);
@@ -76,7 +81,6 @@ namespace GameLauncher.ViewModels
             Scanner.Scan();
             Games = Scanner.GetExecutables();
             FilteredGames = CollectionViewSource.GetDefaultView(Games);
-            FirstTimeConfiguration();
             APIController = new APIController(Games);
             APIController.GetGameCovers();
             GameCovers = APIController.GameCovers;
@@ -96,16 +100,20 @@ namespace GameLauncher.ViewModels
         #endregion
 
         #region VM Methods
-
+        private void CloseSettings(object obj)
+        {
+            GameLauncherViewModel.MainFrame.Content = new MainView();
+        }
         private void FirstTimeConfiguration()
         {
+            firstTimeConfiguration = Properties.Settings.Default.FirstTimeConfig;
             if (firstTimeConfiguration)
             {
                 File.WriteAllText(@"game.json", string.Empty);
                 File.WriteAllText(@"game.json", "[]");
                 Properties.Settings.Default.FolderPaths.Clear();
+                Properties.Settings.Default.FirstTimeConfig = false;
                 Properties.Settings.Default.Save();
-                firstTimeConfiguration = false;
             }
         }
 
@@ -183,16 +191,25 @@ namespace GameLauncher.ViewModels
                     {
                         try
                         {
-                            if (game.Name == SelectedGame.Name && game.Platform.Equals(Platforms.STEAM))
+                            if (game.Name == SelectedGame.Name && SelectedGame.Platform.Equals(Platforms.STEAM))
                             {
                                 ReadACF = new ReadACF(MainViewModel.SelectedGame.Name);
                                 Process.Start($"steam://rungameid/{GameID}");
                             }
 
-                            if (game.Name == SelectedGame.Name && game.Platform.Equals(Platforms.NONE))
+                            if (game.Name == SelectedGame.Name && SelectedGame.Platform.Equals(Platforms.NONE))
                             {
-                                ReadACF = new ReadACF(MainViewModel.SelectedGame.Name);
-                                Process.Start(SelectedGame.UserPreferedEXE);
+                                Process.Start(game.UserPreferedEXE);
+                            }
+
+                            if (game.Name == SelectedGame.Name && SelectedGame.Platform.Equals(Platforms.UPLAY))
+                            {
+                                Process.Start(game.UserPreferedEXE);
+                            }
+
+                            if (game.Name == SelectedGame.Name && SelectedGame.Platform.Equals(Platforms.EPIC))
+                            {
+                                Process.Start(game.UserPreferedEXE);
                             }
                         }
                         catch (Win32Exception) { }

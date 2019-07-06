@@ -93,10 +93,10 @@ namespace GameLauncher.Utils
                         }
                     }
                 }
-                else
-                {
-                    MessageBox.Show("Could not find Steam directories... Do you have Steam Installed?");
-                }
+                //else
+                //{
+                //    MessageBox.Show("Could not find Steam directories... Do you have Steam Installed?");
+                //}
             }
             catch (Exception e)
             {
@@ -140,10 +140,10 @@ namespace GameLauncher.Utils
                         InstallationPath = epicGames64[0]
                     }); ;
                 }
-                else
-                {
-                    MessageBox.Show("Could not find Epic Games folder in Program Files...");
-                }
+                //else
+                //{
+                //    MessageBox.Show("Could not find Epic Games folder in Program Files...");
+                //}
                 //DirExists = CheckIfRegistryDirExists(EpicRegistry, "INSTALLDIR");
                 //if (DirExists)
                 //{
@@ -196,10 +196,10 @@ namespace GameLauncher.Utils
                         });
                     }
                 }
-                else
-                {
-                    MessageBox.Show("Could not find Uplay directories... Do you have Uplay Installed?");
-                }
+                //else
+                //{
+                //    MessageBox.Show("Could not find Uplay directories... Do you have Uplay Installed?");
+                //}
 
             }
             catch (Exception e)
@@ -215,12 +215,15 @@ namespace GameLauncher.Utils
             try
             {
                 r = Registry.LocalMachine.OpenSubKey(key);
-                string k = r.GetValue(value).ToString();
+                if (r != null)
+                {
+                    string k = r.GetValue(value).ToString();
 
-                if (r != null && (k != null && Directory.Exists(k)))
-                    keyExists = true;
-                else
-                    keyExists = false;
+                    if (r != null && (k != null && Directory.Exists(k)))
+                        keyExists = true;
+                    else
+                        keyExists = false;
+                }
 
             }
             catch (Exception ex)

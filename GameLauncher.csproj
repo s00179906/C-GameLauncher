@@ -50,7 +50,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>glicon_LN8_icon.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\Images\glicon_LN8_icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ControlzEx, Version=3.0.2.4, Culture=neutral, processorArchitecture=MSIL">
@@ -128,16 +128,8 @@
     <Compile Include="Views\SplashScreenView.xaml.cs">
       <DependentUpon>SplashScreenView.xaml</DependentUpon>
     </Compile>
-    <Page Include="GameLauncher.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="GameLauncher.xaml.cs">
-      <DependentUpon>GameLauncher.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\ChooseGameExesView.xaml">
@@ -219,13 +211,13 @@
     <Resource Include="Resources\Images\grid2.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="glicon_in7_icon.ico" />
+    <Resource Include="Resources\Images\glicon_in7_icon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="glicon_LN8_icon.ico" />
+    <Resource Include="Resources\Images\glicon_LN8_icon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="gliconbig_jjB_icon.ico" />
+    <Resource Include="Resources\Images\gliconbig_jjB_icon.ico" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\nogamecover.png" />

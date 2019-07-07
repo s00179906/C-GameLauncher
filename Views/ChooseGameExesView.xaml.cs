@@ -13,7 +13,7 @@ namespace GameLauncher.Views
         public ChooseGameExesView(Game game)
         {
             InitializeComponent();
-            ChooseGameExesViewModel vm = new ChooseGameExesViewModel(game, DialogCoordinator.Instance);
+            ChooseGameExesViewModel vm = new ChooseGameExesViewModel(game);
             DataContext = vm;
         }
     }

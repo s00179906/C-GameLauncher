@@ -18,13 +18,10 @@ namespace GameLauncher.ViewModels
         public string SelectedExecutable { get; set; }
         public CommandRunner SetEXECommand { get; set; }
         public ChooseGameExesView ExeWindow { get; set; }
-        public IDialogCoordinator DialogCoordinator { get; set; }
 
-        public ChooseGameExesViewModel(Game game, IDialogCoordinator instance)
+        public ChooseGameExesViewModel(Game game)
         {
             Game = game;
-            DialogCoordinator = instance;
-            //MultilpleEXEWarning();
             GameExecutables = new ObservableCollection<string>();
             foreach (var exe in Game.Executables)
             {
@@ -37,38 +34,33 @@ namespace GameLauncher.ViewModels
         {
             if (SelectedExecutable != null)
             {
-                MainViewModel.SelectedGame.UserPreferedEXE = SelectedExecutable;
+                  MainViewModel.SelectedGame.UserPreferedEXE = SelectedExecutable;
 
-                if (MainViewModel.SelectedGame.UserPreferedEXE != null)
-                {
-                    var initialJson = File.ReadAllText(@"game.json");
-
-                    var list = JsonConvert.DeserializeObject<List<Game>>(initialJson);
-                    Game game = new Game()
+                    if (MainViewModel.SelectedGame.UserPreferedEXE != null)
                     {
-                        Executables = MainViewModel.SelectedGame.Executables,
-                        ID = MainViewModel.SelectedGame.ID,
-                        Platform = MainViewModel.SelectedGame.Platform,
-                        UserPreferedEXE = MainViewModel.SelectedGame.UserPreferedEXE,
-                        Name = MainViewModel.SelectedGame.Name
-                    };
+                        var initialJson = File.ReadAllText(@"game.json");
 
-                    //create steam game
+                        var list = JsonConvert.DeserializeObject<List<Game>>(initialJson);
+                        Game game = new Game()
+                        {
+                            Executables = MainViewModel.SelectedGame.Executables,
+                            ID = MainViewModel.SelectedGame.ID,
+                            Platform = MainViewModel.SelectedGame.Platform,
+                            UserPreferedEXE = MainViewModel.SelectedGame.UserPreferedEXE,
+                            Name = MainViewModel.SelectedGame.Name
+                        };
 
-                    list.Add(game);
-                    var convertedJson = JsonConvert.SerializeObject(list, Formatting.Indented);
-                    File.WriteAllText(@"game.json", string.Empty);
-                    File.AppendAllText(@"game.json", convertedJson);
-                }
+                        //create steam game
 
+                        list.Add(game);
+                        var convertedJson = JsonConvert.SerializeObject(list, Formatting.Indented);
+                        File.WriteAllText(@"game.json", string.Empty);
+                        File.AppendAllText(@"game.json", convertedJson);
+                    }
+                
                 ExeWindow = Application.Current.Windows.OfType<ChooseGameExesView>().SingleOrDefault(w => w.IsActive);
                 ExeWindow.Close();
             }
         }
-        private async void MultilpleEXEWarning()
-        {
-            await DialogCoordinator.ShowMessageAsync(this, "Multiple Exes", $"{MainViewModel.SelectedGame.Name} has multiple exes. \nPlease choose the correct one to launch.");
-        }
-
     }
 }

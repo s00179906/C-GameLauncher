@@ -121,9 +121,19 @@ namespace GameLauncher.ViewModels
 
                     if (gameFound == null)
                     {
-                        Window = new ChooseGameExesView(SelectedGame);
-                        Window.ShowDialog();
-                        AllowGameToBePlayed = false;
+                        if (SelectedGame.Executables.Count != 1)
+                        {
+                            Window = new ChooseGameExesView(SelectedGame);
+                            Window.ShowDialog();
+                            AllowGameToBePlayed = false;
+                        }
+                        else
+                        {
+                            if (SelectedGame.Executables.Count == 1)
+                            {
+                                MainViewModel.SelectedGame.UserPreferedEXE = SelectedGame.Executables[0];
+                            }
+                        }
                     }
                 }
             }

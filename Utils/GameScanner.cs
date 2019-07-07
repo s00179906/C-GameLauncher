@@ -28,6 +28,7 @@ namespace GameLauncher.Utils
         public void Scan()
         {
             GetSteamDirs();
+            GetExternalUplayGames();
             //GetOriginsDir();
             GetEpicDirs();
             GetUplayDirs();
@@ -208,6 +209,37 @@ namespace GameLauncher.Utils
             }
         }
 
+        private void GetExternalUplayGames()
+        {
+            string key = @"SOFTWARE\WOW6432Node\Ubisoft\Launcher\Installs";
+            RegistryKey keyExists = Registry.LocalMachine.OpenSubKey(key);
+
+            if (keyExists != null)
+            {
+                //var gameInstalls = Directory.GetDirectories(keyExists.ToString());
+                foreach (string subKey in keyExists.GetSubKeyNames())
+                {
+                    if (subKey != "205")
+                    {
+                        using (RegistryKey k = keyExists.OpenSubKey(subKey))
+                        {
+                            string gamePath = k.GetValue("InstallDir").ToString();
+                            string[] splitArray = gamePath.Split('/');
+                            string gameNameFromPath = splitArray[splitArray.Length - 2];
+                            string gameInstalledDir = gamePath.Replace(gameNameFromPath, "");
+
+                            LibraryDirectories.Add(new Platform
+                            {
+                                PlatformType = Platforms.UPLAY,
+                                Name = nameof(Platforms.UPLAY),
+                                InstallationPath = gameInstalledDir
+                            });
+                        }
+                    }
+                }
+            }
+        }
+
         private bool CheckIfRegistryDirExists(string key, string value)
         {
             RegistryKey r;
@@ -251,6 +283,7 @@ namespace GameLauncher.Utils
                         //{
 
                         //}
+                        DirectoryInfo info = new DirectoryInfo(@"d:\\");
                         string[] exes = Directory.GetFiles(gameDir, "*.exe", SearchOption.AllDirectories);
                         Game game = new Game
                         {

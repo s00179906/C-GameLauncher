@@ -39,25 +39,29 @@
                 <Button Command="{Binding AddFolderPathCommand}"
                      Width="50"
                     Height="50"
-                     Margin="10">
+                     Margin="10"
+                        Background="#FFA000">
                     <iconPacks:Material Kind="Plus"></iconPacks:Material>
                 </Button>
                 <Button Command="{Binding DeleteFolderPathCommand}"
                      Width="50"
                     Height="50"
-                        Margin="10">
+                        Margin="10"
+                        Background="#FFA000">
                     <iconPacks:Material Kind="Minus"></iconPacks:Material>
                 </Button>
                 <Button Command="{Binding ResetAllSettingsCommand}"
                      Width="50"
                     Height="50"
-                        Margin="10">
+                        Margin="10"
+                        Background="#FFA000">
                     <iconPacks:Material Kind="Refresh"></iconPacks:Material>
                 </Button>
                 <Button Command="{Binding ScanGamesCommand}"
                      Width="50"
                     Height="50"
-                        Margin="10">
+                        Margin="10"
+                        Background="#FFA000">
                     <iconPacks:Material Kind="FileFind"></iconPacks:Material>
                 </Button>
             </StackPanel>
@@ -65,10 +69,11 @@
         </StackPanel>
 
         <Button Command="{Binding CloseSettingsCommand}"
-                    Width="25"
-                    Height="25"
+                    Width="35"
+                    Height="35"
                     VerticalAlignment="Top"
-                    HorizontalAlignment="Right">
+                    HorizontalAlignment="Right"
+                Background="#FFA000">
             <iconPacks:PackIconMaterial Kind="Close"
                                         VerticalAlignment="Center"
                                         HorizontalAlignment="Center"/>

@@ -33,7 +33,7 @@ namespace GameLauncher.Utils
 
                 string path = key.GetValue("InstallPath").ToString();
                 ACFLocationPath = path + "\\steamapps";
-                //CheckExternalSteamLibs();
+                CheckExternalSteamLibs();
 
             }
             catch (Exception e)
@@ -61,11 +61,11 @@ namespace GameLauncher.Utils
         {
             string[] acfFiles = Directory.GetFiles(ACFLocationPath, "*.acf");
 
-            //string[] externalACFFiles = (Directory.GetFiles(ExternalSteamLibACFPath + "\\steamapps", "*.acf"));
+            string[] externalACFFiles = (Directory.GetFiles(ExternalSteamLibACFPath + "\\steamapps", "*.acf"));
 
-            //string[] combinedACF = acfFiles.Concat(externalACFFiles).ToArray();
+            string[] combinedACF = acfFiles.Concat(externalACFFiles).ToArray();
 
-            foreach (var acfFile in acfFiles)
+            foreach (var acfFile in combinedACF)
             {
                 ReadACFFile(acfFile, gameName);
             }

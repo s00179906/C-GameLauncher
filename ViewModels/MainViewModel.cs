@@ -57,7 +57,7 @@ namespace GameLauncher.ViewModels
         #region Constructor
         public MainViewModel()
         {
-            //Properties.Settings.Default.Reset();
+            Properties.Settings.Default.Reset();
             CloseSettingsCommand = new CommandRunner(CloseSettings);
             FirstTimeConfiguration();
             ScanGamesCommand = new CommandRunner(ScanGames);

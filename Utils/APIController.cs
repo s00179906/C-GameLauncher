@@ -45,16 +45,19 @@ namespace GameLauncher.Utils
                 var g = JsonConvert.DeserializeObject<List<GameInfo>>(json);
                 if (g.Count != 0)
                 {
+
                     if (g[0].cover != null)
                     {
                         cover = g[0].cover.image_id;
-                       
+
                     }
                     if (g[0].name != null)
                     {
                         name = g[0].name;
                     }
-                    if (!String.IsNullOrWhiteSpace(g[0].screenshots[0].url) || g[0].screenshots != null)
+                    var x = g[0].screenshots;
+                    // took this out from if statement !String.IsNullOrWhiteSpace(g[0].screenshots[0].url) ||
+                    if (x != null)
                     {
                         foreach (var screenshot in g[0].screenshots)
                         {
@@ -62,6 +65,7 @@ namespace GameLauncher.Utils
                             screenshots.Add(screenshotURL);
                         }
                     }
+
 
                 }
                 string finalCover = $"https://images.igdb.com/igdb/image/upload/t_cover_big/{cover}.jpg";

@@ -226,7 +226,7 @@
                      Grid.ColumnSpan="2"
                      Grid.Row="2"
                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                     ItemsSource="{Binding Games}" 
+                     ItemsSource="{Binding Games, UpdateSourceTrigger=PropertyChanged}" 
                      Background="#151518"
                      >
                 <ListBox.ItemsPanel>

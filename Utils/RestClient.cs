@@ -17,7 +17,7 @@ namespace GameLauncher.Utils
         public string EndPoint { get; set; }
         public HttpMethods HttpMethod { get; set; }
         public HttpWebRequest Request { get; set; }
-        public string APIKey { get; set; } = "e2e3dca62672ef196563f5bc3b31c331";
+        public string APIKey { get; set; } = "0eefb9ee998243965d2c713a34d82905";
 
         public RestClient()
         {

@@ -13,17 +13,10 @@ using System.Windows;
 using System.Diagnostics;
 using System.Windows.Controls;
 
-/*
-    TODOS:
-        1. Add spinner for app launching > DONE
-
-*/
-
 namespace GameLauncher.ViewModels
 {
     public class MainViewModel : INotifyPropertyChanged
     {
-
         #region Private Members
         private ObservableCollection<Game> _games;
         private bool firstTimeConfiguration;
@@ -39,7 +32,6 @@ namespace GameLauncher.ViewModels
         public CommandRunner AddFolderPathCommand { get; private set; }
         public CommandRunner DeleteFolderPathCommand { get; private set; }
         public CommandRunner FilterGamesCommand { get; private set; }
-        //public CommandRunner SetPreferedEXECommand { get; private set; }
         public CommandRunner ResetAllSettingsCommand { get; private set; }
         public CommandRunner PassSelectedGameToViewCommand { get; private set; }
         public CommandRunner ScanGamesCommand { get; set; }
@@ -48,7 +40,6 @@ namespace GameLauncher.ViewModels
         public static Game SelectedGame { get; set; }
         public Platform SelectedFolder { get; set; }
         public ChooseGameExesView Window { get; set; }
-        public IDialogCoordinator DialogCoordinator { get; set; }
         public static int GameID { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
         public APIController APIController { get; set; }
@@ -60,14 +51,14 @@ namespace GameLauncher.ViewModels
         public string[] ComboBoxItems = { "GENRES", "----------------------------------------", "FPS", "RPG", "ACTION", "ADVENTURE", "HORROR", "RACING" };
         public MainView MainView { get; set; }
         public GameDetailedView GameDetailedView { get; set; }
+        public Platform SelectedFolderValue { get; set; }
         #endregion
 
         #region Constructor
-        public MainViewModel(IDialogCoordinator instance)
+        public MainViewModel()
         {
             //Properties.Settings.Default.Reset();
             CloseSettingsCommand = new CommandRunner(CloseSettings);
-            DialogCoordinator = instance;
             FirstTimeConfiguration();
             ScanGamesCommand = new CommandRunner(ScanGames);
             AddFolderPathCommand = new CommandRunner(AddDir);
@@ -173,9 +164,15 @@ namespace GameLauncher.ViewModels
 
         private void DeleteDir(object obj)
         {
-            if (SelectedFolder != null)
+            if (!String.IsNullOrEmpty(SelectedFolder.InstallationPath))
             {
+                //remove from c# settings
+                Helper.DeleteDir(SelectedFolder.InstallationPath);
+
+                // remove from library directories 
+                // because when vm gets instanciated the library from settings gets added to the oc
                 Scanner.LibraryDirectories.Remove(SelectedFolder);
+
                 RefreshGames();
             }
         }
@@ -210,18 +207,12 @@ namespace GameLauncher.ViewModels
 
         private void ResetAllSettings(object obj)
         {
-            ResetAllSettingsWarning();
             File.WriteAllText(@"game.json", string.Empty);
             File.WriteAllText(@"game.json", "[]");
             Scanner.LibraryDirectories.Clear();
             Properties.Settings.Default.FolderPaths.Clear();
             Properties.Settings.Default.Save();
             RefreshGames();
-        }
-
-        private async void ResetAllSettingsWarning()
-        {
-            await DialogCoordinator.ShowMessageAsync(this, "Reset All Settings", "Warning you are about to reset all settings. Continue?");
         }
         #endregion
     }

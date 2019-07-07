@@ -1,4 +1,5 @@
 ﻿using Microsoft.WindowsAPICodePack.Dialogs;
+using System;
 
 namespace GameLauncher.Utils
 {
@@ -19,6 +20,15 @@ namespace GameLauncher.Utils
             }
 
             return string.Empty;
+        }
+
+        public static void DeleteDir(string dir)
+        {
+            if (!String.IsNullOrEmpty(dir))
+            {
+                Properties.Settings.Default.FolderPaths.Remove(dir);
+                Properties.Settings.Default.Save();
+            }
         }
     }
 }

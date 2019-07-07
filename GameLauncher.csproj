@@ -116,7 +116,7 @@
     <Compile Include="Views\GameDetailedView.xaml.cs">
       <DependentUpon>GameDetailedView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\GameLauncherView.xaml.cs">
+    <Compile Include="GameLauncherView.xaml.cs">
       <DependentUpon>GameLauncherView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainView.xaml.cs">
@@ -140,7 +140,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\GameLauncherView.xaml">
+    <Page Include="GameLauncherView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

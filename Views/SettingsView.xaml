@@ -28,7 +28,8 @@
                      Height="200"
                      FontSize="18"
                      ScrollViewer.CanContentScroll="True" 
-                     SelectedItem="{Binding SelectedFolder}">
+                     SelectedItem="{Binding SelectedFolder}"
+                     SelectedValue="{Binding SelectedFolderValue}">
             </ListBox>
 
             <StackPanel Orientation="Horizontal" 

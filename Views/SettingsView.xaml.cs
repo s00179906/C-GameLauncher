@@ -24,7 +24,7 @@ namespace GameLauncher.Views
         public SettingsView()
         {
             InitializeComponent();
-            MainViewModel vm = new MainViewModel(null);
+            MainViewModel vm = new MainViewModel();
             DataContext = vm;
         }
     }

@@ -1,4 +1,4 @@
-﻿<Page x:Class="GameLauncher.Views.MainView"
+﻿<UserControl x:Class="GameLauncher.Views.MainView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -6,45 +6,221 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"             
              xmlns:Dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
              Dialog:DialogParticipation.Register="{Binding}"
+             xmlns:ViewModels="clr-namespace:GameLauncher.ViewModels"
+             xmlns:Views="clr-namespace:GameLauncher.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="800" d:DesignWidth="1200" Background="#151518">
+             d:DesignHeight="800" d:DesignWidth="1200">
+    <UserControl.Resources>
+        <DataTemplate x:Name="GameDetailedViewTemplate" DataType="{x:Type ViewModels:GameDetailedViewModel}">
+            <Views:GameDetailedView DataContext="{Binding}"/>
+        </DataTemplate>
+        <BitmapImage x:Key="DefaultImage" UriSource="https://images.igdb.com/igdb/image/upload/t_1080p/wklmdcc9vn93257yjg1c.jpg" />
+        <TextBlock x:Key="DefaultText" Text="Call of Duty Black Ops III"/>
 
-    <Grid>
-        <Grid.ColumnDefinitions>
+
+        <!-- Button Style -->
+        <Style TargetType="{x:Type Button}">
+            <Setter Property="Background" Value="#373737" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}" >
+                        <Border Background="{TemplateBinding Background}">
+                            <Grid>
+                                <ContentPresenter x:Name="MyContentPresenter" Content="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" />
+                            </Grid>
+                        </Border>
+
+                        <!--Mouse Over Event-->
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#E59400" />
+                            </Trigger>
+
+                            <!--Mouse left click even-->
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="OrangeRed" />
+                                <Setter Property="Foreground" Value="White" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+    <Grid Background="Black">
+        <!--<Grid.RowDefinitions>
+            <RowDefinition Height="1.2*"/>
+            <RowDefinition Height="10*"/>
+            <RowDefinition Height="3*"/>
+        </Grid.RowDefinitions>-->
+
+        <!--<Border Grid.Row="0"
+                   BorderBrush="White"
+                BorderThickness="0 0 0 0.5"
+                   />
+
+        <Grid Grid.Row="0" Panel.ZIndex="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="GAME LAUNCHER"
+                       Foreground="#fff"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Left"
+                       FontSize="24"
+                       FontWeight="Bold"
+                       Margin="40 0"/>
+            <StackPanel Orientation="Horizontal"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Grid.Row="0"
+                    HorizontalAlignment="Right"
+                    Margin="70 0">
+                <Button Content="YOUR GAMES"
+                    Command="{Binding FilterGamesCommand}"
+                    CommandParameter="ALL"
+                    Foreground="#fff"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    FontSize="18"
+                    Margin="10 0"
+                    Background="Transparent"
+                    BorderThickness="0"/>
+
+                <TextBlock Text="RECENTLY PLAYED"
+                       Foreground="#fff"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+                       FontSize="18"
+                       Margin="10 0"/>
+                <TextBlock Text="ABOUT"
+                       Foreground="#fff"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+                       FontSize="18"
+                       Margin="10 0"/>
+            </StackPanel>
+        </Grid>-->
+
+
+        <!--<Grid Grid.Row="0" Grid.RowSpan="3" Panel.ZIndex="-1">
+            <Image Source="{Binding RandomSelectedGameScreenshot, 
+               FallbackValue={StaticResource DefaultImage},
+               TargetNullValue={StaticResource DefaultImage}, UpdateSourceTrigger=PropertyChanged}"
+               VerticalAlignment="Center"
+               HorizontalAlignment="Center"
+               Opacity="0.2"
+                   
+               Stretch="fill"/>
+
+
+
+        </Grid>-->
+
+        <!--<Button Background="DarkRed"
+                                Cursor="Hand"
+                                Width="Auto"
+                                Height="{Binding ImageHeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                BorderThickness="0"
+                
+                Panel.ZIndex="22"/>-->
+
+        <Slider Value="{Binding ImageHeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                Width="200"
+                Height="50"
+                Minimum="200"
+                Maximum="600"
+                Panel.ZIndex="22"
+                VerticalAlignment="Bottom"
+                HorizontalAlignment="Left"/>
+
+        <Slider Value="{Binding ImageWidth, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                Width="200"
+                Height="50"
+                Minimum="200"
+                Maximum="600"
+                Panel.ZIndex="22"
+                VerticalAlignment="Bottom"
+                HorizontalAlignment="Right"/>
+
+        <ListBox ItemsSource="{Binding Games, UpdateSourceTrigger=PropertyChanged}"
+                 ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 Background="Transparent"
+                 VerticalAlignment="Top"
+                 HorizontalAlignment="Left">
+            
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="Padding" Value="0"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="BorderBrush" Value="WhiteSmoke" />
+                            <Setter Property="BorderThickness" Value="1" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </ListBox.ItemContainerStyle>
+            
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Background="Transparent" 
+                               Orientation="Horizontal"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Center"/>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Button Foreground="Transparent"
+                                Cursor="Hand"
+                                Width="{Binding DataContext.ImageWidth, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}"
+                                Height="{Binding DataContext.ImageHeight ,RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}"
+                                Command="{Binding DataContext.PassSelectedGameToViewCommand,RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" 
+                                CommandParameter="{Binding}"
+                                BorderThickness="0">
+                            <Button.Content>
+                                <Image Source="{Binding GameCover}"
+                                       Stretch="Fill"/>
+                            </Button.Content>
+                        </Button>
+                        <!--<TextBlock Text="{Binding Name}"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"
+                                       FontSize="16"
+                                       Grid.Row="2"
+                                       Padding="10"/>-->
+
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <!--<Slider />-->
+
+        <!--<Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="24*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="15*"/>
-        </Grid.RowDefinitions>
+        </Grid.RowDefinitions>-->
 
-        <Rectangle Grid.Row="0"
-                   Grid.Column="0"
-                   Grid.ColumnSpan="2"
-                   Fill="#111113"/>
+        <!--
 
         <Rectangle Grid.Row="0"
                    Grid.Column="0"
                    Grid.RowSpan="2"
-                   Fill="#111113"/>
-
-
-        <!--<Image Source="{Binding GameScreenshot}"
-               Panel.ZIndex="2"
-               Grid.Row="2" Grid.Column="2"/>-->
-
-
+                   Fill="#14171c"/>
 
         <Grid Grid.Column="0" Grid.Row="2">
-            <!--<Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>-->
-
             <StackPanel VerticalAlignment="Center" 
                         HorizontalAlignment="Center">
 
@@ -140,51 +316,7 @@
             </StackPanel>
         </Grid>
 
-        <Grid Grid.Row="0"
-              Grid.Column="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <TextBlock Text="GAME LAUNCHER"
-                       Foreground="#fff"
-                       VerticalAlignment="Center"
-                       HorizontalAlignment="Left"
-                       FontSize="24"
-                       FontWeight="Bold"
-                       />
-            <StackPanel Orientation="Horizontal"
-                    Grid.Column="0"
-                    Grid.ColumnSpan="2"
-                    Grid.Row="0"
-                    HorizontalAlignment="Right"
-                    Margin="70 0">
-                <Button Content="YOUR GAMES"
-                    Command="{Binding FilterGamesCommand}"
-                    CommandParameter="ALL"
-                    Foreground="#fff"
-                    VerticalAlignment="Center"
-                    HorizontalAlignment="Center"
-                    FontSize="18"
-                    Margin="10 0"
-                    Background="Transparent"
-                    BorderThickness="0"/>
-
-                <TextBlock Text="RECENTLY PLAYED"
-                       Foreground="#fff"
-                       VerticalAlignment="Center"
-                       HorizontalAlignment="Center"
-                       FontSize="18"
-                       Margin="10 0"/>
-                <TextBlock Text="ABOUT"
-                       Foreground="#fff"
-                       VerticalAlignment="Center"
-                       HorizontalAlignment="Center"
-                       FontSize="18"
-                       Margin="10 0"/>
-            </StackPanel>
-        </Grid>
-
+       
         <Grid Grid.Row="2" Grid.Column="2" Margin="30 0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
@@ -227,8 +359,8 @@
                      Grid.Row="2"
                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                      ItemsSource="{Binding Games, UpdateSourceTrigger=PropertyChanged}" 
-                     Background="#151518"
-                     >
+                     Background="#14171c"
+                    >
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel Background="#151518" 
@@ -245,30 +377,35 @@
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="10*"/>
                             </Grid.RowDefinitions>
-                            <Button Foreground="Transparent"
-                                Cursor="Hand"
-                                Width="230"
-                                Height="270"
-                                Command="{Binding DataContext.PassSelectedGameToViewCommand,RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" 
-                                CommandParameter="{Binding}"
-                                BorderThickness="0">
 
-                                <Image Source="{Binding GameCover}"
-                               Width="220"
-                               Height="270"
-                               Grid.Row="0"/>
+                            <Button Foreground="Transparent"
+                                    Cursor="Hand"
+                                    Width="569"
+                                    Height="320"
+                                    Command="{Binding DataContext.PassSelectedGameToViewCommand,RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" 
+                                    CommandParameter="{Binding}"
+                                    BorderThickness="0"
+                                x:Name="gameBtn">
+                                <Button.Content>
+
+                                    <Image Source="{Binding GameCover}"
+                                           
+                                           Grid.Row="0"
+                                           Stretch="Fill"
+                                           />
+                                </Button.Content>
                             </Button>
                             <TextBlock Text="{Binding Name}"
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Center"
-                                   FontSize="16"
-                                   Grid.Row="2"
-                                   Padding="10"/>
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"
+                                       FontSize="16"
+                                       Grid.Row="2"
+                                       Padding="10"/>
 
                         </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-        </Grid>
+        </Grid>-->
     </Grid>
-</Page>
+</UserControl>

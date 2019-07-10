@@ -1,33 +1,103 @@
-﻿<Page x:Class="GameLauncher.Views.GameDetailedView"
+﻿<UserControl x:Class="GameLauncher.Views.GameDetailedView"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       mc:Ignorable="d" 
       d:DesignHeight="800" d:DesignWidth="1200"
-      Title="GameDetailedView">
-    <Page.Resources>
+      >
+    <UserControl.Resources>
         <BitmapImage x:Key="DefaultImage" UriSource="https://images.igdb.com/igdb/image/upload/t_1080p/wklmdcc9vn93257yjg1c.jpg" />
         <TextBlock x:Key="DefaultText" Text="Call of Duty Black Ops III"/>
-    </Page.Resources>
+    </UserControl.Resources>
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2.2*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
         <Image Source="{Binding RandomSelectedGameScreenshot, 
                FallbackValue={StaticResource DefaultImage},
                TargetNullValue={StaticResource DefaultImage}}"
                VerticalAlignment="Center"
                HorizontalAlignment="Center"
                Opacity="0.5"
-               
-               />
-        <TextBlock Text="{Binding SelectedGame.Name, 
-                   FallbackValue={StaticResource DefaultText}, 
-                   TargetNullValue={StaticResource DefaultText}}"
-                   FontSize="30"
-                   Foreground="#fff"
-                   VerticalAlignment="Top"
-                   Margin="50 110"/>
-        
-        <Button Command="{Binding BackToMainViewCommand}"
+               Grid.Column="0"
+               Grid.ColumnSpan="2"
+               Stretch="Fill"/>
+
+        <!--News-->
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="6*"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0"
+                       Text="News"
+                       FontSize="60"
+                       Foreground="White"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Left"
+                       FontWeight="Bold"
+                       Margin="50 0"/>
+            <StackPanel Grid.Row="1"
+                        Margin="20">
+                
+            </StackPanel>
+            
+        </Grid>
+
+        <!--Play-->
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="6*"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Play"
+                       FontSize="60"
+                       Foreground="White"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Left"
+                       FontWeight="Bold"
+                       Margin="50 0"/>
+
+            <StackPanel Grid.Row="1"
+                        Margin="0 20"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center">
+                
+                <Button Foreground="Transparent"
+                        Cursor="Hand"
+                        Width="350"
+                        Height="450"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Margin="10"
+                        Command="{Binding TileCommand}" 
+                        CommandParameter="{Binding}"
+                        BorderThickness="0">
+
+                 <Image Source="{Binding SelectedGame.GameCover}"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Stretch="Fill"/>
+                </Button>
+
+                <Button Content="PLAY"
+                        FontSize="30"
+                        Cursor="Hand"
+                        Foreground="White"
+                        Background="#5C6BC0"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Command="{Binding TileCommand}" 
+                        CommandParameter="{Binding}"
+                        Width="264"
+                        Height="100"/>
+            </StackPanel>
+            <Button Command="{Binding BackToMainViewCommand}"
                 Width="30"
                 Height="30"
                 Content="X"
@@ -38,37 +108,24 @@
                 VerticalAlignment="Top" 
                 HorizontalAlignment="Right"
                 Margin="10"/>
+        </Grid>
+
+        <!--
+        <TextBlock Text="{Binding SelectedGame.Name, 
+                   FallbackValue={StaticResource DefaultText}, 
+                   TargetNullValue={StaticResource DefaultText}}"
+                   FontSize="30"
+                   Foreground="#fff"
+                   VerticalAlignment="Top"
+                   Margin="50 110"/>
+        
+       
 
         <StackPanel VerticalAlignment="Center"
                     HorizontalAlignment="Right"
                     Margin="10">
-            <Button Foreground="Transparent"
-                Cursor="Hand"
-                Width="220"
-                Height="270"
-                VerticalAlignment="Center"
-                HorizontalAlignment="Center"
-                Margin="10"
-                Command="{Binding TileCommand}" 
-                CommandParameter="{Binding}"
-                BorderThickness="0">
-
-                <Image Source="{Binding SelectedGame.GameCover}"
-                   Width="220"
-                   Height="270"
-                   VerticalAlignment="Center"
-                   HorizontalAlignment="Center"/>
-            </Button>
-            <Button Content="PLAY" 
-                    Width="220"
-                    Height="50"
-                    Cursor="Hand"
-                    Foreground="#fff"
-                    Background="#FFA000"
-                    VerticalAlignment="Center"
-                    HorizontalAlignment="Center"
-                    Command="{Binding TileCommand}" 
-                    CommandParameter="{Binding}"/>
-        </StackPanel>
+           
+            
+        </StackPanel>-->
     </Grid>
-</Page>
+</UserControl>

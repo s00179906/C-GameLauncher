@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using GameLauncher.ViewModels;
+using System.Collections.Generic;
 
 namespace GameLauncher.Utils
 {
@@ -13,6 +14,8 @@ namespace GameLauncher.Utils
         public string GameID { get; set; }
         public string ACFLocationPath { get; set; }
         public string ExternalSteamLibACFPath { get; set; }
+        public string[] ExternalSteamLibACFPathArr { get; set; }
+        public List<string> externalLibDirectories = new List<string>();
 
         private readonly string Steam32 = "SOFTWARE\\VALVE\\STEAM";
         private readonly string Steam64 = "SOFTWARE\\Wow6432Node\\Valve\\STEAM";
@@ -20,7 +23,7 @@ namespace GameLauncher.Utils
         public ReadACF(string gameName)
         {
             GetSteamACFDirectory();
-            GetACF(gameName);
+            GetACFFilesFromAllSteamLibraries(gameName);
         }
 
         public void GetSteamACFDirectory()
@@ -47,21 +50,47 @@ namespace GameLauncher.Utils
             string externalLibPath = ACFLocationPath;
             string[] libraryFolders = Directory.GetFiles(externalLibPath, "*.vdf");
 
-            ExternalSteamLibACFPath = File.ReadLines(libraryFolders[0]).Skip(4).Take(1).First();
-            var numerical = ExternalSteamLibACFPath;
+            var x = File.ReadAllLines(libraryFolders[0]);
 
-            numerical = Regex.Match(numerical, @"\d+").Value;
-            var charsToRemove = new string[] { "\"", "\t", $"{numerical}" };
+           
 
-            foreach (var c in charsToRemove)
-                ExternalSteamLibACFPath = ExternalSteamLibACFPath.Replace(c, string.Empty);
+            foreach (var line in x)
+            {
+                if (line.Contains(":\\"))
+                {
+                    //ExternalSteamLibACFPathArr = (string[])File.ReadLines(libraryFolders[0]).Skip(4);
+                    var numerical = line;
+                    var test = numerical.Split('"');
+                    numerical = test[test.Length - 2];
+                    externalLibDirectories.Add(numerical);
+                }
+            }
+
+
+
+
+            //ExternalSteamLibACFPath = File.ReadLines(libraryFolders[0]).Skip(4).Take(1).First();
+            ////ExternalSteamLibACFPathArr = (string[])File.ReadLines(libraryFolders[0]).Skip(4);
+            //var numerical = ExternalSteamLibACFPath;
+            //var test = ExternalSteamLibACFPath.Split('"');
+            //ExternalSteamLibACFPath = test[test.Length - 2];
+
+            //numerical = Regex.Match(numerical, @"\d+").Value;
+            //var charsToRemove = new string[] { "\"", "\t", $"{numerical}" };
+
+            //foreach (var c in charsToRemove)
+            //    ExternalSteamLibACFPath = ExternalSteamLibACFPath.Replace(c, string.Empty);
         }
 
-        public void GetACF(string gameName)
+        public void GetACFFilesFromAllSteamLibraries(string gameName)
         {
             string[] acfFiles = Directory.GetFiles(ACFLocationPath, "*.acf");
 
-            string[] externalACFFiles = (Directory.GetFiles(ExternalSteamLibACFPath + "\\steamapps", "*.acf"));
+            string[] externalACFFiles = new string[] { };
+            foreach (var exLib in externalLibDirectories)
+            {
+                externalACFFiles = externalACFFiles.Concat((Directory.GetFiles(exLib + "\\steamapps", "*.acf"))).ToArray();
+            }
 
             string[] combinedACF = acfFiles.Concat(externalACFFiles).ToArray();
 

@@ -5,26 +5,33 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GameLauncher.Views"
         xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+        xmlns:ViewModels="clr-namespace:GameLauncher.ViewModels"
+        xmlns:Views="clr-namespace:GameLauncher.Views"
         mc:Ignorable="d"
-        Title="GameLauncherView" Height="800" Width="1200"
-        Background="#151518">
+        Title="Game Launcher" Width="1200" Height="800"
+        Background="Transparent" MinWidth="1200" MinHeight="800"
+        WindowStartupLocation="CenterScreen"
+        >
+    <Window.Resources>
+        <DataTemplate x:Name="MainViewTemplate" DataType="{x:Type ViewModels:MainViewModel}">
+            <Views:MainView DataContext="{Binding}"/>
+        </DataTemplate>
+        <DataTemplate x:Name="GameDetailedViewTemplate" DataType="{x:Type ViewModels:GameDetailedViewModel}">
+            <Views:GameDetailedView DataContext="{Binding}"/>
+        </DataTemplate>
+    </Window.Resources>
     <Grid>
-        <!--<Grid.ColumnDefinitions>
-            <ColumnDefinition Width="21*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="15*"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>-->
-        <Frame x:Name="frmMainFrame" 
+
+        <Frame x:Name="frmMainFrame"
                Content="{Binding MainView}"
                NavigationUIVisibility="Hidden"
                Grid.Column="0"
                Grid.Row="0"
                Grid.ColumnSpan="2"
-               Grid.RowSpan="2"/>
+               Grid.RowSpan="2"
+               />
 
+        <!--Settings Button-->
         <Button Height="45" Width="45"
                 Grid.Column="1"
                 Grid.Row="1"

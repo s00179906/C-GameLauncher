@@ -3,7 +3,7 @@ using System.Windows.Controls;
 
 namespace GameLauncher.Views
 {
-    public partial class MainView : Page
+    public partial class MainView : UserControl
     {
         public MainView()
         {

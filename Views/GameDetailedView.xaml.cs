@@ -7,7 +7,7 @@ namespace GameLauncher.Views
     /// <summary>
     /// Interaction logic for GameDetailedView.xaml
     /// </summary>
-    public partial class GameDetailedView : Page
+    public partial class GameDetailedView : UserControl
     {
         public GameDetailedViewModel VM { get; set; }
         public GameDetailedView()

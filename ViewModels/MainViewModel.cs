@@ -12,6 +12,10 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Diagnostics;
 using System.Windows.Controls;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Linq;
+using System.Timers;
 
 namespace GameLauncher.ViewModels
 {
@@ -23,6 +27,14 @@ namespace GameLauncher.ViewModels
         #endregion
 
         #region Public Properties 
+
+        private string _randomSelectedGameScreenshot;
+        public string RandomSelectedGameScreenshot
+        {
+            get { return _randomSelectedGameScreenshot; }
+            set { _randomSelectedGameScreenshot = value; OnPropertyChanged(nameof(RandomSelectedGameScreenshot)); }
+        }
+
         public ObservableCollection<Game> Games
         {
             get { return _games; }
@@ -52,6 +64,33 @@ namespace GameLauncher.ViewModels
         public MainView MainView { get; set; }
         public GameDetailedView GameDetailedView { get; set; }
         public Platform SelectedFolderValue { get; set; }
+        public Random Random = new Random();
+        public ObservableCollection<Game> MyProperty { get; set; }
+
+
+        private int _imageWidth;
+
+        public int ImageWidth
+        {
+            get { return _imageWidth; }
+            set { _imageWidth = value; OnPropertyChanged(nameof(ImageWidth)); }
+        }
+
+        private int _imageHeight;
+
+        public int ImageHeight
+        {
+            get { return _imageHeight; }
+            set { _imageHeight = value; OnPropertyChanged(nameof(ImageHeight)); }
+        }
+
+
+
+
+
+
+
+
         #endregion
 
         #region Constructor
@@ -69,22 +108,113 @@ namespace GameLauncher.ViewModels
             Scanner = new GameScanner();
             Scanner.Scan();
             Games = Scanner.GetExecutables();
+             MyProperty = Scanner.GetExecutables();
             FilteredGames = CollectionViewSource.GetDefaultView(Games);
             APIController = new APIController(Games);
-            APIController.GetGameCovers();
-            GameCovers = APIController.GameCovers;
-            SetGameCover();
+            TEST();
+            ImageHeight = 290;
+            ImageWidth = 210;
+            //SetGameCover();
+            //GameCovers = APIController.GameAPIData; 
+            RandomSelectedGameScreenshot = Games[0].GameScreenshots[0];
+
+            
         }
 
-        /// <summary>
-        /// Quick fix, we need to rework this process.. 
-        /// </summary>
-        /// <param name="obj"></param>
+      
+
+        private void PickRandomGameScreenshot()
+        {
+            RandomSelectedGameScreenshot = SelectedGame.GameScreenshots[Random.Next(0, SelectedGame.GameScreenshots.Count)];
+        }
+
+        private void TEST()
+        {
+            if (!File.Exists("gameDataAPI.json"))
+            {
+                File.WriteAllText("gameDataAPI.json", "[]");
+            }
+
+            var file = File.ReadAllText("gameDataAPI.json");
+
+            var gameDataAPI = JsonConvert.DeserializeObject<List<Game>>(file);
+
+            if (file == "[]")
+            {
+                APIController.GetGameCovers();
+                SaveGameDataFromAPIToFile();
+            }
+            foreach (var game in Games)
+            {
+                // give back no game found?
+                ReadGameDataFromFile();
+                //this is the problem!!
+                if (!gameDataAPI.Any(m => m.Name == game.Name))
+                {
+                    APIController.GetGameCovers();
+                    SaveGameDataFromAPIToFile();
+                }
+            }
+            if (file != "[]")
+            {
+                ReadGameDataFromFile();
+            }
+
+        }
+
+        private void SaveGameDataFromAPIToFile()
+        {
+            var initialJson = File.ReadAllText(@"gameDataAPI.json");
+
+            var list = JsonConvert.DeserializeObject<List<Game>>(initialJson);
+            foreach (var game in Games)
+            {
+                if (!list.Any(m => m.Name == game.Name))
+                { 
+                    //Game gameWithCoverAndScreenshots = new Game()
+                    //{
+                    //    Name = game.Name,
+                    //    GameCover = game.GameCover,
+                    //    GameScreenshots = game.GameScreenshots,
+                    //    Executables = game.Executables,
+                    //    ID = game.ID,
+                    //    Platform = game.Platform,
+                    //    UserPreferedEXE = game.UserPreferedEXE
+                    //};
+                    list.Add(game);
+                }
+            }
+
+            //create steam game
+
+            var convertedJson = JsonConvert.SerializeObject(list, Formatting.Indented);
+            File.WriteAllText(@"gameDataAPI.json", string.Empty);
+            File.AppendAllText(@"gameDataAPI.json", convertedJson);
+        }
+
+        private void ReadGameDataFromFile()
+        {
+            var initialJson = File.ReadAllText(@"gameDataAPI.json");
+            var list = JsonConvert.DeserializeObject<List<Game>>(initialJson);
+            foreach (var game in Games)
+            {
+                foreach (var gameFromList in list)
+                {
+
+                    if (game.Name.Equals(gameFromList.Name))
+                    {
+                        game.GameCover = gameFromList.GameCover;
+                        game.GameScreenshots = gameFromList.GameScreenshots;
+                    }
+                }
+            }
+        }
+
         private void PassSelectedGameToGameDetailedView(object obj)
         {
             SelectedGame = obj as Game;
-            GameDetailedView = new GameDetailedView();
-            GameLauncherViewModel.MainFrame.Content = GameDetailedView;
+            GameLauncherViewModel.MainFrame.Navigate(new GameDetailedView());
+            //PickRandomGameScreenshot();
         }
         #endregion
 
@@ -95,47 +225,47 @@ namespace GameLauncher.ViewModels
         }
         private void FirstTimeConfiguration()
         {
-            firstTimeConfiguration = Properties.Settings.Default.FirstTimeConfig;
-            if (firstTimeConfiguration)
-            {
-                File.WriteAllText(@"game.json", string.Empty);
-                File.WriteAllText(@"game.json", "[]");
-                Properties.Settings.Default.FolderPaths.Clear();
-                Properties.Settings.Default.FirstTimeConfig = false;
-                Properties.Settings.Default.Save();
-            }
+            //firstTimeConfiguration = Properties.Settings.Default.FirstTimeConfig;
+            //if (firstTimeConfiguration)
+            //{
+            //    File.WriteAllText(@"game.json", string.Empty);
+            //    File.WriteAllText(@"game.json", "[]");
+            //    Properties.Settings.Default.FolderPaths.Clear();
+            //    Properties.Settings.Default.FirstTimeConfig = false;
+            //    Properties.Settings.Default.Save();
+            //}
         }
 
         private void SetGameCover()
         {
-            foreach (var cover in GameCovers)
-            {
-                foreach (var game in Games)
-                {
-                    string gameNameFromOC = game.Name;
-                    string gameNameFromCovers = cover.Name;
-                    var charsToRemove = new string[] { ":", "-", "'", " " };
+            //foreach (var cover in GameCovers)
+            //{
+            //    foreach (var game in Games)
+            //    {
+            //        string gameNameFromOC = game.Name;
+            //        string gameNameFromCovers = cover.Name;
+            //        var charsToRemove = new string[] { ":", "-", "'", " " };
 
-                    foreach (var c in charsToRemove)
-                    {
-                        gameNameFromCovers = gameNameFromCovers.Replace(c, string.Empty);
-                        gameNameFromOC = gameNameFromOC.Replace(c, string.Empty);
-                    }
+            //        foreach (var c in charsToRemove)
+            //        {
+            //            gameNameFromCovers = gameNameFromCovers.Replace(c, string.Empty);
+            //            gameNameFromOC = gameNameFromOC.Replace(c, string.Empty);
+            //        }
 
-                    if (gameNameFromOC.ToUpper() == gameNameFromCovers.ToUpper())
-                    {
-                        if (cover.GameCover != null || String.IsNullOrEmpty(cover.GameCover))
-                        {
-                            game.GameCover = cover.GameCover;
-                        }
-                        else
-                        {
-                            game.GameCover = "https://sisterhoodofstyle.com/wp-content/uploads/2018/02/no-image-1.jpg";
-                        }
-                        game.GameScreenshots = cover.GameScreenshots;
-                    }
-                }
-            }
+            //        if (gameNameFromOC.ToUpper() == gameNameFromCovers.ToUpper())
+            //        {
+            //            if (cover.GameCover != null || String.IsNullOrEmpty(cover.GameCover))
+            //            {
+            //                game.GameCover = cover.GameCover;
+            //            }
+            //            else
+            //            {
+            //                game.GameCover = "https://sisterhoodofstyle.com/wp-content/uploads/2018/02/no-image-1.jpg";
+            //            }
+            //            game.GameScreenshots = cover.GameScreenshots;
+            //        }
+            //    }
+            //}
         }
 
         //Used to scan games when settings have been reset.
@@ -184,7 +314,7 @@ namespace GameLauncher.ViewModels
             {
                 Games.Add(exe);
             }
-            SetGameCover();
+            APIController.GetGameCovers();
         }
 
         private void FilterGamesByPlatformSteam(object obj)

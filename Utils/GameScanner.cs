@@ -370,7 +370,9 @@ namespace GameLauncher.Utils
                                     {
                                         Name = new DirectoryInfo(RemoveSpecialWordsAndChars(gameDir)).Name,
                                         Platform = libDir.PlatformType,
-                                        Executables = new List<string>(exes)
+                                        Executables = new List<string>(exes),
+                                        InstallPath = gameDir
+                                        
                                     };
 
                                     games.Add(game);
@@ -395,7 +397,8 @@ namespace GameLauncher.Utils
                                 {
                                     Name = new DirectoryInfo(RemoveSpecialWordsAndChars(gameDir)).Name,
                                     Platform = libDir.PlatformType,
-                                    Executables = new List<string>(exes)
+                                    Executables = new List<string>(exes),
+                                    InstallPath = gameDir
                                 };
 
                                 games.Add(game);

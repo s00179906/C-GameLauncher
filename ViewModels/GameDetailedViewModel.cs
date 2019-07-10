@@ -32,6 +32,7 @@ namespace GameLauncher.ViewModels
         public List<string> SelectedGameScreenshots { get; set; }
         public Random Random = new Random();
         public GameDetailedView GameDetailView { get; set; }
+        public CommandRunner OpenGameLocationCommand { get; set; }
 
         private string _lastPlayed = "Never Played";
 
@@ -59,6 +60,7 @@ namespace GameLauncher.ViewModels
             SelectedGame = MainViewModel.SelectedGame;
             BackToMainViewCommand = new CommandRunner(BackToView);
             TileCommand = new CommandRunner(TileClick);
+            OpenGameLocationCommand = new CommandRunner(OpenGameLocation);
 
             //var startTimeSpan = TimeSpan.Zero;
             //var periodTimeSpan = TimeSpan.FromSeconds(3);
@@ -73,6 +75,11 @@ namespace GameLauncher.ViewModels
             // TODO: Add a CancellationTokenSource and supply the token here instead of None.
             _ = RunPeriodicAsync(PickRandomGameScreenshot, dueTime, interval, CancellationToken.None);
 
+        }
+
+        private void OpenGameLocation(object obj)
+        {
+            Helper.OpenGameLocation(SelectedGame.InstallPath);
         }
 
         // The `onTick` method will be called periodically unless cancelled.

@@ -24,7 +24,7 @@ namespace GameLauncher.ViewModels
         public ReadACF ReadACF { get; set; }
         public static int GameID { get; set; }
         public bool AllowGameToBePlayed { get; set; }
-        public Game SelectedGame { get; set; }
+        public Game SelectedGame { get; set; } 
         public event PropertyChangedEventHandler PropertyChanged;
         public CommandRunner BackToMainViewCommand { get; set; }
         public CommandRunner TileCommand { get; private set; }
@@ -57,10 +57,7 @@ namespace GameLauncher.ViewModels
         }
 
         // The `onTick` method will be called periodically unless cancelled.
-        private static async Task RunPeriodicAsync(Action onTick,
-                                                   TimeSpan dueTime,
-                                                   TimeSpan interval,
-                                                   CancellationToken token)
+        private static async Task RunPeriodicAsync(Action onTick,TimeSpan dueTime,TimeSpan interval,CancellationToken token)
         {
             // Initial wait time before we begin the periodic loop.
             if (dueTime > TimeSpan.Zero)

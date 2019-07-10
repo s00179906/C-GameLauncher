@@ -1,6 +1,6 @@
 ﻿namespace GameLauncher.Models
 {
-    public enum Platforms { STEAM, EPIC, ORIGIN, BETHESDA, UPLAY, NONE }
+    public enum Platforms { STEAM, EPIC, ORIGIN, BETHESDA, UPLAY, BLIZZARD, NONE }
 
     public class Platform
     {

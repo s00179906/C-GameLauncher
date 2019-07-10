@@ -34,7 +34,7 @@
             </Grid.RowDefinitions>
 
             <TextBlock Grid.Row="0"
-                       Text="News"
+                       Text="{Binding Name}"
                        FontSize="60"
                        Foreground="White"
                        VerticalAlignment="Center"
@@ -43,9 +43,21 @@
                        Margin="50 0"/>
             <StackPanel Grid.Row="1"
                         Margin="20">
-                
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Last Played:" 
+                               Margin="20 0"
+                               FontSize="28"
+                               Foreground="White"
+                               FontWeight="DemiBold"/>
+                    <TextBlock Text="{Binding LastPlayed, FallbackValue=10/07/2019, UpdateSourceTrigger=PropertyChanged}"
+                               FontSize="28"
+                               Foreground="White"
+                               FontWeight="DemiBold"/>
+                </StackPanel>
+
             </StackPanel>
-            
+
         </Grid>
 
         <!--Play-->
@@ -67,7 +79,7 @@
                         Margin="0 20"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Center">
-                
+
                 <Button Foreground="Transparent"
                         Cursor="Hand"
                         Width="350"
@@ -79,7 +91,7 @@
                         CommandParameter="{Binding}"
                         BorderThickness="0">
 
-                 <Image Source="{Binding SelectedGame.GameCover}"
+                    <Image Source="{Binding SelectedGame.GameCover}"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Center"
                         Stretch="Fill"/>

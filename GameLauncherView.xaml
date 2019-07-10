@@ -23,7 +23,7 @@
     <Grid>
 
         <Frame x:Name="frmMainFrame"
-               Content="{Binding MainView}"
+               Content="{Binding}"
                NavigationUIVisibility="Hidden"
                Grid.Column="0"
                Grid.Row="0"

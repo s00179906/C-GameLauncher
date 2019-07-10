@@ -153,7 +153,7 @@
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                  Background="Transparent"
                  VerticalAlignment="Top"
-                 HorizontalAlignment="Left">
+                 HorizontalAlignment="Center">
             
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
@@ -171,32 +171,37 @@
                 <ItemsPanelTemplate>
                     <WrapPanel Background="Transparent" 
                                Orientation="Horizontal"
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Center"/>
+                               VerticalAlignment="Top"
+                               HorizontalAlignment="Left"/>
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
 
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
                         <Button Foreground="Transparent"
                                 Cursor="Hand"
                                 Width="{Binding DataContext.ImageWidth, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}"
                                 Height="{Binding DataContext.ImageHeight ,RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}"
                                 Command="{Binding DataContext.PassSelectedGameToViewCommand,RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" 
                                 CommandParameter="{Binding}"
-                                BorderThickness="0">
+                                BorderThickness="0"
+                                Grid.Row="0">
                             <Button.Content>
                                 <Image Source="{Binding GameCover}"
                                        Stretch="Fill"/>
                             </Button.Content>
                         </Button>
-                        <!--<TextBlock Text="{Binding Name}"
+                        <TextBlock Text="{Binding Name}"
                                        VerticalAlignment="Center"
                                        HorizontalAlignment="Center"
                                        FontSize="16"
-                                       Grid.Row="2"
-                                       Padding="10"/>-->
+                                       Grid.Row="1"
+                                       />
 
                     </Grid>
                 </DataTemplate>

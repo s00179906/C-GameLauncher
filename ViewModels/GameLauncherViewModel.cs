@@ -13,19 +13,15 @@ namespace GameLauncher.ViewModels
 {
     public class GameLauncherViewModel
     {
-        public MainView MainView { get; set; }
-
         public SettingsView SettingsView = new SettingsView();
         public static Frame MainFrame { get; set; }
         public CommandRunner SettingsCommand { get; set; }
-
-
         public GameLauncherViewModel(Frame frmMainFrame)
         {
             MainFrame = frmMainFrame;
             SettingsCommand = new CommandRunner(Settings);
-            
-            MainView = new MainView();
+
+            MainFrame.Content = new MainViewModel();
 
         }
         private void Settings(object obj)

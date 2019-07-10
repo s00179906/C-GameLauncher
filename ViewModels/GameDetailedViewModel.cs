@@ -24,14 +24,34 @@ namespace GameLauncher.ViewModels
         public ReadACF ReadACF { get; set; }
         public static int GameID { get; set; }
         public bool AllowGameToBePlayed { get; set; }
-        public Game SelectedGame { get; set; } 
+        public Game SelectedGame { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
         public CommandRunner BackToMainViewCommand { get; set; }
         public CommandRunner TileCommand { get; private set; }
         public MainView MainView { get; set; }
         public List<string> SelectedGameScreenshots { get; set; }
         public Random Random = new Random();
-        public GameDetailedView GameDetailView { get; set; } 
+        public GameDetailedView GameDetailView { get; set; }
+        public CommandRunner OpenGameLocationCommand { get; set; }
+
+        private string _lastPlayed = "Never Played";
+
+        public string LastPlayed
+        {
+            get
+            {
+
+                return _lastPlayed;
+
+            }
+            set
+            {
+                _lastPlayed = value;
+
+                OnPropertyChanged(nameof(LastPlayed));
+            }
+        }
+
 
         public GameDetailedViewModel()
         {
@@ -40,6 +60,7 @@ namespace GameLauncher.ViewModels
             SelectedGame = MainViewModel.SelectedGame;
             BackToMainViewCommand = new CommandRunner(BackToView);
             TileCommand = new CommandRunner(TileClick);
+            OpenGameLocationCommand = new CommandRunner(OpenGameLocation);
 
             //var startTimeSpan = TimeSpan.Zero;
             //var periodTimeSpan = TimeSpan.FromSeconds(3);
@@ -56,8 +77,13 @@ namespace GameLauncher.ViewModels
 
         }
 
+        private void OpenGameLocation(object obj)
+        {
+            Helper.OpenGameLocation(SelectedGame.InstallPath);
+        }
+
         // The `onTick` method will be called periodically unless cancelled.
-        private static async Task RunPeriodicAsync(Action onTick,TimeSpan dueTime,TimeSpan interval,CancellationToken token)
+        private static async Task RunPeriodicAsync(Action onTick, TimeSpan dueTime, TimeSpan interval, CancellationToken token)
         {
             // Initial wait time before we begin the periodic loop.
             if (dueTime > TimeSpan.Zero)
@@ -94,6 +120,7 @@ namespace GameLauncher.ViewModels
             //GameLauncherViewModel.MainFrame.Content = GameDetailView;
             SetPreferedEXE(obj);
             PlayGame(obj);
+            LastPlayed = DateTime.Now.Date.ToShortDateString();
         }
 
         private void SetPreferedEXE(object obj)

@@ -11,7 +11,8 @@ namespace GameLauncher.Models
         public Platforms Platform { get; set; }
         public string GameCover { get; set; }
         public List<string> GameScreenshots { get; set; }
-        
+        public string InstallPath { get; set; }
+
 
         public Game()
         {

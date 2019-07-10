@@ -16,6 +16,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Linq;
 using System.Timers;
+using System.Windows.Threading;
 
 namespace GameLauncher.ViewModels
 {
@@ -96,32 +97,30 @@ namespace GameLauncher.ViewModels
         #region Constructor
         public MainViewModel()
         {
-            Properties.Settings.Default.Reset();
+            //Properties.Settings.Default.Reset();
             CloseSettingsCommand = new CommandRunner(CloseSettings);
-            FirstTimeConfiguration();
+            //FirstTimeConfiguration();
             ScanGamesCommand = new CommandRunner(ScanGames);
             AddFolderPathCommand = new CommandRunner(AddDir);
             DeleteFolderPathCommand = new CommandRunner(DeleteDir);
             FilterGamesCommand = new CommandRunner(FilterGamesByPlatformSteam);
             ResetAllSettingsCommand = new CommandRunner(ResetAllSettings);
-            PassSelectedGameToViewCommand = new CommandRunner(PassSelectedGameToGameDetailedView);
+            PassSelectedGameToViewCommand = new CommandRunner(PassSelectedGameToGameDetailedViewModel);
             Scanner = new GameScanner();
             Scanner.Scan();
             Games = Scanner.GetExecutables();
-             MyProperty = Scanner.GetExecutables();
+            MyProperty = Scanner.GetExecutables();
             FilteredGames = CollectionViewSource.GetDefaultView(Games);
             APIController = new APIController(Games);
             TEST();
             ImageHeight = 290;
             ImageWidth = 210;
-            //SetGameCover();
-            //GameCovers = APIController.GameAPIData; 
             RandomSelectedGameScreenshot = Games[0].GameScreenshots[0];
 
-            
+          
         }
 
-      
+
 
         private void PickRandomGameScreenshot()
         {
@@ -170,17 +169,7 @@ namespace GameLauncher.ViewModels
             foreach (var game in Games)
             {
                 if (!list.Any(m => m.Name == game.Name))
-                { 
-                    //Game gameWithCoverAndScreenshots = new Game()
-                    //{
-                    //    Name = game.Name,
-                    //    GameCover = game.GameCover,
-                    //    GameScreenshots = game.GameScreenshots,
-                    //    Executables = game.Executables,
-                    //    ID = game.ID,
-                    //    Platform = game.Platform,
-                    //    UserPreferedEXE = game.UserPreferedEXE
-                    //};
+                {
                     list.Add(game);
                 }
             }
@@ -210,10 +199,10 @@ namespace GameLauncher.ViewModels
             }
         }
 
-        private void PassSelectedGameToGameDetailedView(object obj)
+        private void PassSelectedGameToGameDetailedViewModel(object obj)
         {
             SelectedGame = obj as Game;
-            GameLauncherViewModel.MainFrame.Navigate(new GameDetailedView());
+            GameLauncherViewModel.MainFrame.Navigate(new GameDetailedViewModel());
             //PickRandomGameScreenshot();
         }
         #endregion
@@ -221,19 +210,19 @@ namespace GameLauncher.ViewModels
         #region VM Methods
         private void CloseSettings(object obj)
         {
-            GameLauncherViewModel.MainFrame.Content = new MainView();
+            GameLauncherViewModel.MainFrame.Content = new MainViewModel();
         }
         private void FirstTimeConfiguration()
         {
-            //firstTimeConfiguration = Properties.Settings.Default.FirstTimeConfig;
-            //if (firstTimeConfiguration)
-            //{
-            //    File.WriteAllText(@"game.json", string.Empty);
-            //    File.WriteAllText(@"game.json", "[]");
-            //    Properties.Settings.Default.FolderPaths.Clear();
-            //    Properties.Settings.Default.FirstTimeConfig = false;
-            //    Properties.Settings.Default.Save();
-            //}
+            firstTimeConfiguration = Properties.Settings.Default.FirstTimeConfig;
+            if (firstTimeConfiguration)
+            {
+                File.WriteAllText(@"game.json", string.Empty);
+                File.WriteAllText(@"game.json", "[]");
+                Properties.Settings.Default.FolderPaths.Clear();
+                Properties.Settings.Default.FirstTimeConfig = false;
+                Properties.Settings.Default.Save();
+            }
         }
 
         private void SetGameCover()

@@ -29,16 +29,11 @@ namespace GameLauncher.Utils
 
         public void Scan()
         {
-
             GetBattleNetDirs();
             GetSteamDirs();
-
-            //GetOriginsDir();
             GetEpicDirs();
-
             GetExternalUplayGames();
             GetUplayDirs();
-
             ReadUserAddedDirectories();
         }
 
@@ -101,10 +96,6 @@ namespace GameLauncher.Utils
                         }
                     }
                 }
-                //else
-                //{
-                //    MessageBox.Show("Could not find Steam directories... Do you have Steam Installed?");
-                //}
             }
             catch (Exception e)
             {
@@ -154,7 +145,7 @@ namespace GameLauncher.Utils
                                 PlatformType = Platforms.EPIC,
                                 Name = "Epic",
                                 InstallationPath = epicGames64[0]
-                            }); ;
+                            });
                         }
                         //else
                         //{
@@ -379,7 +370,9 @@ namespace GameLauncher.Utils
                                     {
                                         Name = new DirectoryInfo(RemoveSpecialWordsAndChars(gameDir)).Name,
                                         Platform = libDir.PlatformType,
-                                        Executables = new List<string>(exes)
+                                        Executables = new List<string>(exes),
+                                        InstallPath = gameDir
+                                        
                                     };
 
                                     games.Add(game);
@@ -404,7 +397,8 @@ namespace GameLauncher.Utils
                                 {
                                     Name = new DirectoryInfo(RemoveSpecialWordsAndChars(gameDir)).Name,
                                     Platform = libDir.PlatformType,
-                                    Executables = new List<string>(exes)
+                                    Executables = new List<string>(exes),
+                                    InstallPath = gameDir
                                 };
 
                                 games.Add(game);

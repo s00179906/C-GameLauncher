@@ -13,7 +13,7 @@ namespace GameLauncher.Utils
     {
         private readonly string Steam32 = "SOFTWARE\\VALVE\\";
         private readonly string Steam64 = "SOFTWARE\\Wow6432Node\\Valve\\";
-        //private readonly string EpicRegistry = "SOFTWARE\\WOW6432Node\\EpicGames\\Unreal Engine";
+        private readonly string EpicRegistry = "SOFTWARE\\WOW6432Node\\EpicGames\\Unreal Engine";
         private readonly string UplayRegistry = "SOFTWARE\\WOW6432Node\\Ubisoft\\Launcher";
         private readonly string OriginsRegistry = "SOFTWARE\\WOW6432Node\\Origin";
         private readonly string BlizzardRegistry = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall";
@@ -29,9 +29,11 @@ namespace GameLauncher.Utils
 
         public void Scan()
         {
+            //TEST();
             GetBattleNetDirs();
             GetSteamDirs();
             GetEpicDirs();
+            GetOriginsDir();
             GetExternalUplayGames();
             GetUplayDirs();
             ReadUserAddedDirectories();
@@ -44,16 +46,87 @@ namespace GameLauncher.Utils
             {
                 foreach (var dir in dirs)
                 {
-                    LibraryDirectories.Add(new Platform
+                    if (Directory.Exists(dir) && dir != null)
                     {
-                        PlatformType = Platforms.NONE,
-                        Name = nameof(Platforms.NONE),
-                        InstallationPath = dir
-                    });
+                        LibraryDirectories.Add(new Platform
+                        {
+                            PlatformType = Platforms.NONE,
+                            Name = nameof(Platforms.NONE),
+                            InstallationPath = dir
+                        });
+                    }
+                    else
+                    {
+                        // remove the dirs that are in the settings and dont exits on the machine
+                        dirs.Remove(dir);
+                        Properties.Settings.Default.Save();
+                    }
                 }
             }
         }
 
+        private void TEST()
+        {
+
+
+            RegistryKey key = Registry.LocalMachine.OpenSubKey(BlizzardRegistry);
+            if (key != null)
+            {
+                foreach (string ksubKey in key.GetSubKeyNames())
+                {
+                    using (RegistryKey subKey = key.OpenSubKey(ksubKey))
+                    {
+                        foreach (string subkeyname in subKey.GetValueNames())
+                        {
+
+                            string tempTitle = string.Empty, installLocation = string.Empty, publisher = string.Empty;
+
+                            if (subkeyname.ToString() == "DisplayName")
+                            {
+                                tempTitle = subKey.GetValue("DisplayName").ToString();
+                            }
+
+                            if (subkeyname.ToString() == "DisplayName")
+                            {
+                                var x = subKey.GetValue("DisplayName").ToString();
+                                if (x.Contains("Epic Games"))
+                                {
+                                    var s = x;
+                                }
+                                tempTitle = subKey.GetValue("DisplayName").ToString();
+                            }
+
+                            if (subkeyname.ToString() == "Publisher")
+                            {
+                                publisher = subKey.GetValue("Publisher").ToString();
+                                if (publisher.Contains("Epic Games"))
+                                {
+                                    var x = subKey.GetValue("DisplayName").ToString();
+                                }
+                            }
+
+                            //if (tempTitle == "Fortnite")
+                            //{
+                            //    gamePath = subKey.GetValue("InstallLocation").ToString();
+                            //    string[] splitArray = gamePath.Split('\\');
+                            //    string gameNameFromPath = splitArray[splitArray.Length - 1];
+                            //    string gameInstalledDir = gamePath.Replace(gameNameFromPath, "");
+
+                            //    LibraryDirectories.Add(new Platform
+                            //    {
+                            //        PlatformType = Platforms.BLIZZARD,
+                            //        Name = nameof(Platforms.BLIZZARD),
+                            //        InstallationPath = gameInstalledDir
+                            //    });
+                            //}
+
+                        }
+                    }
+                }
+            }
+        }
+
+        // seems fine error wise
         public void GetSteamDirs()
         {
             try
@@ -86,6 +159,7 @@ namespace GameLauncher.Utils
                                     });
                                 }
 
+                                // adds the steam library where windows is installed.
                                 LibraryDirectories.Add(new Platform
                                 {
                                     PlatformType = Platforms.STEAM,
@@ -105,18 +179,51 @@ namespace GameLauncher.Utils
 
         public void GetOriginsDir()
         {
-            RegistryKey key = Registry.LocalMachine.OpenSubKey(OriginsRegistry);
-
+            string title = string.Empty, publisher = string.Empty;
+            RegistryKey key = Registry.LocalMachine.OpenSubKey(BlizzardRegistry);
+            bool PublisherFound = false;
             foreach (string ksubKey in key.GetSubKeyNames())
             {
                 using (RegistryKey subKey = key.OpenSubKey(ksubKey))
                 {
                     foreach (string subkeyname in subKey.GetValueNames())
                     {
+                        PublisherFound = false;
+                        if (subkeyname.ToString() == "Publisher")
+                        {
+                            publisher = subKey.GetValue("Publisher").ToString();
+                            title = subKey.GetValue("DisplayName").ToString();
+                            PublisherFound = true;
+                        }
+                        if (subkeyname.ToString() == "InstallLocation")
+                        {
+                            gamePath = subKey.GetValue("InstallLocation").ToString();
+                        }
+                        if (PublisherFound == true)
+                        {
+                            if (publisher.Contains("Electronic Arts") && !title.Contains("Origin"))
+                            {
+                                gamePath = subKey.GetValue("InstallLocation").ToString();
+
+                                if (title.Contains('™'))
+                                {
+                                    title.Replace('™', ' ');
+                                }
+                                int index = gamePath.IndexOf(title);
+                                if (index > 0)
+                                    gamePath = gamePath.Substring(0, index);
+
+                                LibraryDirectories.Add(new Platform
+                                {
+                                    PlatformType = Platforms.ORIGIN,
+                                    Name = nameof(Platforms.ORIGIN),
+                                    InstallationPath = gamePath
+                                });
+                            }
+                        }
                     }
                 }
             }
-
         }
 
         //gets x86 directory, this is where epic games launcher is installed. But games are installed at Program Files 64
@@ -147,35 +254,31 @@ namespace GameLauncher.Utils
                                 InstallationPath = epicGames64[0]
                             });
                         }
-                        //else
-                        //{
-                        //    MessageBox.Show("Could not find Epic Games folder in Program Files...");
-                        //}
-                        //DirExists = CheckIfRegistryDirExists(EpicRegistry, "INSTALLDIR");
-                        //if (DirExists)
-                        //{
-                        //    using (RegistryKey key = Registry.LocalMachine.OpenSubKey(EpicRegistry))
-                        //    {
-                        //        foreach (string k in key.GetSubKeyNames())
-                        //        {
-                        //            using (RegistryKey subkey = key.OpenSubKey(k))
-                        //            {
-                        //                string epicGamesPath = subkey.GetValue("InstalledDirectory").ToString();
-                        //                epicGamesPath = epicGamesPath.Substring(0, epicGamesPath.Length - 4);
-                        //                LibraryDirectories.Add(new Platform
-                        //                {
-                        //                    PlatformType = Platforms.EPIC,
-                        //                    Name = "Epic",
-                        //                    InstallationPath = epicGamesPath
-                        //                });
-                        //            }
-                        //        }
-                        //    }
-                        //}
-                        //else
-                        //{
-                        //    MessageBox.Show("Could not find Epic directories... Do you have Epic Games Installed?");
-                        //}
+
+                        // this code gets this directory > C:\Program Files (x86)\Epic Games\
+                        // but games dont get installed by default into that directory
+                        // so this way is pointless
+                        DirExists = CheckIfRegistryDirExists(EpicRegistry, "INSTALLDIR");
+                        if (DirExists)
+                        {
+                            using (RegistryKey key = Registry.LocalMachine.OpenSubKey(EpicRegistry))
+                            {
+                                foreach (string k in key.GetSubKeyNames())
+                                {
+                                    using (RegistryKey subkey = key.OpenSubKey(k))
+                                    {
+                                        string epicGamesPath = subkey.GetValue("InstalledDirectory").ToString();
+                                        epicGamesPath = epicGamesPath.Substring(0, epicGamesPath.Length - 4);
+                                        LibraryDirectories.Add(new Platform
+                                        {
+                                            PlatformType = Platforms.EPIC,
+                                            Name = "Epic",
+                                            InstallationPath = epicGamesPath
+                                        });
+                                    }
+                                }
+                            }
+                        }
                     }
                     catch (Exception e)
                     {
@@ -207,11 +310,6 @@ namespace GameLauncher.Utils
                         });
                     }
                 }
-                //else
-                //{
-                //    MessageBox.Show("Could not find Uplay directories... Do you have Uplay Installed?");
-                //}
-
             }
             catch (Exception e)
             {
@@ -254,40 +352,43 @@ namespace GameLauncher.Utils
             List<string> battleNetGames = AddBattleNetGamesToList();
 
             RegistryKey key = Registry.LocalMachine.OpenSubKey(BlizzardRegistry);
-
-            foreach (string ksubKey in key.GetSubKeyNames())
+            if (key != null)
             {
-                using (RegistryKey subKey = key.OpenSubKey(ksubKey))
+                foreach (string ksubKey in key.GetSubKeyNames())
                 {
-                    foreach (string subkeyname in subKey.GetValueNames())
+                    using (RegistryKey subKey = key.OpenSubKey(ksubKey))
                     {
-                        foreach (var battleNetGame in battleNetGames)
+                        foreach (string subkeyname in subKey.GetValueNames())
                         {
-                            string tempTitle = string.Empty, installLocation = string.Empty;
-
-                            if (subkeyname.ToString() == "DisplayName")
+                            foreach (var battleNetGame in battleNetGames)
                             {
-                                tempTitle = subKey.GetValue("DisplayName").ToString();
-                            }
+                                string tempTitle = string.Empty, installLocation = string.Empty;
 
-                            if (battleNetGame.Equals(tempTitle))
-                            {
-                                gamePath = subKey.GetValue("InstallLocation").ToString();
-                                string[] splitArray = gamePath.Split('\\');
-                                string gameNameFromPath = splitArray[splitArray.Length - 1];
-                                string gameInstalledDir = gamePath.Replace(gameNameFromPath, "");
-
-                                LibraryDirectories.Add(new Platform
+                                if (subkeyname.ToString() == "DisplayName")
                                 {
-                                    PlatformType = Platforms.BLIZZARD,
-                                    Name = nameof(Platforms.BLIZZARD),
-                                    InstallationPath = gameInstalledDir
-                                });
+                                    tempTitle = subKey.GetValue("DisplayName").ToString();
+                                }
+
+                                if (battleNetGame.Equals(tempTitle))
+                                {
+                                    gamePath = subKey.GetValue("InstallLocation").ToString();
+                                    string[] splitArray = gamePath.Split('\\');
+                                    string gameNameFromPath = splitArray[splitArray.Length - 1];
+                                    string gameInstalledDir = gamePath.Replace(gameNameFromPath, "");
+
+                                    LibraryDirectories.Add(new Platform
+                                    {
+                                        PlatformType = Platforms.BLIZZARD,
+                                        Name = nameof(Platforms.BLIZZARD),
+                                        InstallationPath = gameInstalledDir
+                                    });
+                                }
                             }
                         }
                     }
                 }
             }
+
         }
 
         public List<string> AddBattleNetGamesToList()
@@ -372,7 +473,7 @@ namespace GameLauncher.Utils
                                         Platform = libDir.PlatformType,
                                         Executables = new List<string>(exes),
                                         InstallPath = gameDir
-                                        
+
                                     };
 
                                     games.Add(game);

@@ -21,25 +21,34 @@
         </DataTemplate>
     </Window.Resources>
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="15*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="10*"/>
+        </Grid.RowDefinitions>
 
         <Frame x:Name="frmMainFrame"
                Content="{Binding}"
                NavigationUIVisibility="Hidden"
                Grid.Column="0"
                Grid.Row="0"
-               Grid.ColumnSpan="2"
-               Grid.RowSpan="2"
-               />
+               Grid.ColumnSpan="3"
+               Grid.RowSpan="2"/>
 
         <!--Settings Button-->
-        <Button Height="45" Width="45"
-                Grid.Column="1"
+        <Button Height="45" 
+                Width="45"
+                Grid.Column="3"
                 Grid.Row="1"
                 Command="{Binding SettingsCommand}"
+                Background="Transparent"
                 VerticalAlignment="Bottom"
-                HorizontalAlignment="Right"
+                HorizontalAlignment="Center"
                 BorderThickness="0"
-                Background="#151518"
                 Margin="10">
             <iconPacks:PackIconMaterial Kind="Settings"
                                         VerticalAlignment="Center"

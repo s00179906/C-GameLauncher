@@ -55,34 +55,68 @@ namespace GameLauncher.ViewModels
         public ChooseGameExesView Window { get; set; }
         public static int GameID { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
-        public APIController APIController { get; set; }
+        public IGDBAPIController APIController { get; set; }
         public string JSONResponse { get; set; }
         public string Cover { get; set; }
         public List<Game> GameCovers { get; set; }
         public CommandRunner CloseSettingsCommand { get; set; }
+        public ObservableCollection<string> GameGenresCBX { get; private set; }
 
-        public string[] ComboBoxItems = { "GENRES", "----------------------------------------", "FPS", "RPG", "ACTION", "ADVENTURE", "HORROR", "RACING" };
-        public MainView MainView { get; set; }
-        public GameDetailedView GameDetailedView { get; set; }
+
         public Platform SelectedFolderValue { get; set; }
         public Random Random = new Random();
         public ObservableCollection<Game> MyProperty { get; set; }
 
 
-        private int _imageWidth;
+        private decimal _imageWidth;
 
-        public int ImageWidth
+        public decimal ImageWidth
         {
             get { return _imageWidth; }
             set { _imageWidth = value; OnPropertyChanged(nameof(ImageWidth)); }
         }
 
-        private int _imageHeight;
+        private decimal _imageHeight;
 
-        public int ImageHeight
+        public decimal ImageHeight
         {
             get { return _imageHeight; }
             set { _imageHeight = value; OnPropertyChanged(nameof(ImageHeight)); }
+        }
+
+
+        private string _gamesFoundText;
+
+        public string GamesFoundText
+        {
+            get { return _gamesFoundText; }
+            set { _gamesFoundText = value; OnPropertyChanged(nameof(GamesFoundText)); }
+        }
+
+        private string _searchForGamesText;
+
+        public string SearchForGamesText
+        {
+            get { return _searchForGamesText; }
+            set
+            {
+                _searchForGamesText = value;
+                OnPropertyChanged(nameof(SearchForGamesText));
+                SearchForAGame(_searchForGamesText);
+            }
+        }
+
+        private decimal _imageWidthAndHeight = 1;
+
+        public decimal ImageWidthAndHeight
+        {
+            get { return _imageWidthAndHeight; }
+            set
+            {
+                _imageWidthAndHeight = value;
+                OnPropertyChanged(nameof(ImageWidthAndHeight));
+                MakeGamesBiggerOrSmaller();
+            }
         }
 
 
@@ -97,30 +131,61 @@ namespace GameLauncher.ViewModels
         #region Constructor
         public MainViewModel()
         {
+            SearchForGamesText = "Search for a game";
+            GameGenresCBX = new ObservableCollection<string>
+            {
+                "All Genres",
+                "----------------------------------------",
+                "FPS",
+                "RPG",
+                "ACTION",
+                "ADVENTURE",
+                "HORROR",
+                "RACING"
+            };
             //Properties.Settings.Default.Reset();
             CloseSettingsCommand = new CommandRunner(CloseSettings);
             //FirstTimeConfiguration();
             ScanGamesCommand = new CommandRunner(ScanGames);
             AddFolderPathCommand = new CommandRunner(AddDir);
             DeleteFolderPathCommand = new CommandRunner(DeleteDir);
-            FilterGamesCommand = new CommandRunner(FilterGamesByPlatformSteam);
+            FilterGamesCommand = new CommandRunner(FilterGamesByPlatform);
             ResetAllSettingsCommand = new CommandRunner(ResetAllSettings);
             PassSelectedGameToViewCommand = new CommandRunner(PassSelectedGameToGameDetailedViewModel);
             Scanner = new GameScanner();
             Scanner.Scan();
             Games = Scanner.GetExecutables();
+            GamesFoundText = string.Format($"We found {Games.Count.ToString()} games installed on your system.");
             MyProperty = Scanner.GetExecutables();
             FilteredGames = CollectionViewSource.GetDefaultView(Games);
-            APIController = new APIController(Games);
+            APIController = new IGDBAPIController(Games);
             TEST();
             ImageHeight = 290;
             ImageWidth = 210;
-            RandomSelectedGameScreenshot = Games[0].GameScreenshots[0];
-
-          
         }
 
+        private void MakeGamesBiggerOrSmaller()
+        {
+            int w = 210;
+            int h = 290;
 
+            decimal x = ImageWidthAndHeight;
+
+            ImageWidth = w * x;
+            ImageHeight = h * x;
+        }
+
+        private void SearchForAGame(string searchedGame)
+        {
+            if (!String.IsNullOrEmpty(searchedGame) && !searchedGame.Equals("Search for a game"))
+                FilteredGames.Filter = game => ((Game)game).Name.ToUpper().Contains(searchedGame.ToUpper());
+
+            else if (String.IsNullOrEmpty(searchedGame) && !searchedGame.Equals("Search for a game"))
+            {
+                FilteredGames.Filter = game => game.Equals(game);
+            }
+            
+        }
 
         private void PickRandomGameScreenshot()
         {
@@ -306,7 +371,7 @@ namespace GameLauncher.ViewModels
             APIController.GetGameCovers();
         }
 
-        private void FilterGamesByPlatformSteam(object obj)
+        private void FilterGamesByPlatform(object obj)
         {
             if (obj as string == "ALL")
             {

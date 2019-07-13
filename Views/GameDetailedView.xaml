@@ -10,7 +10,7 @@
         <BitmapImage x:Key="DefaultImage" UriSource="https://images.igdb.com/igdb/image/upload/t_1080p/wklmdcc9vn93257yjg1c.jpg" />
         <TextBlock x:Key="DefaultText" Text="Call of Duty Black Ops III"/>
     </UserControl.Resources>
-    <Grid>
+    <Grid Background="#060411">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2.2*"/>
             <ColumnDefinition Width="*"/>
@@ -132,7 +132,7 @@
                         Background="#5C6BC0"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Center"
-                        Command="{Binding OpenGameLocationCommand}" 
+                        Command="{Binding OpenGameDirCommand}" 
                         CommandParameter="{Binding}"
                         Width="150"
                         Height="50"/>

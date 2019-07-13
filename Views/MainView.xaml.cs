@@ -5,11 +5,12 @@ namespace GameLauncher.Views
 {
     public partial class MainView : UserControl
     {
+        public MainViewModel VM { get; set; }
         public MainView()
         {
             InitializeComponent();
-            MainViewModel vm = new MainViewModel();
-            DataContext = vm;
+            VM = new MainViewModel();
+            DataContext = VM;
         }
     }
 }

@@ -109,12 +109,13 @@
     <Compile Include="Models\Game.cs" />
     <Compile Include="Models\GameInfo.cs" />
     <Compile Include="Models\Platform.cs" />
-    <Compile Include="Utils\APIController.cs" />
+    <Compile Include="APIControllers\IGDBAPIController.cs" />
     <Compile Include="Utils\CommandRunner.cs" />
     <Compile Include="Utils\GameScanner.cs" />
     <Compile Include="Utils\Helper.cs" />
     <Compile Include="Utils\ReadACF.cs" />
     <Compile Include="Utils\RestClient.cs" />
+    <Compile Include="APIControllers\SGDBAPIController.cs" />
     <Compile Include="ViewModels\ChooseGameExesViewModel.cs" />
     <Compile Include="ViewModels\GameDetailedViewModel.cs" />
     <Compile Include="ViewModels\GameLauncherViewModel.cs" />
@@ -237,6 +238,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\bg.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\allICON.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />

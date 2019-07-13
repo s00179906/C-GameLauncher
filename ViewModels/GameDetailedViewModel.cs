@@ -32,7 +32,7 @@ namespace GameLauncher.ViewModels
         public List<string> SelectedGameScreenshots { get; set; }
         public Random Random = new Random();
         public GameDetailedView GameDetailView { get; set; }
-        public CommandRunner OpenGameLocationCommand { get; set; }
+        public CommandRunner OpenGameDirCommand { get; set; }
 
         private string _lastPlayed = "Never Played";
 
@@ -60,7 +60,7 @@ namespace GameLauncher.ViewModels
             SelectedGame = MainViewModel.SelectedGame;
             BackToMainViewCommand = new CommandRunner(BackToView);
             TileCommand = new CommandRunner(TileClick);
-            OpenGameLocationCommand = new CommandRunner(OpenGameLocation);
+            OpenGameDirCommand = new CommandRunner(OpenGameDir);
 
             //var startTimeSpan = TimeSpan.Zero;
             //var periodTimeSpan = TimeSpan.FromSeconds(3);
@@ -77,9 +77,9 @@ namespace GameLauncher.ViewModels
 
         }
 
-        private void OpenGameLocation(object obj)
+        private void OpenGameDir(object obj)
         {
-            Helper.OpenGameLocation(SelectedGame.InstallPath);
+            Helper.OpenGameDir(SelectedGame.InstallPath);
         }
 
         // The `onTick` method will be called periodically unless cancelled.
@@ -145,19 +145,19 @@ namespace GameLauncher.ViewModels
 
                     if (gameFound == null)
                     {
-                        if (SelectedGame.Executables.Count != 1)
-                        {
+                        //if (SelectedGame.Executables.Count != 1)
+                        //{
                             Window = new ChooseGameExesView(SelectedGame);
                             Window.ShowDialog();
                             AllowGameToBePlayed = false;
-                        }
-                        else
-                        {
-                            if (SelectedGame.Executables.Count == 1)
-                            {
-                                MainViewModel.SelectedGame.UserPreferedEXE = SelectedGame.Executables[0];
-                            }
-                        }
+                       // }
+                        //else
+                        //{
+                        //    if (SelectedGame.Executables.Count == 1)
+                        //    {
+                        //        MainViewModel.SelectedGame.UserPreferedEXE = SelectedGame.Executables[0];
+                        //    }
+                        //}
                     }
                 }
             }
@@ -182,19 +182,16 @@ namespace GameLauncher.ViewModels
                             }
 
                             if (game.Name == SelectedGame.Name && SelectedGame.Platform.Equals(Platforms.NONE))
-                            {
                                 Process.Start(game.UserPreferedEXE);
-                            }
-
+                            
                             if (game.Name == SelectedGame.Name && SelectedGame.Platform.Equals(Platforms.UPLAY))
-                            {
                                 Process.Start(game.UserPreferedEXE);
-                            }
-
+                            
                             if (game.Name == SelectedGame.Name && SelectedGame.Platform.Equals(Platforms.EPIC))
-                            {
                                 Process.Start(game.UserPreferedEXE);
-                            }
+
+                            if (game.Name == SelectedGame.Name && SelectedGame.Platform.Equals(Platforms.BLIZZARD))
+                                Process.Start(game.UserPreferedEXE);
                         }
                         catch (Win32Exception) { }
                     }

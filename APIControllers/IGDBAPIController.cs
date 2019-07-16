@@ -9,7 +9,7 @@ using System.Threading;
 
 namespace GameLauncher.Utils
 {
-    public class APIController
+    public class IGDBAPIController
     {
         public RestClient Client { get; set; }
         public string Params { get; set; }
@@ -18,9 +18,11 @@ namespace GameLauncher.Utils
         public List<Game> GameAPIData { get; set; }
         public ObservableCollection<Game> Games { get; set; }
         public List<GameInfo> JsonDeserialized { get; set; }
-        public APIController(ObservableCollection<Game> games)
+        public string APIKey { get; set; }
+        public IGDBAPIController(ObservableCollection<Game> games)
         {
-            Client = new RestClient();
+            APIKey = "d890bcccf131c0c13138621d6908fe1e";
+            Client = new RestClient(APIKey);
             GameAPIData = new List<Game>();
             Games = games;
         }

@@ -34,16 +34,16 @@ namespace GameLauncher.Utils
             }
         }
 
-        public static void OpenGameLocation(string gameLocation)
+        public static void OpenGameDir(string gameLocation)
         {
-            string loc = RefactorGameLocation(gameLocation);
+            string loc = RefactorGameDir(gameLocation);
             if (Directory.Exists(loc))
             {
                 Process.Start("explorer.exe", loc);
             }
         }
 
-        private static string RefactorGameLocation(string gameLocation)
+        private static string RefactorGameDir(string gameLocation)
         {
             string[] x = gameLocation.Split('\\');
             x = x.Where(w => w != "").ToArray();

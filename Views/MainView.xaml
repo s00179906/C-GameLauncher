@@ -9,6 +9,8 @@
              xmlns:ViewModels="clr-namespace:GameLauncher.ViewModels"
              xmlns:Views="clr-namespace:GameLauncher.Views"
              mc:Ignorable="d" 
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+ xmlns:ie="http://schemas.microsoft.com/expression/2010/interactions"
              d:DesignHeight="800" d:DesignWidth="1200">
     <UserControl.Resources>
         <DataTemplate x:Name="GameDetailedViewTemplate" DataType="{x:Type ViewModels:GameDetailedViewModel}">
@@ -16,368 +18,163 @@
         </DataTemplate>
         <BitmapImage x:Key="DefaultImage" UriSource="https://images.igdb.com/igdb/image/upload/t_1080p/wklmdcc9vn93257yjg1c.jpg" />
         <TextBlock x:Key="DefaultText" Text="Call of Duty Black Ops III"/>
-
-
-        <!-- Button Style -->
-        <Style TargetType="{x:Type Button}">
-            <Setter Property="Background" Value="#373737" />
-            <Setter Property="Foreground" Value="White" />
-            <Setter Property="FontSize" Value="15" />
-            <Setter Property="SnapsToDevicePixels" Value="True" />
-
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Button}" >
-                        <Border Background="{TemplateBinding Background}">
-                            <Grid>
-                                <ContentPresenter x:Name="MyContentPresenter" Content="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" />
-                            </Grid>
-                        </Border>
-
-                        <!--Mouse Over Event-->
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#E59400" />
-                            </Trigger>
-
-                            <!--Mouse left click even-->
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter Property="Background" Value="OrangeRed" />
-                                <Setter Property="Foreground" Value="White" />
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
     </UserControl.Resources>
-    <Grid Background="Black">
-        <!--<Grid.RowDefinitions>
-            <RowDefinition Height="1.2*"/>
-            <RowDefinition Height="10*"/>
-            <RowDefinition Height="3*"/>
-        </Grid.RowDefinitions>-->
 
-        <!--<Border Grid.Row="0"
-                   BorderBrush="White"
-                BorderThickness="0 0 0 0.5"
-                   />
-
-        <Grid Grid.Row="0" Panel.ZIndex="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <TextBlock Text="GAME LAUNCHER"
-                       Foreground="#fff"
-                       VerticalAlignment="Center"
-                       HorizontalAlignment="Left"
-                       FontSize="24"
-                       FontWeight="Bold"
-                       Margin="40 0"/>
-            <StackPanel Orientation="Horizontal"
-                    Grid.Column="0"
-                    Grid.ColumnSpan="2"
-                    Grid.Row="0"
-                    HorizontalAlignment="Right"
-                    Margin="70 0">
-                <Button Content="YOUR GAMES"
-                    Command="{Binding FilterGamesCommand}"
-                    CommandParameter="ALL"
-                    Foreground="#fff"
-                    VerticalAlignment="Center"
-                    HorizontalAlignment="Center"
-                    FontSize="18"
-                    Margin="10 0"
-                    Background="Transparent"
-                    BorderThickness="0"/>
-
-                <TextBlock Text="RECENTLY PLAYED"
-                       Foreground="#fff"
-                       VerticalAlignment="Center"
-                       HorizontalAlignment="Center"
-                       FontSize="18"
-                       Margin="10 0"/>
-                <TextBlock Text="ABOUT"
-                       Foreground="#fff"
-                       VerticalAlignment="Center"
-                       HorizontalAlignment="Center"
-                       FontSize="18"
-                       Margin="10 0"/>
-            </StackPanel>
-        </Grid>-->
-
-
-        <!--<Grid Grid.Row="0" Grid.RowSpan="3" Panel.ZIndex="-1">
-            <Image Source="{Binding RandomSelectedGameScreenshot, 
-               FallbackValue={StaticResource DefaultImage},
-               TargetNullValue={StaticResource DefaultImage}, UpdateSourceTrigger=PropertyChanged}"
-               VerticalAlignment="Center"
-               HorizontalAlignment="Center"
-               Opacity="0.2"
-                   
-               Stretch="fill"/>
-
-
-
-        </Grid>-->
-
-        <!--<Button Background="DarkRed"
-                                Cursor="Hand"
-                                Width="Auto"
-                                Height="{Binding ImageHeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                BorderThickness="0"
-                
-                Panel.ZIndex="22"/>-->
-
-        <Slider Value="{Binding ImageHeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                Width="200"
-                Height="50"
-                Minimum="200"
-                Maximum="600"
-                Panel.ZIndex="22"
-                VerticalAlignment="Bottom"
-                HorizontalAlignment="Left"/>
-
-        <Slider Value="{Binding ImageWidth, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                Width="200"
-                Height="50"
-                Minimum="200"
-                Maximum="600"
-                Panel.ZIndex="22"
-                VerticalAlignment="Bottom"
-                HorizontalAlignment="Right"/>
-
-        <ListBox ItemsSource="{Binding Games, UpdateSourceTrigger=PropertyChanged}"
-                 ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                 Background="Transparent"
-                 VerticalAlignment="Top"
-                 HorizontalAlignment="Center">
-
-            <ListBox.ItemContainerStyle>
-                <Style TargetType="ListBoxItem">
-                    <Setter Property="Padding" Value="0"/>
-                    <Style.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="BorderBrush" Value="WhiteSmoke" />
-                            <Setter Property="BorderThickness" Value="1" />
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </ListBox.ItemContainerStyle>
-
-            <ListBox.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel Background="Transparent" 
-                               Orientation="Horizontal"
-                               VerticalAlignment="Top"
-                               HorizontalAlignment="Left"/>
-                </ItemsPanelTemplate>
-            </ListBox.ItemsPanel>
-
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <Button Foreground="Transparent"
-                                Cursor="Hand"
-                                Width="{Binding DataContext.ImageWidth, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}"
-                                Height="{Binding DataContext.ImageHeight ,RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}"
-                                Command="{Binding DataContext.PassSelectedGameToViewCommand,RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" 
-                                CommandParameter="{Binding}"
-                                BorderThickness="0"
-                                Grid.Row="0">
-                            <Button.Effect>
-                                <DropShadowEffect Direction="25" 
-                                                  Color="Black" 
-                                                  ShadowDepth="7" 
-                                                  BlurRadius="4" />
-                            </Button.Effect>
-                            <Button.Content>
-                                <Image Source="{Binding GameCover}"
-                                       Stretch="Fill"/>
-                            </Button.Content>
-                        </Button>
-                        <TextBlock Text="{Binding Name}"
-                                       VerticalAlignment="Center"
-                                       HorizontalAlignment="Center"
-                                       FontSize="16"
-                                       Grid.Row="1"
-                                       />
-
-                    </Grid>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-        <!--<Slider />-->
-
-        <!--<Grid.ColumnDefinitions>
+    <Grid Background="White">
+        <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="24*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="15*"/>
-        </Grid.RowDefinitions>-->
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
 
-        <!--
-
-        <Rectangle Grid.Row="0"
-                   Grid.Column="0"
-                   Grid.RowSpan="2"
-                   Fill="#14171c"/>
-
-        <Grid Grid.Column="0" Grid.Row="2">
-            <StackPanel VerticalAlignment="Center" 
-                        HorizontalAlignment="Center">
-
-                <Button Grid.Row="0"
-                        HorizontalAlignment="Center" 
-                        VerticalAlignment="Center"
-                        Height="55"
-                        Width="55"
-                        BorderThickness="0"
-                        Command="{Binding FilterGamesCommand}"
-                        CommandParameter="ALL"
-                        Background="#111113"
-                        Margin="0 40">
-
-                    <Image Width="45"
-                           Height="45"
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Center"
-                           Source="pack://application:,,,/GameLauncher;component/Resources/Images/noneICON.png"/>
-                </Button>
-
-                <Button Grid.Row="1" 
-                        HorizontalAlignment="Center" 
-                        VerticalAlignment="Center"
-                        Command="{Binding FilterGamesCommand}"
-                        CommandParameter="STEAM"
-                        Height="55"
-                        Width="55"
-                        BorderThickness="0"
-                        Background="#111113"
-                        Margin="0 40">
-
-                    <Image Width="45"
-                           Height="45"
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Center"
-                           Source="pack://application:,,,/GameLauncher;component/Resources/Images/steamICON.png"/>
-                </Button>
-
-                <Button Grid.Row="2" 
-                        HorizontalAlignment="Center" 
-                        VerticalAlignment="Center"
-                        Height="55"
-                        Width="55"
-                        BorderThickness="0"
-                        CommandParameter="EPIC"
-                        Command="{Binding FilterGamesCommand}"
-                        Background="#111113"
-                        Margin="0 40">
-
-                    <Image Width="45"
-                           Height="45"
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Center"
-                           Source="pack://application:,,,/GameLauncher;component/Resources/Images/epicICON.png"/>
-                </Button>
-
-                <Button Grid.Row="3" 
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Height="55"
-                        Width="55"
-                        BorderThickness="0"
-                        CommandParameter="UPLAY"
-                        Command="{Binding FilterGamesCommand}"
-                        Background="#111113"
-                        Margin="0 40">
-
-                    <Image Width="45"
-                           Height="45"
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Center"
-                           Source="pack://application:,,,/GameLauncher;component/Resources/Images/uplayICON.png"/>
-                </Button>
-
-                <Button Grid.Row="4" 
-                        HorizontalAlignment="Center" 
-                        VerticalAlignment="Center"
-                        CommandParameter="NONE"
-                        Command="{Binding FilterGamesCommand}"
-                        Height="55"
-                        Width="55"
-                        BorderThickness="0"
-                        Background="#111113"
-                        Margin="0 40">
-
-                    <Image Width="45"
-                           Height="45"
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Center"
-                           Source="pack://application:,,,/GameLauncher;component/Resources/Images/noneICON.png"/>
-                </Button>
-            </StackPanel>
-        </Grid>
-
-       
-        <Grid Grid.Row="2" Grid.Column="2" Margin="30 0">
+        <!--All Games/ListBox Grid-->
+        <Grid Grid.Row="0" Grid.Column="1" Margin="10 0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="10*"/>
+                <RowDefinition Height="6*"/>
             </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
 
-            <ComboBox Grid.Row="0"
-                      Grid.Column="1"
-                      Width="200"
-                      Height="50"
-                      VerticalAlignment="Center"
-                      HorizontalAlignment="Right"
-                      Background="Transparent"
-                      BorderThickness="0"
-                      ItemsSource="{Binding ComboBoxItems}"
-                      SelectedItem="{Binding ComboBoxItems[0]}"/>
-            <StackPanel Orientation="Horizontal"
-                        Grid.Row="0"
-                        Grid.Column="0">
+            <!--All Games Section-->
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
-                <Button BorderThickness="0"
-                        Background="Transparent"
-                        Width="40"
-                        Height="40">
-                    <Image Source="pack://application:,,,/GameLauncher;component/Resources/Images/grid1.png"/>
-                </Button>
-                <Button BorderThickness="0"
-                        Background="Transparent"
-                        Width="40"
-                        Height="40">
-                    <Image Source="pack://application:,,,/GameLauncher;component/Resources/Images/grid2.png"/>
-                </Button>
-            </StackPanel>
-            <ListBox Grid.Column="0"
-                     Grid.ColumnSpan="2"
-                     Grid.Row="2"
+                <!--All Games Text Block-->
+                <StackPanel Margin="80 0 0 0" Grid.Column="0"
+                            VerticalAlignment="Center">
+                    <TextBlock Text="All Games"
+                           FontSize="40"
+                           Foreground="{StaticResource MainPurpleBrush}"
+                           VerticalAlignment="Center"
+                           FontWeight="Bold"
+                           />
+                    <TextBlock Text="{Binding GamesFoundText, FallbackValue=We found 9 games installed on your system}"
+                           FontSize="16"
+                           Foreground="Gray"
+                           VerticalAlignment="Center"
+                           />
+                </StackPanel>
+
+                <!--Filtering/Search Menu-->
+                <StackPanel Grid.Column="0"
+                            Grid.ColumnSpan="2"
+                            Margin="0 0 30 0"
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Right">
+
+                    <!--Combobox filters-->
+                    <!--<ComboBox ItemsSource="{Binding Path=GameGenresCBX, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                                FontSize="16"
+                                Cursor="Hand"
+                                Width="150"
+                                Height="50"
+                                Margin="0 0 40 0">
+                        <ComboBox.ItemContainerStyle>
+                            <Style TargetType="ComboBoxItem">
+                                <Style.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="Red" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ComboBox.ItemContainerStyle>
+                    </ComboBox>-->
+                    <!--Search Bar Grid-->
+
+                    <!--Search box-->
+                    <Border VerticalAlignment="Center" 
+                            BorderBrush="Gray" 
+                            BorderThickness="1"
+                            CornerRadius="30"
+                            Margin="0 0 20 0"
+                            Width="300">
+                        <StackPanel Orientation="Horizontal"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left"
+                                    Margin="15 0 0 0">
+                            
+                            <!--Search Icon for search box-->
+                            <Image Source="pack://application:,,,/GameLauncher;component/Resources/Images/searchICON.png"
+                                   Width="25"
+                                   Height="25"/>
+                            
+                            <!--Search textbox-->
+                            <TextBox Text="{Binding SearchForGamesText, Mode=TwoWay, FallbackValue=Search for a game, UpdateSourceTrigger=PropertyChanged}"
+                                     Tag="Search for a game"
+                                     BorderThickness="0"
+                                     VerticalAlignment="Center"
+                                     Padding="0 15"
+                                     FontSize="14"
+                                     Width="230"/>
+                        </StackPanel>
+                    </Border>
+                    <!--<TextBox Text="{Binding SearchForGamesText, Mode=TwoWay, FallbackValue=Search for a game, UpdateSourceTrigger=PropertyChanged}"
+                             Tag="Search for a game"
+                             Style="{StaticResource ResourceKey=SearchTextBoxStyle}"
+                             Margin="0 0 20 0"/>-->
+
+                    <!--Feature button-->
+                    <Button Content="Feature"
+                            FontSize="18"
+                            Cursor="Hand"
+                            Foreground="#3F51B5"
+                            Width="150"
+                            Height="50"
+                            Style="{StaticResource ResourceKey=FilterMenuButtonStyle}"
+                            Margin="0 0 20 0"/>
+
+                    <!--Refresh Games Button-->
+                    <Button FontSize="16"
+                            Cursor="Hand"
+                            Foreground="#3F51B5"
+                            Width="50"
+                            Height="50"
+                            Background="Transparent"
+                            Style="{StaticResource ResourceKey=FilterMenuButtonStyle}">
+                        <iconPacks:Material Kind="Refresh"></iconPacks:Material>
+                    </Button>
+                </StackPanel>
+            </Grid>
+
+            <!--Listbox of Games Section-->
+            <ListBox ItemsSource="{Binding Games}"
+                     ScrollViewer.VerticalScrollBarVisibility="Hidden"
                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                     ItemsSource="{Binding Games, UpdateSourceTrigger=PropertyChanged}" 
-                     Background="#14171c"
-                    >
+                     Background="Transparent"
+                     VerticalAlignment="Top"
+                     HorizontalAlignment="Center"
+                     Grid.Row="1"
+                     BorderThickness="0">
+
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListBoxItem}">
+                        <Setter Property="Margin" Value="20 0"/>
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="BorderThickness" Value="1"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListBoxItem">
+                                    <Grid Background="{TemplateBinding Background}">
+                                        <ContentPresenter />
+                                    </Grid>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="Transparent"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel Background="#151518" 
-                               Orientation="Horizontal"
-                               VerticalAlignment="Top"
-                               HorizontalAlignment="Left"/>
+                        <WrapPanel VerticalAlignment="Center" HorizontalAlignment="Center"/>
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
 
@@ -385,38 +182,192 @@
                     <DataTemplate>
                         <Grid>
                             <Grid.RowDefinitions>
+                                <!--Game Button/Image Row-->
+                                <RowDefinition Height="2*"/>
+
+                                <!--Game Name Row-->
                                 <RowDefinition Height="*"/>
-                                <RowDefinition Height="10*"/>
                             </Grid.RowDefinitions>
 
-                            <Button Foreground="Transparent"
-                                    Cursor="Hand"
-                                    Width="569"
-                                    Height="320"
+                            <!--Game Button/Image-->
+                            <Button Cursor="Hand"
                                     Command="{Binding DataContext.PassSelectedGameToViewCommand,RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" 
                                     CommandParameter="{Binding}"
-                                    BorderThickness="0"
-                                x:Name="gameBtn">
-                                <Button.Content>
+                                    Grid.Row="0"
+                                    Style="{StaticResource ResourceKey=GameButtonStyle}">
 
-                                    <Image Source="{Binding GameCover}"
-                                           
-                                           Grid.Row="0"
-                                           Stretch="Fill"
-                                           />
+                                <!--Actual Image-->
+                                <Button.Content>
+                                    <Rectangle RadiusX="20"
+                                               RadiusY="20"
+                                               Style="{StaticResource RectTest}"
+                                               >
+                                        <Rectangle.Fill>
+                                            <ImageBrush ImageSource="{Binding RandomWideGameCover}"/>
+                                        </Rectangle.Fill>
+                                    </Rectangle>
                                 </Button.Content>
+
                             </Button>
+
+                            <!--Game Name-->
                             <TextBlock Text="{Binding Name}"
                                        VerticalAlignment="Center"
                                        HorizontalAlignment="Center"
                                        FontSize="16"
-                                       Grid.Row="2"
-                                       Padding="10"/>
-
+                                       Grid.Row="1"/>
                         </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
+
             </ListBox>
-        </Grid>-->
+        </Grid>
+
+        <!--Side Platform Menu-->
+        <Grid Grid.Row="1" Grid.Column="0"
+              Panel.ZIndex="1"
+              Margin="0 10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button Command="{Binding FilterGamesCommand}"
+                        CommandParameter="ALL"
+                        Grid.Column="5"
+                        Style="{StaticResource ResourceKey=PlatformButtonStyle}">
+                <Button.ToolTip>
+                    <TextBlock Text="All Games"/>
+                </Button.ToolTip>
+                <Image Width="40"
+                           Height="40" 
+                           Source="pack://application:,,,/GameLauncher;component/Resources/Images/allICON.png">
+                    <Image.Effect>
+                        <DropShadowEffect Direction="255"
+                                              Color="#FFB6C2CB" 
+                                              ShadowDepth="2" 
+                                              BlurRadius="15" />
+                    </Image.Effect>
+                </Image>
+            </Button>
+            <Button Command="{Binding FilterGamesCommand}"
+                        CommandParameter="STEAM"
+                        Grid.Column="6"
+                        Style="{StaticResource ResourceKey=PlatformButtonStyle}">
+                <Button.ToolTip>
+                    <TextBlock Text="Steam Games Only"/>
+                </Button.ToolTip>
+                <Image Width="40"
+                           Height="40" 
+                           Source="pack://application:,,,/GameLauncher;component/Resources/Images/steamICON.png">
+                    <Image.Effect>
+                        <DropShadowEffect Direction="255"
+                                              Color="#FFB6C2CB" 
+                                              ShadowDepth="2" 
+                                              BlurRadius="15" />
+                    </Image.Effect>
+                </Image>
+            </Button>
+            <Button Command="{Binding FilterGamesCommand}"
+                        CommandParameter="UPLAY"
+                        Grid.Column="7"
+                        Style="{StaticResource ResourceKey=PlatformButtonStyle}">
+                <Button.ToolTip>
+                    <TextBlock Text="Uplay Games Only"/>
+                </Button.ToolTip>
+                <Image Width="40"
+                           Height="40" 
+                           Source="pack://application:,,,/GameLauncher;component/Resources/Images/uplayICON.png">
+                    <Image.Effect>
+                        <DropShadowEffect Direction="255"
+                                              Color="#FFB6C2CB" 
+                                              ShadowDepth="2" 
+                                              BlurRadius="15" />
+                    </Image.Effect>
+                </Image>
+            </Button>
+            <Button Command="{Binding FilterGamesCommand}"
+                        CommandParameter="EPIC"
+                        Grid.Column="8"
+                        Style="{StaticResource ResourceKey=PlatformButtonStyle}">
+                <Button.ToolTip>
+                    <TextBlock Text="Epic Games Only"/>
+                </Button.ToolTip>
+                <Image Width="40"
+                           Height="40" 
+                           Source="pack://application:,,,/GameLauncher;component/Resources/Images/epicICON.png">
+                    <Image.Effect>
+                        <DropShadowEffect Direction="255"
+                                              Color="#FFB6C2CB" 
+                                              ShadowDepth="2" 
+                                              BlurRadius="15" />
+                    </Image.Effect>
+                </Image>
+            </Button>
+            <Button Command="{Binding FilterGamesCommand}"
+                        CommandParameter="NONE"
+                        Grid.Column="9"
+                        Style="{StaticResource ResourceKey=PlatformButtonStyle}">
+                <Button.ToolTip>
+                    <TextBlock Text="Manually Added Games Only"/>
+                </Button.ToolTip>
+                <Image Width="40"
+                           Height="40" 
+                           Source="pack://application:,,,/GameLauncher;component/Resources/Images/noneICON.png">
+                    <Image.Effect>
+                        <DropShadowEffect Direction="255"
+                                              Color="#FFB6C2CB" 
+                                              ShadowDepth="2" 
+                                              BlurRadius="15" />
+                    </Image.Effect>
+                </Image>
+            </Button>
+
+
+
+        </Grid>
+
+
+        <!--Games size filter-->
+        <!--<StackPanel Orientation="Horizontal" 
+                    Margin="20 0"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Left"
+                    Grid.Row="1">
+
+            <Button Background="Transparent"
+                    Command="{Binding MakeGamesBiggerCommand}"
+                    Cursor="Hand">
+                <Image Source="pack://application:,,,/GameLauncher;component/Resources/Images/grid1.png"/>
+            </Button>
+
+            <Slider Width="150" 
+                    Value="{Binding ImageWidthAndHeight, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                    Minimum="0.5"
+                    Maximum="2" 
+                    IsSnapToTickEnabled="True" 
+                    VerticalAlignment="Center"
+                    TickFrequency="0.1"
+                    AutoToolTipPlacement="BottomRight"/>
+
+            <Button Background="Transparent"
+                    Command="{Binding MakeGamesSmallerCommand}"
+                    Cursor="Hand">
+                <Image Source="pack://application:,,,/GameLauncher;component/Resources/Images/grid2.png"/>
+            </Button>
+
+        </StackPanel>-->
     </Grid>
 </UserControl>

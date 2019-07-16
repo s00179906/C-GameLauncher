@@ -17,12 +17,14 @@ namespace GameLauncher.Utils
         public string EndPoint { get; set; }
         public HttpMethods HttpMethod { get; set; }
         public HttpWebRequest Request { get; set; }
-        public string APIKey { get; set; } = "5a79ad0ea1809139f8db322e0a8e9584";
+        public string APIKey { get; set; }
 
-        public RestClient()
+
+        public RestClient(string apiKey)
         {
             EndPoint = "";
             HttpMethod = HttpMethods.GET;
+            APIKey = apiKey;
         }
 
         public string MakeRequest()
@@ -33,7 +35,13 @@ namespace GameLauncher.Utils
             Request = (HttpWebRequest)WebRequest.Create(EndPoint);
 
             Request.Method = HttpMethod.ToString();
-            Request.Headers.Add("user-key", APIKey);
+            if (APIKey == "d890bcccf131c0c13138621d6908fe1e")
+                Request.Headers.Add("user-key", APIKey);
+            else
+            {
+                Request.Headers.Add("Authorization", $"Bearer {APIKey}");
+            }
+
 
             HttpWebResponse response = null;
 

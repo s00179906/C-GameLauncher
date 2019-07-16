@@ -30,7 +30,7 @@ namespace GameLauncher.ViewModels
             SetEXECommand = new CommandRunner(SetEXE);
         }
 
-        private void SetEXE(object obj)
+        public void SetEXE(object obj)
         {
             if (SelectedExecutable != null)
             {

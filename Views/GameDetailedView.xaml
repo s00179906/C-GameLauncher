@@ -4,16 +4,17 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       mc:Ignorable="d" 
-      d:DesignHeight="800" d:DesignWidth="1200"
-      >
+      d:DesignHeight="800" d:DesignWidth="1200">
+
     <UserControl.Resources>
         <BitmapImage x:Key="DefaultImage" UriSource="https://images.igdb.com/igdb/image/upload/t_1080p/wklmdcc9vn93257yjg1c.jpg" />
         <TextBlock x:Key="DefaultText" Text="Call of Duty Black Ops III"/>
     </UserControl.Resources>
-    <Grid>
+
+    <Grid Background="White">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2.2*"/>
             <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
 
         <!--<Border Background="LightGray" BorderBrush="DarkGray" 
@@ -28,6 +29,7 @@
             </Border>
         </Border>-->
 
+        <!--Images of the selected Game-->
         <Image Source="{Binding RandomSelectedGameScreenshot, 
                FallbackValue={StaticResource DefaultImage},
                TargetNullValue={StaticResource DefaultImage}}"
@@ -38,33 +40,64 @@
                Grid.ColumnSpan="2"
                Stretch="Fill"/>
 
-        <!--News-->
+        <!--News Section-->
         <Grid Grid.Column="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="6*"/>
             </Grid.RowDefinitions>
 
+            <!--Game Name-->
             <TextBlock Grid.Row="0"
-                       Text="{Binding SelectedGame.Name}"
+                       Text="{Binding SelectedGame.Name, FallbackValue=TEKKEN 7}"
                        FontSize="60"
-                       Foreground="White"
+                       Foreground="{StaticResource MainPurpleBrush}"
                        VerticalAlignment="Center"
                        HorizontalAlignment="Left"
                        FontWeight="Bold"
                        Margin="50 0"/>
+
+            <!--Game Detailed Content-->
             <StackPanel Grid.Row="1"
                         Margin="20">
 
+                <!--Time When game was played -->
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Last Played:" 
                                Margin="20 0"
                                FontSize="28"
-                               Foreground="White"
+                               Foreground="Gray"
                                FontWeight="DemiBold"/>
                     <TextBlock Text="{Binding LastPlayed, FallbackValue=10/07/2019, UpdateSourceTrigger=PropertyChanged}"
                                FontSize="28"
-                               Foreground="White"
+                               Foreground="{StaticResource MainPurpleBrush}"
+                               FontWeight="DemiBold"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="0 20 0 0">
+                    <TextBlock Text="Time to Beat: " 
+                               Margin="20 0"
+                               FontSize="28"
+                               Foreground="Gray"
+                               FontWeight="DemiBold"/>
+                    <TextBlock Text="{Binding LastPlayed, FallbackValue=8Hrs, UpdateSourceTrigger=PropertyChanged}"
+                               FontSize="28"
+                               Foreground="{StaticResource MainPurpleBrush}"
+                               FontWeight="DemiBold"/>
+                </StackPanel>
+
+                <StackPanel Margin="0 20 0 0">
+                    <TextBlock Text="Summary:" 
+                               Margin="20 0 20 10"
+                               FontSize="28"
+                               Foreground="Gray"
+                               FontWeight="DemiBold"/>
+                    <TextBlock Text="Tekken 7 promised to resolve the Mishima Zaibatsu storyline. This fight between three generations of Mishima men — outrageously coiffed Heihachi, his son Kazuya and Kazuya's illegitimate son Jin Kazama — for control of Mishima Zaibatsu has been the background of the series since its inception"
+                               FontSize="16"
+                               Margin="20 0"
+                               TextWrapping="Wrap"
+                               VerticalAlignment="Stretch"
+                               Foreground="{StaticResource MainPurpleBrush}"
                                FontWeight="DemiBold"/>
                 </StackPanel>
 
@@ -72,7 +105,7 @@
 
         </Grid>
 
-        <!--Play-->
+        <!--Play Section-->
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
@@ -81,7 +114,7 @@
 
             <TextBlock Text="Play"
                        FontSize="60"
-                       Foreground="White"
+                       Foreground="{StaticResource MainPurpleBrush}"
                        VerticalAlignment="Center"
                        HorizontalAlignment="Left"
                        FontWeight="Bold"
@@ -92,6 +125,7 @@
                         VerticalAlignment="Center"
                         HorizontalAlignment="Center">
 
+                <!--Selected Game Button-->
                 <Button Foreground="Transparent"
                         Cursor="Hand"
                         Width="350"
@@ -103,51 +137,52 @@
                         CommandParameter="{Binding}"
                         BorderThickness="0">
 
+                    <!--Seleceted Game Cover-->
                     <Image Source="{Binding SelectedGame.GameCover}"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Center"
                         Stretch="Fill"/>
                 </Button>
 
+                <!--Play and Game Location Buttons-->
                 <StackPanel Orientation="Horizontal"
                             HorizontalAlignment="Center" 
-                            Margin="10"
-                            >
+                            Margin="10">
 
+                    <!--Play Button-->
                     <Button Content="PLAY"
-                        FontSize="25"
-                        Cursor="Hand"
-                        Foreground="White"
-                        Background="#5C6BC0"
-                        VerticalAlignment="Center"
-                        HorizontalAlignment="Center"
-                        Command="{Binding TileCommand}" 
-                        Width="150"
-                        Height="50"
-                            Margin="0 0 20 0"/>
+                            FontSize="25"
+                            Cursor="Hand"
+                            Foreground="White"
+                            Background="#5C6BC0"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center"
+                            Command="{Binding TileCommand}" 
+                            Width="150"
+                            Height="50"
+                            Margin="0 0 20 0"
+                            Style="{StaticResource Hoverless}"/>
+
+                    <!--Location Button-->
                     <Button Content="LOCATION"
-                        FontSize="25"
-                        Cursor="Hand"
-                        Foreground="White"
-                        Background="#5C6BC0"
-                        VerticalAlignment="Center"
-                        HorizontalAlignment="Center"
-                        Command="{Binding OpenGameLocationCommand}" 
-                        CommandParameter="{Binding}"
-                        Width="150"
-                        Height="50"/>
+                            FontSize="25"
+                            Cursor="Hand"
+                            Foreground="White"
+                            Background="#5C6BC0"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center"
+                            Command="{Binding OpenGameDirCommand}" 
+                            CommandParameter="{Binding}"
+                            Width="150"
+                            Height="50"
+                            Style="{StaticResource Hoverless}"/>
                 </StackPanel>
             </StackPanel>
+
+            <!--Close View Button-->
             <Button Command="{Binding BackToMainViewCommand}"
-                Width="30"
-                Height="30"
-                Content="X"
-                FontSize="20"
-                Padding="0"
-                Foreground="#fff"
-                Background="#FFA000"
-                VerticalAlignment="Top" 
-                HorizontalAlignment="Right"
+                Content="✖"
+                Style="{StaticResource CloseButtonStyle}"
                 Margin="10"/>
         </Grid>
 

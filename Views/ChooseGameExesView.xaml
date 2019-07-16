@@ -6,37 +6,40 @@
         xmlns:Dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
         Dialog:DialogParticipation.Register="{Binding}"
         mc:Ignorable="d"
-        Title="ChooseGameExesView" Height="450" Width="800"
-        WindowStartupLocation="CenterScreen" Topmost="True" Background="#151518">
+        Height="450" Width="800"
+        WindowStartupLocation="CenterScreen" 
+        Topmost="True" 
+        Background="White">
     <Grid Margin="10">
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.1*"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="7*"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         
         <TextBlock Text="Select the main exe"        
                    FontSize="22"        
-                   Grid.Row="0"    
+                   Grid.Row="0"   
+                   VerticalAlignment="Center"
                    HorizontalAlignment="Left"           
-                   Foreground="AntiqueWhite"/>
+                   Foreground="{StaticResource MainPurpleBrush}"/>
         
         <TextBlock Text="{Binding Game.Name}"              
                    FontSize="22"                
                    Grid.Row="0"              
                    HorizontalAlignment="Right"     
-                   Foreground="AntiqueWhite"/>
+                   Foreground="Gray"/>
         
         <ListBox ItemsSource="{Binding GameExecutables}"
                  SelectedItem="{Binding SelectedExecutable}"
                  Grid.Row="1"
-                 Foreground="WhiteSmoke"
-                 Background="#151518"/>
+                 Foreground="Gray"
+                 Background="White"
+                 FontSize="16"/>
         
         <Button Content="Select"
                 Grid.Row="2"
-                HorizontalAlignment="Right"
                 Command="{Binding SetEXECommand}"
-                Background="#151518"/>
+                Style="{StaticResource ResourceKey=ChooseEXESelectButton}"/>
     </Grid>
 </Window>

@@ -8,10 +8,14 @@
         xmlns:ViewModels="clr-namespace:GameLauncher.ViewModels"
         xmlns:Views="clr-namespace:GameLauncher.Views"
         mc:Ignorable="d"
-        Title="Game Launcher" Width="1200" Height="800"
-        Background="Transparent" MinWidth="1200" MinHeight="800"
+        Title="Game Launcher" 
+        Style="{StaticResource ResourceKey=MainWindowStyle}"
+        MinWidth="1200" MinHeight="800"
+        Background="Transparent" 
         WindowStartupLocation="CenterScreen"
-        >
+        WindowStyle="None"
+        AllowsTransparency="True">
+
     <Window.Resources>
         <DataTemplate x:Name="MainViewTemplate" DataType="{x:Type ViewModels:MainViewModel}">
             <Views:MainView DataContext="{Binding}"/>
@@ -20,30 +24,34 @@
             <Views:GameDetailedView DataContext="{Binding}"/>
         </DataTemplate>
     </Window.Resources>
+
+    <!--Window Chrome for custom window styling-->
+    <WindowChrome.WindowChrome>
+        <WindowChrome ResizeBorderThickness="{Binding ResizeBorderThickness}"
+                      CaptionHeight="{Binding TitleHeight}"
+                      GlassFrameThickness="0"
+                      CornerRadius="0"/>
+    </WindowChrome.WindowChrome>
+
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="15*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="10*"/>
         </Grid.RowDefinitions>
-
+        
+        <!--Main Frame-->
         <Frame x:Name="frmMainFrame"
-               Content="{Binding}"
                NavigationUIVisibility="Hidden"
                Grid.Column="0"
-               Grid.Row="0"
-               Grid.ColumnSpan="3"
-               Grid.RowSpan="2"/>
+               Grid.ColumnSpan="2"/>
 
         <!--Settings Button-->
         <Button Height="45" 
                 Width="45"
-                Grid.Column="3"
-                Grid.Row="1"
+                Grid.Column="1"
                 Command="{Binding SettingsCommand}"
                 Background="Transparent"
                 VerticalAlignment="Bottom"
@@ -54,7 +62,8 @@
                                         VerticalAlignment="Center"
                                         HorizontalAlignment="Center"
                                         Width="25"
-                                        Height="25"/>
+                                        Height="25"
+                                        Foreground="#3F51B5"/>
         </Button>
 
     </Grid>

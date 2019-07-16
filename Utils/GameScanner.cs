@@ -11,11 +11,12 @@ namespace GameLauncher.Utils
 {
     public class GameScanner
     {
+        
         private readonly string Steam32 = "SOFTWARE\\VALVE\\";
         private readonly string Steam64 = "SOFTWARE\\Wow6432Node\\Valve\\";
-        private readonly string EpicRegistry = "SOFTWARE\\WOW6432Node\\EpicGames\\Unreal Engine";
+        //private readonly string EpicRegistry = "SOFTWARE\\WOW6432Node\\EpicGames\\Unreal Engine";
         private readonly string UplayRegistry = "SOFTWARE\\WOW6432Node\\Ubisoft\\Launcher";
-        private readonly string OriginsRegistry = "SOFTWARE\\WOW6432Node\\Origin";
+        //private readonly string OriginsRegistry = "SOFTWARE\\WOW6432Node\\Origin";
         private readonly string BlizzardRegistry = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall";
         public bool DirExists { get; set; }
         private string gamePath = string.Empty;
@@ -258,27 +259,27 @@ namespace GameLauncher.Utils
                         // this code gets this directory > C:\Program Files (x86)\Epic Games\
                         // but games dont get installed by default into that directory
                         // so this way is pointless
-                        DirExists = CheckIfRegistryDirExists(EpicRegistry, "INSTALLDIR");
-                        if (DirExists)
-                        {
-                            using (RegistryKey key = Registry.LocalMachine.OpenSubKey(EpicRegistry))
-                            {
-                                foreach (string k in key.GetSubKeyNames())
-                                {
-                                    using (RegistryKey subkey = key.OpenSubKey(k))
-                                    {
-                                        string epicGamesPath = subkey.GetValue("InstalledDirectory").ToString();
-                                        epicGamesPath = epicGamesPath.Substring(0, epicGamesPath.Length - 4);
-                                        LibraryDirectories.Add(new Platform
-                                        {
-                                            PlatformType = Platforms.EPIC,
-                                            Name = "Epic",
-                                            InstallationPath = epicGamesPath
-                                        });
-                                    }
-                                }
-                            }
-                        }
+                        //DirExists = CheckIfRegistryDirExists(EpicRegistry, "INSTALLDIR");
+                        //if (DirExists)
+                        //{
+                        //    using (RegistryKey key = Registry.LocalMachine.OpenSubKey(EpicRegistry))
+                        //    {
+                        //        foreach (string k in key.GetSubKeyNames())
+                        //        {
+                        //            using (RegistryKey subkey = key.OpenSubKey(k))
+                        //            {
+                        //                string epicGamesPath = subkey.GetValue("InstalledDirectory").ToString();
+                        //                epicGamesPath = epicGamesPath.Substring(0, epicGamesPath.Length - 4);
+                        //                LibraryDirectories.Add(new Platform
+                        //                {
+                        //                    PlatformType = Platforms.EPIC,
+                        //                    Name = "Epic",
+                        //                    InstallationPath = epicGamesPath
+                        //                });
+                        //            }
+                        //        }
+                        //    }
+                        //}
                     }
                     catch (Exception e)
                     {
@@ -450,7 +451,6 @@ namespace GameLauncher.Utils
         public ObservableCollection<Game> GetExecutables()
         {
             ObservableCollection<Game> games = new ObservableCollection<Game>();
-
             foreach (Platform libDir in LibraryDirectories)
             {
                 if (libDir.PlatformType.Equals(Platforms.BLIZZARD))
@@ -489,11 +489,13 @@ namespace GameLauncher.Utils
                     {
                         string[] gameDirs = Directory.GetDirectories(lib);
 
+
                         foreach (var gameDir in gameDirs)
                         {
                             string[] exes = Directory.GetFiles(gameDir, "*.exe", SearchOption.AllDirectories);
                             if (exes.Length != 0)
                             {
+
                                 Game game = new Game
                                 {
                                     Name = new DirectoryInfo(RemoveSpecialWordsAndChars(gameDir)).Name,
@@ -503,13 +505,17 @@ namespace GameLauncher.Utils
                                 };
 
                                 games.Add(game);
+
+
                             }
                         }
+
                     }
                 }
 
             }
             return games;
         }
+
     }
 }

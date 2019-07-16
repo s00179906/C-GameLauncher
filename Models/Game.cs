@@ -10,6 +10,8 @@ namespace GameLauncher.Models
         public string UserPreferedEXE { get; set; }
         public Platforms Platform { get; set; }
         public string GameCover { get; set; }
+        public List<string> WideGameCovers { get; set; }
+        public string RandomWideGameCover { get; set; }
         public List<string> GameScreenshots { get; set; }
         public string InstallPath { get; set; }
 
@@ -17,6 +19,7 @@ namespace GameLauncher.Models
         public Game()
         {
             Executables = new List<string>();
+            WideGameCovers = new List<string>();
         }
     }
 }

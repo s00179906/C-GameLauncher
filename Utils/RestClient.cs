@@ -39,7 +39,7 @@ namespace GameLauncher.Utils
                 Request.Headers.Add("user-key", APIKey);
             else
             {
-                Request.Headers.Add("Bearer Token", APIKey);
+                Request.Headers.Add("Authorization", $"Bearer {APIKey}");
             }
 
 

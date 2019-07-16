@@ -10,7 +10,7 @@ namespace GameLauncher.Views
         public GameLauncherView()
         {
             InitializeComponent();
-            DataContext = new GameLauncherViewModel(frmMainFrame);
+            DataContext = new GameLauncherViewModel(frmMainFrame, this);
         }
     }
 }

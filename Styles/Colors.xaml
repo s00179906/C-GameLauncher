@@ -1,0 +1,15 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:GameLauncher">
+    
+    <!--The main Purple color of the application-->
+    <Color x:Key="MainPurple">#3F51B5</Color>
+    <SolidColorBrush x:Key="MainPurpleBrush" Color="{StaticResource MainPurple}"/>
+
+    <Color x:Key="MainWhite">#fff</Color>
+    <SolidColorBrush x:Key="MainWhiteBrush" Color="{StaticResource MainWhite}"/>
+
+    <Color x:Key="BorderBlue">#2196F3</Color>
+    <SolidColorBrush x:Key="BorderBlueBrush" Color="{StaticResource BorderBlue}"/>
+    
+</ResourceDictionary>

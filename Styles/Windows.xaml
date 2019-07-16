@@ -1,0 +1,105 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:GameLauncher">
+    <Style TargetType="{x:Type Window}" x:Key="MainWindowStyle">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Window}">
+
+                    <!--Outer border with the dropshadow margin-->
+                    <Border Padding="{Binding OuterMarginSizeThickness}">
+
+                        <!--Main window outline-->
+                        <Grid>
+
+                            <!--Window border and dropshadow-->
+                            <Border CornerRadius="{Binding WindowCornerRadius, FallbackValue=10}"
+                                        Background="White">
+                                <Border.Effect>
+                                    <DropShadowEffect ShadowDepth="0" Opacity="0.2"/>
+                                </Border.Effect>
+                            </Border>
+
+                            <!--The main window-->
+                            <Grid>
+                                <Grid.RowDefinitions>
+
+                                    <!--Title Bar Row-->
+                                    <RowDefinition Height="42"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <!--Window Content-->
+                                    <RowDefinition Height="*"/>
+
+                                </Grid.RowDefinitions>
+
+                                <!--Title Bar-->
+                                <Grid Grid.Row="0" Panel.ZIndex="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <!--Icon-->
+                                    <Button Style="{StaticResource ResourceKey=Hoverless}"
+                                                Padding="5">
+                                        <Button.Content>
+                                            <Image Source="pack://application:,,,/GameLauncher;component/Resources/Images/vizionICON2.png"
+                                                       RenderOptions.BitmapScalingMode="HighQuality"/>
+                                        </Button.Content>
+                                    </Button>
+
+                                    <!--Vizion Text-->
+                                    <TextBlock Text="VIZION"
+                                                   Grid.Column="0"
+                                                   Grid.ColumnSpan="3"
+                                                   Style="{StaticResource ResourceKey=VizionText}"/>
+
+                                    <!--Min Max and Close Buttons-->
+                                    <StackPanel Orientation="Horizontal" Grid.Column="2">
+                                        <Button Content="—"
+                                                    Style="{StaticResource ResourceKey=WindowMinMaxStyle}"
+                                                    Command="{Binding WindowMinimizeCommand}"/>
+                                        <Button Content="[ ]"
+                                                    Style="{StaticResource ResourceKey=WindowMinMaxStyle}"
+                                                    Command="{Binding WindowMaximizeCommand}"/>
+                                        <Button Content="X" 
+                                                    Style="{StaticResource ResourceKey=WindowCloseStyle}"
+                                                    Command="{Binding WindowCloseCommand}"/>
+                                    </StackPanel>
+                                </Grid>
+
+                                <!--Title Bar drop shadow-->
+                                <Border Grid.Row="1"
+                                            Height="8"
+                                            BorderThickness="0 0.2 0 0">
+                                    <Border.BorderBrush>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                            <GradientStop Color="White" Offset="0.0"/>
+                                            <GradientStop Color="Gray" Offset="0.5"/>
+                                            <GradientStop Color="White" Offset="1.0"/>
+                                        </LinearGradientBrush>
+                                    </Border.BorderBrush>
+
+                                    <!--<Border.Background>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                <GradientStop Color="White" Offset="0.0"/>
+                                                <GradientStop Color="Gray" Offset="1.0"/>
+                                            </LinearGradientBrush>
+                                        </Border.Background>-->
+                                </Border>
+
+                                <!--Main Content of the window-->
+                                <Border Grid.Row="2">
+                                    <ContentPresenter Content="{TemplateBinding Content}"/>
+                                </Border>
+
+                            </Grid>
+
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

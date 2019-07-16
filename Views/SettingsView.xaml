@@ -10,15 +10,17 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="SettingsView">
 
-    <Grid Background="#060411">
+    <Grid Background="White">
         <Grid.ColumnDefinitions>
 
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
+        
+        <!--Add, Remove, Reset and Search for games settings-->
         <StackPanel Grid.Column="0" Grid.ColumnSpan="1">
             <TextBlock Text="Game Folders"
                        FontSize="18"
-                       Foreground="White"
+                       Foreground="{StaticResource MainPurpleBrush}"
                        FontWeight="Bold"
                        HorizontalAlignment="Center"
                        Padding="10"/>
@@ -28,6 +30,7 @@
                      Height="200"
                      FontSize="18"
                      Margin="40"
+                     Foreground="Gray"
                      ScrollViewer.CanContentScroll="True" 
                      SelectedItem="{Binding SelectedFolder}"
                      SelectedValue="{Binding SelectedFolderValue}"
@@ -38,48 +41,62 @@
                         VerticalAlignment="Center"
                         HorizontalAlignment="Center"
                         Margin="10">
+                
                 <Button Command="{Binding AddFolderPathCommand}"
-                     Width="50"
-                    Height="50"
-                     Margin="10"
-                        Background="#FFA000">
-                    <iconPacks:Material Kind="Plus"></iconPacks:Material>
+                        Width="50"
+                        Height="50"
+                        Margin="10"
+                        Background="{StaticResource MainPurpleBrush}">
+                    <Button.ToolTip>
+                        <TextBlock Text="Manually add a game folder"/>
+                    </Button.ToolTip>
+                    <iconPacks:Material Kind="Folder"></iconPacks:Material>
                 </Button>
+                
                 <Button Command="{Binding DeleteFolderPathCommand}"
                      Width="50"
                     Height="50"
                         Margin="10"
-                        Background="#FFA000">
-                    <iconPacks:Material Kind="Minus"></iconPacks:Material>
+                        Background="{StaticResource MainPurpleBrush}">
+                    <Button.ToolTip>
+                        <TextBlock Text="Delete a game folder"/>
+                    </Button.ToolTip>
+                    <iconPacks:Material Kind="Delete"></iconPacks:Material>
                 </Button>
+                
                 <Button Command="{Binding ResetAllSettingsCommand}"
                      Width="50"
                     Height="50"
                         Margin="10"
-                        Background="#FFA000">
+                        Background="{StaticResource MainPurpleBrush}">
+                    <Button.ToolTip>
+                        <TextBlock Text="Reset all of your settings"/>
+                    </Button.ToolTip>
                     <iconPacks:Material Kind="Refresh"></iconPacks:Material>
                 </Button>
+                
                 <Button Command="{Binding ScanGamesCommand}"
                      Width="50"
                     Height="50"
                         Margin="10"
-                        Background="#FFA000">
+                        Background="{StaticResource MainPurpleBrush}">
+                    <Button.ToolTip>
+                        <TextBlock Text="Scan pc for games"/>
+                    </Button.ToolTip>
                     <iconPacks:Material Kind="FileFind"></iconPacks:Material>
                 </Button>
+                
             </StackPanel>
 
         </StackPanel>
 
+        <!--Close settings button-->
         <Button Command="{Binding CloseSettingsCommand}"
-                    Width="35"
-                    Height="35"
-                    VerticalAlignment="Top"
-                    HorizontalAlignment="Right"
-                Background="#FFA000">
-            <iconPacks:PackIconMaterial Kind="Close"
-                                        VerticalAlignment="Center"
-                                        HorizontalAlignment="Center"/>
-
-        </Button>
+                Width="35"
+                Height="35"
+                Content="✖"
+                FontSize="22"
+                Style="{StaticResource CloseButtonStyle}"
+                Margin="10"/>
     </Grid>
 </Page>

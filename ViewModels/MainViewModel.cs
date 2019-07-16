@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using System.Timers;
 using System.Windows.Threading;
+using GameLauncher.APIControllers;
 
 namespace GameLauncher.ViewModels
 {
@@ -25,21 +26,32 @@ namespace GameLauncher.ViewModels
         #region Private Members
         private ObservableCollection<Game> _games;
         private bool firstTimeConfiguration;
+        private string _randomSelectedGameScreenshot;
+        private decimal _imageWidth;
+        private decimal _imageHeight;
+        private string _gamesFoundText;
+        private string _searchForGamesText;
+        private decimal _imageWidthAndHeight = 1;
         #endregion
 
         #region Public Properties 
-
-        private string _randomSelectedGameScreenshot;
         public string RandomSelectedGameScreenshot
         {
             get { return _randomSelectedGameScreenshot; }
-            set { _randomSelectedGameScreenshot = value; OnPropertyChanged(nameof(RandomSelectedGameScreenshot)); }
+            set
+            {
+                _randomSelectedGameScreenshot = value;
+                OnPropertyChanged(nameof(RandomSelectedGameScreenshot));
+            }
         }
-
         public ObservableCollection<Game> Games
         {
             get { return _games; }
-            set { _games = value; OnPropertyChanged(nameof(Games)); }
+            set
+            {
+                _games = value;
+                OnPropertyChanged(nameof(Games));
+            }
         }
         public ICollectionView FilteredGames { get; set; }
         public CommandRunner AddFolderPathCommand { get; private set; }
@@ -54,47 +66,43 @@ namespace GameLauncher.ViewModels
         public Platform SelectedFolder { get; set; }
         public ChooseGameExesView Window { get; set; }
         public static int GameID { get; set; }
-        public event PropertyChangedEventHandler PropertyChanged;
+        
         public IGDBAPIController APIController { get; set; }
         public string JSONResponse { get; set; }
         public string Cover { get; set; }
         public List<Game> GameCovers { get; set; }
         public CommandRunner CloseSettingsCommand { get; set; }
         public ObservableCollection<string> GameGenresCBX { get; private set; }
-
-
         public Platform SelectedFolderValue { get; set; }
         public Random Random = new Random();
         public ObservableCollection<Game> MyProperty { get; set; }
-
-
-        private decimal _imageWidth;
-
         public decimal ImageWidth
         {
             get { return _imageWidth; }
-            set { _imageWidth = value; OnPropertyChanged(nameof(ImageWidth)); }
+            set
+            {
+                _imageWidth = value;
+                OnPropertyChanged(nameof(ImageWidth));
+            }
         }
-
-        private decimal _imageHeight;
-
         public decimal ImageHeight
         {
             get { return _imageHeight; }
-            set { _imageHeight = value; OnPropertyChanged(nameof(ImageHeight)); }
+            set
+            {
+                _imageHeight = value;
+                OnPropertyChanged(nameof(ImageHeight));
+            }
         }
-
-
-        private string _gamesFoundText;
-
         public string GamesFoundText
         {
             get { return _gamesFoundText; }
-            set { _gamesFoundText = value; OnPropertyChanged(nameof(GamesFoundText)); }
+            set
+            {
+                _gamesFoundText = value;
+                OnPropertyChanged(nameof(GamesFoundText));
+            }
         }
-
-        private string _searchForGamesText;
-
         public string SearchForGamesText
         {
             get { return _searchForGamesText; }
@@ -105,9 +113,6 @@ namespace GameLauncher.ViewModels
                 SearchForAGame(_searchForGamesText);
             }
         }
-
-        private decimal _imageWidthAndHeight = 1;
-
         public decimal ImageWidthAndHeight
         {
             get { return _imageWidthAndHeight; }
@@ -118,12 +123,39 @@ namespace GameLauncher.ViewModels
                 MakeGamesBiggerOrSmaller();
             }
         }
+        public SGDBAPIController SGDBAPIController { get; set; }
+
+        private string _randomeWideGameCover;
+        public string RandomWideGameCover
+        {
+            get
+            {
+                return _randomeWideGameCover;
+            }
+            set
+            {
+                _randomeWideGameCover = value;
+                OnPropertyChanged(nameof(RandomWideGameCover));
+            }
+        }
 
 
 
+        private string _testCover;
 
+        public event PropertyChangedEventHandler PropertyChanged;
 
+        public string TestCover
+        {
+            get { return _testCover; }
+            set
+            {
+                _testCover = value;
+                OnPropertyChanged(nameof(TestCover));
+            }
+        }
 
+        public CommandRunner MakeGamesBiggerCommand { get; set; }
 
 
         #endregion
@@ -131,6 +163,7 @@ namespace GameLauncher.ViewModels
         #region Constructor
         public MainViewModel()
         {
+            //MakeGamesBiggerCommand = new CommandRunner(MakeBigger);
             SearchForGamesText = "Search for a game";
             GameGenresCBX = new ObservableCollection<string>
             {
@@ -155,24 +188,43 @@ namespace GameLauncher.ViewModels
             Scanner = new GameScanner();
             Scanner.Scan();
             Games = Scanner.GetExecutables();
+
+            //SGDBAPIController = new SGDBAPIController(Games);
+            //PickRandomWideGameCover();
+
             GamesFoundText = string.Format($"We found {Games.Count.ToString()} games installed on your system.");
             MyProperty = Scanner.GetExecutables();
             FilteredGames = CollectionViewSource.GetDefaultView(Games);
-            APIController = new IGDBAPIController(Games);
-            TEST();
-            ImageHeight = 290;
-            ImageWidth = 210;
+            //APIController = new IGDBAPIController(Games);
+            //TEST();
+            ImageHeight = 208;
+            ImageWidth = 400;
         }
-
+        private void PickRandomWideGameCover()
+        {
+            foreach (Game game in Games)
+            {
+                //RandomWideGameCover = Games[0].WideGameCover[Random.Next(0, Games[0].WideGameCover.Count)];
+                if (game.WideGameCovers.Count != 0)
+                {
+                    game.RandomWideGameCover = game.WideGameCovers[Random.Next(0, game.WideGameCovers.Count)];
+                }
+            }
+        }
         private void MakeGamesBiggerOrSmaller()
         {
-            int w = 210;
-            int h = 290;
+            int w = 400;
+            int h = 208;
 
             decimal x = ImageWidthAndHeight;
 
             ImageWidth = w * x;
             ImageHeight = h * x;
+        }
+
+        private void MakeBigger(object obj)
+        {
+            ImageWidthAndHeight += 0.1M;
         }
 
         private void SearchForAGame(string searchedGame)
@@ -184,7 +236,7 @@ namespace GameLauncher.ViewModels
             {
                 FilteredGames.Filter = game => game.Equals(game);
             }
-            
+
         }
 
         private void PickRandomGameScreenshot()
@@ -268,6 +320,7 @@ namespace GameLauncher.ViewModels
         {
             SelectedGame = obj as Game;
             GameLauncherViewModel.MainFrame.Navigate(new GameDetailedViewModel());
+
             //PickRandomGameScreenshot();
         }
         #endregion
@@ -350,9 +403,10 @@ namespace GameLauncher.ViewModels
         {
             if (!String.IsNullOrEmpty(SelectedFolder.InstallationPath))
             {
+                var x = Properties.Settings.Default.FolderPaths.Count.ToString();
                 //remove from c# settings
                 Helper.DeleteDir(SelectedFolder.InstallationPath);
-
+                MessageBox.Show(Properties.Settings.Default.FolderPaths.Count.ToString());
                 // remove from library directories 
                 // because when vm gets instanciated the library from settings gets added to the oc
                 Scanner.LibraryDirectories.Remove(SelectedFolder);
@@ -368,7 +422,7 @@ namespace GameLauncher.ViewModels
             {
                 Games.Add(exe);
             }
-            APIController.GetGameCovers();
+            //APIController.GetGameCovers();
         }
 
         private void FilterGamesByPlatform(object obj)

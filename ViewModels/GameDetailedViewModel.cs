@@ -12,7 +12,7 @@ using System.Threading;
 
 namespace GameLauncher.ViewModels
 {
-    public class GameDetailedViewModel : INotifyPropertyChanged
+    public class GameDetailedViewModel : System.ComponentModel.INotifyPropertyChanged
     {
         private string _randomSelectedGameScreenshot;
         public string RandomSelectedGameScreenshot
@@ -55,24 +55,16 @@ namespace GameLauncher.ViewModels
 
         public GameDetailedViewModel()
         {
-            MainView = new MainView();
-            //SelectedGame = _selectedGame;
+            //MainView = new MainView();
+            ////SelectedGame = _selectedGame;
             SelectedGame = MainViewModel.SelectedGame;
             BackToMainViewCommand = new CommandRunner(BackToView);
             TileCommand = new CommandRunner(TileClick);
             OpenGameDirCommand = new CommandRunner(OpenGameDir);
 
-            //var startTimeSpan = TimeSpan.Zero;
-            //var periodTimeSpan = TimeSpan.FromSeconds(3);
-
-            //var timer = new System.Threading.Timer((e) =>
-            //{
-            //    PickRandomGameScreenshot();
-            //}, null, startTimeSpan, periodTimeSpan);
             var dueTime = TimeSpan.FromSeconds(0);
             var interval = TimeSpan.FromSeconds(3);
 
-            // TODO: Add a CancellationTokenSource and supply the token here instead of None.
             _ = RunPeriodicAsync(PickRandomGameScreenshot, dueTime, interval, CancellationToken.None);
 
         }
@@ -112,7 +104,7 @@ namespace GameLauncher.ViewModels
 
         private void BackToView(object obj)
         {
-            GameLauncherViewModel.MainFrame.Content = MainView;
+            GameLauncherViewModel.MainFrame.Navigate(new MainViewModel());
         }
         private void TileClick(object obj)
         {
